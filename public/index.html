@@ -1062,11 +1062,35 @@
           }
         }
 
+        let forceShowAllExplorerColleges = false;
+
+        window.browseAllExplorerColleges = function() {
+          forceShowAllExplorerColleges = true;
+          fetchExplorerColleges();
+        };
+
         // Fetch and render colleges list
         async function fetchExplorerColleges() {
-          const searchVal = explorerSearch.value;
+          const searchVal = explorerSearch.value.trim();
           const typeVal = explorerType.value;
           const stateVal = explorerState.value;
+
+          if (!searchVal && !typeVal && !stateVal && !forceShowAllExplorerColleges) {
+            explorerResultsCount.textContent = '';
+            explorerGrid.innerHTML = `
+              <div style="grid-column: 1/-1; text-align: center; padding: 40px 20px; background: #ffffff; border: 1.5px dashed #e2e8f0; border-radius: 16px; margin: 10px 0; animation: fadeIn 0.3s ease;">
+                <span style="font-size: 2.5rem; display: block; margin-bottom: 12px;" aria-hidden="true">🏫</span>
+                <h3 style="margin: 0 0 8px 0; font-size: 1.15rem; font-weight: 700; color: #0f172a;">Search the College Directory</h3>
+                <p style="margin: 0 0 20px 0; color: #64748b; font-size: 0.88rem; max-width: 420px; margin-inline: auto;">
+                  Start typing in the search bar or select filters (by type or state) to explore our directory of 200+ top engineering colleges.
+                </p>
+                <button onclick="browseAllExplorerColleges()" style="padding: 10px 22px; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 12px rgba(37,99,235,0.25);">
+                  Browse All 200+ Colleges
+                </button>
+              </div>
+            `;
+            return;
+          }
 
           const params = new URLSearchParams();
           if (searchVal) params.append('search', searchVal);
@@ -1242,14 +1266,21 @@
         // Debounce utility
         let searchTimer;
         function debouncedSearch() {
+          forceShowAllExplorerColleges = false;
           clearTimeout(searchTimer);
           searchTimer = setTimeout(fetchExplorerColleges, 300);
         }
 
         // Event listeners for explorer filters
         explorerSearch.addEventListener('input', debouncedSearch);
-        explorerType.addEventListener('change', fetchExplorerColleges);
-        explorerState.addEventListener('change', fetchExplorerColleges);
+        explorerType.addEventListener('change', () => {
+          forceShowAllExplorerColleges = false;
+          fetchExplorerColleges();
+        });
+        explorerState.addEventListener('change', () => {
+          forceShowAllExplorerColleges = false;
+          fetchExplorerColleges();
+        });
 
         // Initial load
         initExplorerStates().finally(() => {
