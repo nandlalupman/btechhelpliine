@@ -209,6 +209,110 @@
       ]
     }
     </script>
+    <style>
+      /* College Explorer styles */
+      .explorer-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 24px;
+        margin-top: 24px;
+      }
+      .explorer-card {
+        background: rgba(15, 23, 42, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .explorer-card:hover {
+        transform: translateY(-4px);
+        background: rgba(15, 23, 42, 0.6);
+        border-color: rgba(59, 130, 246, 0.3);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+      }
+
+      .college-badge {
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        display: inline-block;
+      }
+
+      .badge-iit { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+      .badge-nit { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+      .badge-iiit { background: rgba(139, 92, 246, 0.15); color: #a78bfa; }
+      .badge-bits { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+      .badge-vit { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+      .badge-state { background: rgba(6, 182, 212, 0.15); color: #22d3ee; }
+      .badge-private { background: rgba(236, 72, 153, 0.15); color: #f472b6; }
+      .badge-other { background: rgba(100, 116, 139, 0.15); color: #cbd5e1; }
+
+      .college-meta-item {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.8rem;
+        color: #94a3b8;
+        margin-top: 8px;
+        border-bottom: 1px dashed rgba(255,255,255,0.05);
+        padding-bottom: 6px;
+      }
+
+      /* Modal overrides for public page */
+      .explorer-modal {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(15, 23, 42, 0.8);
+        backdrop-filter: blur(8px);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1100;
+        padding: 20px;
+      }
+      .explorer-modal.open {
+        display: flex;
+      }
+      .explorer-modal-card {
+        background: #1e293b;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 30px;
+        width: 100%;
+        max-width: 600px;
+        max-height: 90vh;
+        overflow-y: auto;
+        position: relative;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+      }
+      .explorer-modal-close {
+        position: absolute;
+        top: 20px; right: 20px;
+        background: none;
+        border: none;
+        color: #94a3b8;
+        font-size: 1.5rem;
+        cursor: pointer;
+      }
+      .explorer-modal-close:hover {
+        color: #ffffff;
+      }
+      
+      .explorer-modal-card h2 {
+        font-size: 1.5rem;
+        font-weight: 800;
+        margin-bottom: 10px;
+        color: #ffffff;
+      }
+    </style>
   </head>
   <body>
     <header class="site-header">
@@ -485,112 +589,38 @@
         </div>
       </section>
 
-      <!-- ═══════════ FEATURED COLLEGES ═══════════ -->
-      <section class="section-pad soft-band" aria-labelledby="featured-heading">
+      <!-- ═══════════ COLLEGE EXPLORER ═══════════ -->
+      <section class="section-pad soft-band" id="colleges-explorer" aria-labelledby="explorer-heading">
         <div class="container">
-          <div class="section-title reveal">
-            <span class="section-badge green">🎓 Featured Colleges</span>
-            <h2 id="featured-heading">Popular Engineering Colleges</h2>
-            <p>Top colleges where we've helped thousands of students secure admissions.</p>
+          <div class="section-title reveal" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 24px; margin-bottom: 40px; text-align: left;">
+            <div>
+              <span class="section-badge green">🎓 Directory &amp; Predictor</span>
+              <h2 id="explorer-heading" style="margin-top: 8px;">College Explorer</h2>
+              <p style="margin-bottom: 0;">Search, filter, and explore all 120+ top engineering colleges across India</p>
+            </div>
+            
+            <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: flex-start; z-index: 10;">
+              <input type="text" id="explorer-search" placeholder="Search by name..." style="padding: 12px 16px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none; font-size: 0.88rem; width: 220px; font-family: inherit;" />
+              
+              <select id="explorer-type" style="padding: 12px 16px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none; font-size: 0.88rem; cursor: pointer; font-family: inherit;">
+                <option value="">All Types</option>
+                <option value="IIT">IIT</option>
+                <option value="NIT">NIT</option>
+                <option value="IIIT">IIIT</option>
+                <option value="BITS">BITS</option>
+                <option value="VIT">VIT</option>
+                <option value="State">State Gov</option>
+                <option value="Private">Private</option>
+              </select>
+              
+              <select id="explorer-state" style="padding: 12px 16px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none; font-size: 0.88rem; cursor: pointer; font-family: inherit;">
+                <option value="">All States</option>
+              </select>
+            </div>
           </div>
-          <div class="college-grid reveal">
 
-            <article class="college-card">
-              <img src="assets/colleges/mnit.webp" width="640" height="400" loading="lazy" alt="MNIT Jaipur campus" />
-              <div class="college-info">
-                <div class="college-logo"><img src="assets/logos/mnit.png" width="88" height="88" loading="lazy" alt="MNIT logo" /></div>
-                <h3>Malaviya National Institute of Technology</h3>
-                <p>Jaipur, Rajasthan — Government (NIT)</p>
-                <div class="rating"><span>★★★★★</span> <span>4.5/5</span></div>
-                <div class="college-stats">
-                  <span>Avg Package <strong>₹12.4 LPA</strong></span>
-                  <span>Highest <strong>₹56 LPA</strong></span>
-                  <span>Fees <strong>₹1.5L/yr</strong></span>
-                  <span>JEE Mains <strong>~4,500</strong></span>
-                </div>
-              </div>
-            </article>
-
-            <article class="college-card">
-              <img src="assets/colleges/vit.webp" width="640" height="400" loading="lazy" alt="VIT Vellore campus" />
-              <div class="college-info">
-                <div class="college-logo"><img src="assets/logos/vit.png" width="88" height="88" loading="lazy" alt="VIT logo" /></div>
-                <h3>Vellore Institute of Technology</h3>
-                <p>Vellore, Tamil Nadu — Deemed University</p>
-                <div class="rating"><span>★★★★☆</span> <span>4.3/5</span></div>
-                <div class="college-stats">
-                  <span>Avg Package <strong>₹7.8 LPA</strong></span>
-                  <span>Highest <strong>₹44 LPA</strong></span>
-                  <span>Fees <strong>₹2.0L/yr</strong></span>
-                  <span>Exam <strong>VITEEE</strong></span>
-                </div>
-              </div>
-            </article>
-
-            <article class="college-card">
-              <img src="assets/colleges/arya.webp" width="640" height="400" loading="lazy" alt="Arya College campus" />
-              <div class="college-info">
-                <div class="college-logo"><img src="assets/logos/arya.png" width="88" height="88" loading="lazy" alt="Arya College logo" /></div>
-                <h3>Arya College of Engineering &amp; I.T.</h3>
-                <p>Jaipur, Rajasthan — Private (AICTE)</p>
-                <div class="rating"><span>★★★★☆</span> <span>4.1/5</span></div>
-                <div class="college-stats">
-                  <span>Avg Package <strong>₹4.5 LPA</strong></span>
-                  <span>Highest <strong>₹18 LPA</strong></span>
-                  <span>Fees <strong>₹1.0L/yr</strong></span>
-                  <span>Exam <strong>JEE/Direct</strong></span>
-                </div>
-              </div>
-            </article>
-
-            <article class="college-card">
-              <img src="assets/colleges/jecrc.webp" width="640" height="400" loading="lazy" alt="JECRC Jaipur campus" />
-              <div class="college-info">
-                <div class="college-logo"><img src="assets/logos/jecrc.png" width="88" height="88" loading="lazy" alt="JECRC logo" /></div>
-                <h3>JECRC University</h3>
-                <p>Jaipur, Rajasthan — Private (UGC)</p>
-                <div class="rating"><span>★★★★☆</span> <span>4.2/5</span></div>
-                <div class="college-stats">
-                  <span>Avg Package <strong>₹5.2 LPA</strong></span>
-                  <span>Highest <strong>₹24 LPA</strong></span>
-                  <span>Fees <strong>₹1.5L/yr</strong></span>
-                  <span>Exam <strong>JEE/Direct</strong></span>
-                </div>
-              </div>
-            </article>
-
-            <article class="college-card">
-              <img src="assets/colleges/poornima.webp" width="640" height="400" loading="lazy" alt="Poornima College campus" />
-              <div class="college-info">
-                <div class="college-logo"><img src="assets/logos/poornima.png" width="88" height="88" loading="lazy" alt="Poornima logo" /></div>
-                <h3>Poornima College of Engineering</h3>
-                <p>Jaipur, Rajasthan — Private (AICTE)</p>
-                <div class="rating"><span>★★★★☆</span> <span>4.0/5</span></div>
-                <div class="college-stats">
-                  <span>Avg Package <strong>₹4.2 LPA</strong></span>
-                  <span>Highest <strong>₹16 LPA</strong></span>
-                  <span>Fees <strong>₹1.1L/yr</strong></span>
-                  <span>Exam <strong>JEE/Direct</strong></span>
-                </div>
-              </div>
-            </article>
-
-            <article class="college-card">
-              <img src="assets/colleges/skit.webp" width="640" height="400" loading="lazy" alt="SKIT Jaipur campus" />
-              <div class="college-info">
-                <div class="college-logo"><img src="assets/logos/skit.png" width="88" height="88" loading="lazy" alt="SKIT logo" /></div>
-                <h3>Swami Keshvanand Institute of Technology</h3>
-                <p>Jaipur, Rajasthan — Private (AICTE)</p>
-                <div class="rating"><span>★★★★☆</span> <span>4.0/5</span></div>
-                <div class="college-stats">
-                  <span>Avg Package <strong>₹4.0 LPA</strong></span>
-                  <span>Highest <strong>₹15 LPA</strong></span>
-                  <span>Fees <strong>₹1.05L/yr</strong></span>
-                  <span>Exam <strong>JEE/Direct</strong></span>
-                </div>
-              </div>
-            </article>
-
+          <div id="explorer-grid" class="explorer-grid reveal">
+            <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #64748b;">Loading college directory...</div>
           </div>
         </div>
       </section>
@@ -939,6 +969,226 @@
       <a href="#counselling">Free Counselling</a>
     </div>
 
+    <script src="config.js"></script>
     <script src="script.js?v=3" defer></script>
+
+    <!-- College Details Modal -->
+    <div class="explorer-modal" id="explorer-college-modal">
+      <div class="explorer-modal-card">
+        <button class="explorer-modal-close" id="btn-close-explorer-modal">&times;</button>
+        <div id="explorer-college-modal-content">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </div>
+
+    <!-- College Explorer JS -->
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const explorerSearch = document.getElementById('explorer-search');
+        const explorerType = document.getElementById('explorer-type');
+        const explorerState = document.getElementById('explorer-state');
+        const explorerGrid = document.getElementById('explorer-grid');
+        const explorerModal = document.getElementById('explorer-college-modal');
+        const explorerModalContent = document.getElementById('explorer-college-modal-content');
+        const closeExplorerModalBtn = document.getElementById('btn-close-explorer-modal');
+
+        // Escape helper to prevent XSS
+        function escapeHTML(str) {
+          if (!str) return '';
+          return str.toString()
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+        }
+
+        // Fetch dynamic states list once
+        async function initExplorerStates() {
+          try {
+            const apiBase = typeof API_URL !== 'undefined' ? API_URL : 'http://localhost:3000';
+            const res = await fetch(`${apiBase}/api/colleges`);
+            const data = await res.json();
+            if (res.ok && data.success) {
+              const states = [...new Set(data.data.map(col => col.state))].sort();
+              explorerState.innerHTML = '<option value="">All States</option>';
+              states.forEach(state => {
+                const opt = document.createElement('option');
+                opt.value = state;
+                opt.textContent = state;
+                explorerState.appendChild(opt);
+              });
+            }
+          } catch (err) {
+            console.error('Failed to init explorer states:', err);
+          }
+        }
+
+        // Fetch and render colleges list
+        async function fetchExplorerColleges() {
+          const searchVal = explorerSearch.value;
+          const typeVal = explorerType.value;
+          const stateVal = explorerState.value;
+
+          const params = new URLSearchParams();
+          if (searchVal) params.append('search', searchVal);
+          if (typeVal) params.append('type', typeVal);
+          if (stateVal) params.append('state', stateVal);
+
+          const apiBase = typeof API_URL !== 'undefined' ? API_URL : 'http://localhost:3000';
+          try {
+            const res = await fetch(`${apiBase}/api/colleges?${params.toString()}`);
+            const data = await res.json();
+            explorerGrid.innerHTML = '';
+
+            if (res.ok && data.success) {
+              const colleges = data.data;
+              if (colleges.length === 0) {
+                explorerGrid.innerHTML = `
+                  <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #64748b;">
+                    No matching colleges found. Try adjusting your search or filters.
+                  </div>
+                `;
+                return;
+              }
+
+              colleges.forEach(col => {
+                const card = document.createElement('div');
+                card.className = 'explorer-card';
+                card.addEventListener('click', () => openExplorerDetails(col._id));
+
+                const rankText = col.nirfRank ? `NIRF Rank: #${col.nirfRank}` : 'NIRF Rank: N/A';
+                const feesText = col.feesPerYear ? `₹${(col.feesPerYear / 100000).toFixed(2)} L/yr` : 'N/A';
+                const badgeClass = `badge-${col.type.toLowerCase()}`;
+
+                card.innerHTML = `
+                  <div>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; gap: 8px;">
+                      <span class="college-badge ${badgeClass}">${col.type}</span>
+                      <span style="font-size: 0.78rem; font-weight: 600; color: #3b82f6;">${rankText}</span>
+                    </div>
+                    <h3 style="margin: 0 0 6px 0; font-size: 1.15rem; font-weight: 800; color: white;">${escapeHTML(col.name)}</h3>
+                    <div style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 16px;">
+                      <span>📍 ${escapeHTML(col.city)}, ${escapeHTML(col.state)}</span>
+                    </div>
+                  </div>
+                  
+                  <div style="background: rgba(15, 23, 42, 0.4); padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03);">
+                    <div class="college-meta-item">
+                      <span>Admission Mode:</span>
+                      <strong>${escapeHTML(col.admissionMode)}</strong>
+                    </div>
+                    <div class="college-meta-item">
+                      <span>Avg Package:</span>
+                      <strong style="color: #34d399;">₹${col.avgPlacement.toFixed(1)} LPA</strong>
+                    </div>
+                    <div class="college-meta-item">
+                      <span>Fees:</span>
+                      <strong>${feesText}</strong>
+                    </div>
+                  </div>
+                `;
+                explorerGrid.appendChild(card);
+              });
+            } else {
+              explorerGrid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:40px; color:#f87171;">Failed to load colleges.</div>`;
+            }
+          } catch (err) {
+            console.error('Fetch explorer colleges error:', err);
+            explorerGrid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:40px; color:#f87171;">Server connection error.</div>`;
+          }
+        }
+
+        // Open detailed popup modal
+        async function openExplorerDetails(id) {
+          explorerModalContent.innerHTML = '<div style="text-align:center; padding:40px; color:#94a3b8;">Loading details...</div>';
+          explorerModal.classList.add('open');
+          
+          const apiBase = typeof API_URL !== 'undefined' ? API_URL : 'http://localhost:3000';
+          try {
+            const res = await fetch(`${apiBase}/api/colleges/${id}`);
+            const data = await res.json();
+            if (res.ok && data.success) {
+              const col = data.data;
+              const rankText = col.nirfRank ? `NIRF Rank: #${col.nirfRank}` : 'NIRF Rank: N/A';
+              const feesText = col.feesPerYear ? `₹${(col.feesPerYear / 100000).toFixed(2)} L/yr (approx)` : 'N/A';
+              
+              explorerModalContent.innerHTML = `
+                <div style="margin-bottom: 20px;">
+                  <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 8px; flex-wrap: wrap;">
+                    <span class="college-badge badge-${col.type.toLowerCase()}">${col.type}</span>
+                    <span style="font-size: 0.85rem; font-weight: 700; color: #60a5fa;">${rankText}</span>
+                  </div>
+                  <h2>${escapeHTML(col.name)}</h2>
+                  <p style="color:#94a3b8; font-size:0.9rem; margin: 4px 0 0 0;">📍 ${escapeHTML(col.city)}, ${escapeHTML(col.state)}</p>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 24px;">
+                  <div style="background:rgba(15,23,42,0.4); padding:15px; border-radius:10px; border: 1px solid rgba(255,255,255,0.03);">
+                    <div style="font-size:0.8rem; color:#64748b; margin-bottom: 4px;">Admission Mode</div>
+                    <strong style="color:white; font-size:1.05rem;">${escapeHTML(col.admissionMode)}</strong>
+                  </div>
+                  <div style="background:rgba(15,23,42,0.4); padding:15px; border-radius:10px; border: 1px solid rgba(255,255,255,0.03);">
+                    <div style="font-size:0.8rem; color:#64748b; margin-bottom: 4px;">Cutoff CSE</div>
+                    <strong style="color:#60a5fa; font-size:1.05rem;">${escapeHTML(col.cutoffRankCSE)}</strong>
+                  </div>
+                  <div style="background:rgba(15,23,42,0.4); padding:15px; border-radius:10px; border: 1px solid rgba(255,255,255,0.03);">
+                    <div style="font-size:0.8rem; color:#64748b; margin-bottom: 4px;">Average Package</div>
+                    <strong style="color:#34d399; font-size:1.15rem;">₹${col.avgPlacement.toFixed(1)} LPA</strong>
+                  </div>
+                  <div style="background:rgba(15,23,42,0.4); padding:15px; border-radius:10px; border: 1px solid rgba(255,255,255,0.03);">
+                    <div style="font-size:0.8rem; color:#64748b; margin-bottom: 4px;">Highest Package</div>
+                    <strong style="color:#f59e0b; font-size:1.15rem;">₹${col.highestPlacement.toFixed(1)} LPA</strong>
+                  </div>
+                  <div style="background:rgba(15,23,42,0.4); padding:15px; border-radius:10px; border: 1px solid rgba(255,255,255,0.03); grid-column: 1/-1;">
+                    <div style="font-size:0.8rem; color:#64748b; margin-bottom: 4px;">Academic Fees</div>
+                    <strong style="color:white; font-size:1.05rem;">${feesText}</strong>
+                  </div>
+                </div>
+                
+                <div style="margin-bottom: 24px;">
+                  <h4 style="color:white; margin:0 0 8px 0; font-size:1rem;">About Institution</h4>
+                  <p style="color:#94a3b8; font-size:0.88rem; line-height:1.6; margin:0;">${escapeHTML(col.description)}</p>
+                </div>
+                
+                <div style="margin-bottom: 24px;">
+                  <h4 style="color:white; margin:0 0 10px 0; font-size:1rem;">Offered B.Tech Branches</h4>
+                  <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                    ${col.branches && col.branches.length > 0 
+                      ? col.branches.map(b => `<span style="background:rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.05); color:#cbd5e1; padding:5px 10px; border-radius:6px; font-size:0.78rem;">${escapeHTML(b)}</span>`).join('')
+                      : '<span style="color:#64748b; font-size:0.85rem;">Information not specified</span>'
+                    }
+                  </div>
+                </div>
+                
+                ${col.website ? `
+                  <div style="text-align: right; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 20px;">
+                    <a href="${escapeHTML(col.website)}" target="_blank" style="text-decoration:none; display:inline-block; background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; padding: 10px 20px; border-radius: 8px; font-weight: 700; font-size: 0.88rem;">Visit Official Website ↗</a>
+                  </div>
+                ` : ''}
+              `;
+            } else {
+              explorerModalContent.innerHTML = `<div style="text-align:center; padding:40px; color:#f87171;">${data.error || 'Failed to load details'}</div>`;
+            }
+          } catch (err) {
+            explorerModalContent.innerHTML = '<div style="text-align:center; padding:40px; color:#f87171;">Server connection error</div>';
+          }
+        }
+
+        const closeExplorerModal = () => { explorerModal.classList.remove('open'); };
+        closeExplorerModalBtn.addEventListener('click', closeExplorerModal);
+
+        // Event listeners for explorer filters
+        explorerSearch.addEventListener('input', fetchExplorerColleges);
+        explorerType.addEventListener('change', fetchExplorerColleges);
+        explorerState.addEventListener('change', fetchExplorerColleges);
+
+        // Initial load
+        initExplorerStates().finally(() => {
+          fetchExplorerColleges();
+        });
+      });
+    </script>
   </body>
 </html>
