@@ -402,6 +402,28 @@
         .grid-layout {
           grid-template-columns: 1fr;
         }
+        .dash-header-container {
+          flex-direction: column;
+          gap: 12px;
+          text-align: center;
+          padding: 12px 0;
+        }
+        .dash-header-container > div {
+          justify-content: center;
+          flex-wrap: wrap;
+        }
+        .dashboard-container {
+          padding: 20px 0;
+        }
+      }
+
+      @media (max-width: 500px) {
+        .modal-card {
+          padding: 20px;
+        }
+        #colleges-grid {
+          grid-template-columns: 1fr !important;
+        }
       }
     </style>
 

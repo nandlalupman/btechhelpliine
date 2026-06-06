@@ -365,6 +365,36 @@
           grid-template-columns: 1fr;
         }
       }
+
+      @media (max-width: 768px) {
+        .dash-header-container {
+          flex-direction: column;
+          gap: 12px;
+          text-align: center;
+          padding: 12px 0;
+        }
+        .dash-header-container > div {
+          justify-content: center;
+          flex-wrap: wrap;
+        }
+        .portal-container {
+          padding: 20px 0;
+        }
+        .stats-row {
+          grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)) !important;
+          gap: 12px;
+          margin-bottom: 24px;
+        }
+        .stat-card {
+          padding: 14px;
+        }
+        .stat-card .value {
+          font-size: 1.6rem;
+        }
+        .leads-section {
+          padding: 20px;
+        }
+      }
     </style>
   </head>
   <body class="counsellor-body">
