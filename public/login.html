@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login | BtechHelpline — Student & Counsellor Portal</title>
+    <meta name="description" content="Log in to your BtechHelpline account to view your JEE counselling status, check college recommendations, and connect with your assigned counsellor." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://www.btechhelpline.com/login.html" />
+
+    <!-- Preconnect Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+    <style>
+      :root {
+        --blue: #2563eb;
+        --blue-dark: #1e40af;
+        --blue-deeper: #1e3a8a;
+        --violet: #7c3aed;
+        --emerald: #10b981;
+        --ink: #0f172a;
+        --white: #ffffff;
+        --slate-100: #f1f5f9;
+        --slate-300: #cbd5e1;
+        --slate-400: #94a3b8;
+        --slate-800: #1e293b;
+        --radius-card: 20px;
+        --radius-input: 12px;
+        --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body.auth-body {
+        margin: 0;
+        padding: 0;
+        background: #070a13;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        color: var(--slate-100);
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+      }
+
+      /* ── Full Screen Split Wrapper ── */
+      .auth-wrapper {
+        display: grid;
+        grid-template-columns: 1.15fr 1fr;
+        height: 100vh;
+        width: 100vw;
+      }
+
+      /* ── Left Side Promo ── */
+      .auth-promo {
+        background: radial-gradient(circle at 0% 0%, #0c152a 0%, #070a13 100%);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 60px;
+        border-right: 1px solid rgba(255, 255, 255, 0.06);
+        overflow: hidden;
+      }
+
+      .auth-promo::before {
+        content: '';
+        position: absolute;
+        top: -10%; left: -10%;
+        width: 70%; height: 70%;
+        background: radial-gradient(circle, rgba(37, 99, 235, 0.25) 0%, transparent 70%);
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      .auth-promo::after {
+        content: '';
+        position: absolute;
+        bottom: -20%; right: -10%;
+        width: 60%; height: 60%;
+        background: radial-gradient(circle, rgba(124, 58, 237, 0.18) 0%, transparent 70%);
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      .promo-header {
+        position: relative;
+        z-index: 2;
+      }
+
+      .promo-logo {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1.5rem;
+        font-weight: 900;
+        color: var(--blue);
+        text-decoration: none;
+      }
+
+      .promo-logo span span {
+        color: #f59e0b;
+      }
+
+      .brand-mark {
+        width: 36px;
+        height: 36px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, var(--blue), var(--violet));
+        border-radius: 10px;
+        color: var(--white);
+        box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+      }
+
+      .brand-mark svg {
+        width: 20px;
+        fill: currentColor;
+      }
+
+      .promo-content {
+        position: relative;
+        z-index: 2;
+        max-width: 520px;
+        margin: auto 0;
+      }
+
+      .promo-content h2 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        line-height: 1.25;
+        margin: 0 0 16px 0;
+        letter-spacing: -0.02em;
+        background: linear-gradient(to right, #ffffff, #93c5fd);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .promo-content p {
+        color: var(--slate-400);
+        font-size: 1.05rem;
+        line-height: 1.6;
+        margin: 0 0 40px 0;
+      }
+
+      /* ── Floating Dashboard Cards Visual ── */
+      .promo-visual {
+        position: relative;
+        height: 220px;
+        margin-bottom: 20px;
+        width: 100%;
+      }
+
+      .visual-card {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.04);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 16px 20px;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 0.85rem;
+        animation: floatCard 6s ease-in-out infinite alternate;
+      }
+
+      .visual-card strong {
+        color: var(--white);
+        font-size: 0.95rem;
+      }
+
+      .visual-card span {
+        color: var(--slate-400);
+      }
+
+      .card-1 {
+        top: 20px;
+        left: 20px;
+        animation-delay: 0s;
+        border-left: 3px solid var(--blue);
+      }
+
+      .card-2 {
+        top: 90px;
+        right: 40px;
+        animation-delay: -2s;
+        border-left: 3px solid var(--violet);
+      }
+
+      .card-3 {
+        bottom: 10px;
+        left: 80px;
+        animation-delay: -4s;
+        border-left: 3px solid var(--emerald);
+      }
+
+      .visual-card .badge-tag {
+        align-self: flex-start;
+        font-size: 0.72rem;
+        padding: 2px 8px;
+        border-radius: 99px;
+        background: rgba(16, 185, 129, 0.15);
+        color: #34d399;
+        font-weight: 700;
+        margin-top: 4px;
+      }
+
+      @keyframes floatCard {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(-12px); }
+      }
+
+      .promo-stats {
+        position: relative;
+        z-index: 2;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        padding-top: 30px;
+      }
+
+      .stat-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .stat-item strong {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: var(--blue);
+      }
+
+      .stat-item span {
+        font-size: 0.8rem;
+        color: var(--slate-400);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      /* ── Right Side Form ── */
+      .auth-form-panel {
+        background: #0b111e;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        height: 100vh;
+        overflow-y: auto;
+        position: relative;
+      }
+
+      .auth-card-full {
+        width: 100%;
+        max-width: 420px;
+        animation: cardEntrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      @keyframes cardEntrance {
+        from {
+          opacity: 0;
+          transform: translateX(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .form-title-area {
+        margin-bottom: 32px;
+      }
+
+      .form-title-area h1 {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: var(--white);
+        margin: 0 0 8px 0;
+        letter-spacing: -0.02em;
+      }
+
+      .form-title-area p.subtitle {
+        color: var(--slate-400);
+        font-size: 0.95rem;
+        margin: 0;
+      }
+
+      /* Logo fallback inside form area (visible only on mobile) */
+      .mobile-logo-header {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 24px;
+      }
+
+      /* ── Form Styling ── */
+      .auth-form label {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--slate-300);
+        margin-bottom: 20px;
+      }
+
+      .auth-form input {
+        width: 100%;
+        padding: 14px 18px;
+        background: rgba(10, 15, 30, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius-input);
+        color: var(--white);
+        outline: none;
+        font-size: 0.95rem;
+        transition: all var(--transition);
+      }
+
+      .auth-form input:focus {
+        border-color: var(--blue);
+        background: rgba(10, 15, 30, 0.8);
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.20);
+      }
+
+      .auth-form input::placeholder {
+        color: rgba(255, 255, 255, 0.3);
+      }
+
+      .form-forgot {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: -12px;
+        margin-bottom: 24px;
+        font-size: 0.85rem;
+      }
+
+      .form-forgot a {
+        color: var(--slate-400);
+        transition: color var(--transition);
+      }
+
+      .form-forgot a:hover {
+        color: var(--blue);
+      }
+
+      .auth-form button[type="submit"] {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, var(--blue), var(--violet));
+        border: none;
+        border-radius: var(--radius-input);
+        color: white;
+        font-weight: 700;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: all var(--transition);
+        box-shadow: 0 4px 20px rgba(124, 58, 237, 0.2);
+      }
+
+      .auth-form button[type="submit"]:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 24px rgba(124, 58, 237, 0.3);
+      }
+
+      .auth-form button[type="submit"]:active {
+        transform: translateY(0);
+      }
+
+      .auth-form button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none !important;
+        box-shadow: none !important;
+      }
+
+      .auth-footer {
+        margin-top: 28px;
+        text-align: center;
+        font-size: 0.95rem;
+        color: var(--slate-400);
+      }
+
+      .auth-footer a {
+        color: var(--blue);
+        font-weight: 600;
+        transition: color var(--transition);
+      }
+
+      .auth-footer a:hover {
+        text-decoration: underline;
+        color: var(--violet);
+      }
+
+      /* Messages */
+      .form-msg {
+        text-align: center;
+        padding: 12px;
+        border-radius: 10px;
+        font-size: 0.88rem;
+        font-weight: 550;
+        margin-bottom: 24px;
+        display: none;
+        line-height: 1.4;
+      }
+
+      .form-msg.success {
+        display: block;
+        background: rgba(16, 185, 129, 0.15);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        color: #34d399;
+      }
+
+      .form-msg.error {
+        display: block;
+        background: rgba(239, 68, 68, 0.15);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #f87171;
+      }
+
+      /* ── Responsive breakpoint ── */
+      @media (max-width: 1024px) {
+        .auth-wrapper {
+          grid-template-columns: 1fr;
+        }
+
+        .auth-promo {
+          display: none;
+        }
+
+        .auth-form-panel {
+          background: #070a13;
+          padding: 30px 20px;
+        }
+
+        /* Show logo on mobile inside form screen */
+        .mobile-logo-header {
+          display: flex;
+        }
+
+        /* Floating backdrop auroras for mobile view */
+        .auth-form-panel::before {
+          content: '';
+          position: absolute;
+          top: -10%; left: -10%;
+          width: 60%; height: 60%;
+          background: radial-gradient(circle, rgba(37, 99, 235, 0.18) 0%, transparent 60%);
+          z-index: 1;
+          pointer-events: none;
+        }
+
+        .auth-form-panel::after {
+          content: '';
+          position: absolute;
+          bottom: -10%; right: -10%;
+          width: 60%; height: 60%;
+          background: radial-gradient(circle, rgba(124, 58, 237, 0.12) 0%, transparent 60%);
+          z-index: 1;
+          pointer-events: none;
+        }
+
+        .auth-card-full {
+          position: relative;
+          z-index: 2;
+          background: rgba(15, 22, 42, 0.3);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.06);
+          border-radius: var(--radius-card);
+          padding: 32px 24px;
+        }
+      }
+    </style>
+  </head>
+  <body class="auth-body">
+    <div class="auth-wrapper">
+      
+      <!-- Left Side Visual Panel -->
+      <section class="auth-promo">
+        <div class="promo-header">
+          <a class="promo-logo" href="/" aria-label="Btechhelpline.com home">
+            <span class="brand-mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M2.5 7.2 12 2.8l9.5 4.4-9.5 4.4-9.5-4.4Z" />
+                <path d="M6.4 10.1v4.5c0 1.8 2.5 3.2 5.6 3.2s5.6-1.4 5.6-3.2v-4.5L12 12.7l-5.6-2.6Z" />
+              </svg>
+            </span>
+            <span>Btechhelpline<span>.com</span></span>
+          </a>
+        </div>
+
+        <div class="promo-content">
+          <h2>Compare 500+ Engineering Colleges & Find Your Best Fit</h2>
+          <p>Get matched with India's top engineering colleges based on your JEE rank, preferred branches, and budget range.</p>
+          
+          <div class="promo-visual">
+            <div class="visual-card card-1">
+              <strong>JEE Main Rank: 24,500</strong>
+              <span>General Category Matcher</span>
+            </div>
+            <div class="visual-card card-2">
+              <strong>MNIT Jaipur (CSE)</strong>
+              <span class="badge-tag">Top Matching Choice</span>
+            </div>
+            <div class="visual-card card-3">
+              <strong>CSE placements</strong>
+              <span>Average: ₹16.40 LPA</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="promo-stats">
+          <div class="stat-item">
+            <strong>10,000+</strong>
+            <span>Students Guided</span>
+          </div>
+          <div class="stat-item">
+            <strong>500+</strong>
+            <span>Partner Colleges</span>
+          </div>
+          <div class="stat-item">
+            <strong>100%</strong>
+            <span>Free Counselling</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Side Form Panel -->
+      <main class="auth-form-panel">
+        <div class="auth-card-full">
+          
+          <!-- Mobile logo (only shown when left panel is hidden) -->
+          <div class="mobile-logo-header">
+            <a class="promo-logo" href="/">
+              <span class="brand-mark" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M2.5 7.2 12 2.8l9.5 4.4-9.5 4.4-9.5-4.4Z" />
+                  <path d="M6.4 10.1v4.5c0 1.8 2.5 3.2 5.6 3.2s5.6-1.4 5.6-3.2v-4.5L12 12.7l-5.6-2.6Z" />
+                </svg>
+              </span>
+              <span>Btechhelpline<span>.com</span></span>
+            </a>
+          </div>
+
+          <div class="form-title-area">
+            <h1>Welcome Back</h1>
+            <p class="subtitle">Access your counselling status and recommendations</p>
+          </div>
+
+          <div class="form-msg" id="form-msg"></div>
+
+          <form class="auth-form" id="login-form">
+            <label>
+              Email Address
+              <input type="email" id="email" placeholder="student@example.com" required autofocus />
+            </label>
+
+            <label>
+              Password
+              <input type="password" id="password" placeholder="••••••••" required />
+            </label>
+
+            <div class="form-forgot">
+              <a href="forgot-password.html">Forgot Password?</a>
+            </div>
+
+            <button type="submit" id="btn-submit">Login</button>
+          </form>
+
+          <div class="auth-footer">
+            Don't have an account? <a href="register.html">Register free</a>
+          </div>
+        </div>
+      </main>
+
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+      const form = document.getElementById('login-form');
+      const submitBtn = document.getElementById('btn-submit');
+      const formMsg = document.getElementById('form-msg');
+
+      // Auto redirect if already logged in
+      const existingToken = localStorage.getItem('token');
+      const existingRole = localStorage.getItem('role');
+      if (existingToken && existingRole) {
+        redirectUser(existingRole);
+      }
+
+      // Check URL parameters for status
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('verified') === 'true') {
+        formMsg.textContent = 'Account verified successfully! You can now log in.';
+        formMsg.className = 'form-msg success';
+      } else if (params.get('verified') === 'false') {
+        formMsg.textContent = 'Email verification failed. The link may have expired.';
+        formMsg.className = 'form-msg error';
+      } else if (params.get('reset') === 'true') {
+        formMsg.textContent = 'Password reset successful. Please log in.';
+        formMsg.className = 'form-msg success';
+      }
+
+      function redirectUser(role) {
+        if (role === 'admin') {
+          window.location.href = 'admin.html';
+        } else if (role === 'counsellor') {
+          window.location.href = 'counsellor.html';
+        } else {
+          window.location.href = 'dashboard.html';
+        }
+      }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        formMsg.style.display = 'none';
+
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Logging in...';
+
+        try {
+          const res = await fetch(`${API_URL}/api/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+          });
+
+          const data = await res.json();
+
+          if (res.ok && data.success) {
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('role', data.user.role);
+            localStorage.setItem('userName', data.user.name);
+            localStorage.setItem('userEmail', data.user.email);
+            
+            formMsg.textContent = 'Login successful!';
+            formMsg.className = 'form-msg success';
+
+            window.setTimeout(() => redirectUser(data.user.role), 500);
+          } else {
+            formMsg.textContent = data.error || 'Invalid credentials';
+            formMsg.className = 'form-msg error';
+          }
+        } catch (err) {
+          formMsg.textContent = 'Server connection error. Please try again.';
+          formMsg.className = 'form-msg error';
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Login';
+        }
+      });
+    </script>
+  </body>
+</html>

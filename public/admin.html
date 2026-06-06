@@ -1,0 +1,1135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Panel | BtechHelpline</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Chart.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      body.admin-body {
+        background: #0f172a;
+        color: #f8fafc;
+        font-family: 'Inter', system-ui, sans-serif;
+        min-height: 100vh;
+      }
+
+      .admin-container {
+        width: min(100% - 32px, 1280px);
+        margin: 0 auto;
+        padding: 40px 0;
+      }
+
+      /* Header */
+      header.dash-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .dash-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1.3rem;
+        font-weight: 900;
+        color: #3b82f6;
+      }
+
+      .dash-brand span span {
+        color: #f59e0b;
+      }
+
+      .btn-logout {
+        padding: 10px 18px;
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        color: #f87171;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s;
+      }
+
+      .btn-logout:hover {
+        background: rgba(239, 68, 68, 0.2);
+        color: #ef4444;
+      }
+
+      /* Tabs Navigation */
+      .tabs-nav {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 30px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        padding-bottom: 12px;
+      }
+
+      .tab-btn {
+        background: none;
+        border: none;
+        color: #94a3b8;
+        padding: 10px 20px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: all 0.3s;
+      }
+
+      .tab-btn:hover {
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .tab-btn.active {
+        color: #ffffff;
+        background: rgba(59, 130, 246, 0.15);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+      }
+
+      .tab-content {
+        display: none;
+        animation: fadeIn 0.4s ease-out;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* Cards and Metrics */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+        margin-bottom: 35px;
+      }
+
+      .stat-card {
+        background: rgba(30, 41, 59, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        padding: 20px;
+      }
+
+      .stat-card h3 {
+        color: #94a3b8;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin: 0 0 8px 0;
+      }
+
+      .stat-card .value {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #ffffff;
+        margin: 0;
+      }
+
+      /* Controls Panel */
+      .controls-panel {
+        background: rgba(30, 41, 59, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 25px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        flex-grow: 1;
+      }
+
+      .filters input, .filters select {
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+        padding: 10px 14px;
+        border-radius: 10px;
+        outline: none;
+        font-size: 0.9rem;
+        min-width: 160px;
+      }
+
+      .btn-action {
+        padding: 10px 18px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s;
+      }
+
+      .btn-reset {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #cbd5e1;
+      }
+
+      .btn-export {
+        background: linear-gradient(135deg, #10b981, #059669);
+        border: none;
+        color: white;
+      }
+
+      /* Tables styling */
+      .table-wrapper {
+        background: rgba(30, 41, 59, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        overflow-x: auto;
+      }
+
+      .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+        font-size: 0.92rem;
+      }
+
+      .admin-table th {
+        background: rgba(15, 23, 42, 0.6);
+        padding: 16px 20px;
+        font-weight: 600;
+        color: #94a3b8;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .admin-table td {
+        padding: 16px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        color: #cbd5e1;
+        white-space: nowrap;
+      }
+
+      .admin-table tr:hover td {
+        background: rgba(255, 255, 255, 0.01);
+      }
+
+      /* Badges & tags */
+      .badge {
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 4px 8px;
+        border-radius: 6px;
+        text-transform: uppercase;
+      }
+
+      .role-admin { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+      .role-counsellor { background: rgba(139, 92, 246, 0.15); color: #a78bfa; }
+      .role-student { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+
+      .status-active { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+      .status-inactive { background: rgba(100, 116, 139, 0.15); color: #94a3b8; }
+
+      /* Action controls */
+      .action-select {
+        background: #1e293b;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+        padding: 6px 10px;
+        border-radius: 6px;
+        outline: none;
+        font-size: 0.85rem;
+      }
+
+      .btn-toggle {
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        cursor: pointer;
+        border: none;
+      }
+
+      .btn-toggle-deactivate { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+      .btn-toggle-activate { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+
+      /* Slide-out Panel / Detail Modal */
+      .modal {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(15, 23, 42, 0.8);
+        backdrop-filter: blur(8px);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        padding: 20px;
+      }
+
+      .modal.open { display: flex; }
+
+      .modal-card {
+        background: #1e293b;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 30px;
+        width: 100%;
+        max-width: 600px;
+        position: relative;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 20px; right: 20px;
+        background: none;
+        border: none;
+        color: #94a3b8;
+        font-size: 1.5rem;
+        cursor: pointer;
+      }
+
+      /* Analytics charts */
+      .charts-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-bottom: 40px;
+      }
+
+      .chart-card {
+        background: rgba(30, 41, 59, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        padding: 24px;
+      }
+
+      .chart-card h3 {
+        margin: 0 0 20px 0;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #ffffff;
+      }
+
+      .chart-container {
+        position: relative;
+        height: 280px;
+        width: 100%;
+      }
+
+      .no-data {
+        text-align: center;
+        padding: 40px 20px;
+        color: #64748b;
+      }
+
+      .toast {
+        position: fixed;
+        bottom: 24px; right: 24px;
+        background: #1e293b;
+        border-left: 4px solid #10b981;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 8px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        z-index: 1100;
+        display: none;
+      }
+
+      @media (max-width: 900px) {
+        .charts-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body class="admin-body">
+    <div class="admin-container">
+      
+      <!-- Header -->
+      <header class="dash-header">
+        <div class="dash-brand">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" style="width: 24px; fill: white;">
+              <path d="M2.5 7.2 12 2.8l9.5 4.4-9.5 4.4-9.5-4.4Z" />
+              <path d="M6.4 10.1v4.5c0 1.8 2.5 3.2 5.6 3.2s5.6-1.4 5.6-3.2v-4.5L12 12.7l-5.6-2.6Z" />
+            </svg>
+          </span>
+          <span>Btechhelpline<span>.com</span></span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 15px;">
+          <span id="admin-name" style="font-weight: 600; color: #ef4444;">Admin Portal</span>
+          <button class="btn-logout" id="btn-logout">Logout</button>
+        </div>
+      </header>
+
+      <!-- Tabs Nav -->
+      <nav class="tabs-nav">
+        <button class="tab-btn active" onclick="switchTab('leads-tab')">Leads Management</button>
+        <button class="tab-btn" onclick="switchTab('users-tab')">User Operations</button>
+        <button class="tab-btn" onclick="switchTab('analytics-tab')">Analytics Hub</button>
+      </nav>
+
+      <!-- ═══════════ LEADS TAB ═══════════ -->
+      <section class="tab-content active" id="leads-tab">
+        <div class="controls-panel">
+          <div class="filters">
+            <input type="text" id="lead-search" placeholder="Search name/email/phone..." />
+            
+            <select id="lead-filter-status">
+              <option value="">All Statuses</option>
+              <option value="new">New</option>
+              <option value="contacted">Contacted</option>
+              <option value="in_progress">In Progress</option>
+              <option value="counselled">Counselled</option>
+              <option value="closed">Closed</option>
+              <option value="dropped">Dropped</option>
+            </select>
+
+            <select id="lead-filter-priority">
+              <option value="">All Priorities</option>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+
+            <select id="lead-filter-counsellor">
+              <option value="">All Counsellors</option>
+              <option value="unassigned">Unassigned</option>
+              <!-- Populated dynamically -->
+            </select>
+
+            <button class="btn-action btn-reset" onclick="resetLeadFilters()">Reset</button>
+          </div>
+          <button class="btn-action btn-export" onclick="exportLeadsCSV()">
+            Export CSV
+          </button>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>Branch</th>
+                <th>State</th>
+                <th>Budget</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th>Assigned Counsellor</th>
+                <th style="text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="leads-table-body">
+              <tr><td colspan="8" class="no-data">Loading student leads...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ═══════════ USERS TAB ═══════════ -->
+      <section class="tab-content" id="users-tab">
+        <div class="controls-panel">
+          <div class="filters">
+            <input type="text" id="user-search" placeholder="Search user profile..." />
+            <select id="user-filter-role">
+              <option value="">All Roles</option>
+              <option value="student">Student</option>
+              <option value="counsellor">Counsellor</option>
+              <option value="admin">Admin</option>
+            </select>
+            <button class="btn-action btn-reset" onclick="resetUserFilters()">Reset</button>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>User Details</th>
+                <th>Email Address</th>
+                <th>Phone Number</th>
+                <th>Role</th>
+                <th>Account Status</th>
+                <th style="text-align: right;">Manage</th>
+              </tr>
+            </thead>
+            <tbody id="users-table-body">
+              <tr><td colspan="6" class="no-data">Loading user accounts...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ═══════════ ANALYTICS TAB ═══════════ -->
+      <section class="tab-content" id="analytics-tab">
+        <!-- Analytics Cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <h3>System Leads</h3>
+            <p class="value" id="analytic-total-leads">0</p>
+          </div>
+          <div class="stat-card">
+            <h3>Registered Members</h3>
+            <p class="value" id="analytic-total-users" style="color: #60a5fa;">0</p>
+          </div>
+          <div class="stat-card">
+            <h3>Active Counsellors</h3>
+            <p class="value" id="analytic-total-counsellors" style="color: #a78bfa;">0</p>
+          </div>
+          <div class="stat-card">
+            <h3>Lead Conversion</h3>
+            <p class="value" id="analytic-conversion" style="color: #10b981;">0%</p>
+          </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="charts-grid">
+          <div class="chart-card">
+            <h3>Leads Status Breakdown</h3>
+            <div class="chart-container">
+              <canvas id="statusChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <h3>Top Branches Demand</h3>
+            <div class="chart-container">
+              <canvas id="branchChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Workload List -->
+        <div class="chart-card" style="margin-bottom: 40px;">
+          <h3>Counsellor Workload Distribution</h3>
+          <div class="table-wrapper">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Counsellor Name</th>
+                  <th>Counsellor Email</th>
+                  <th>Open Assigned Leads</th>
+                  <th>Total Handled Leads</th>
+                </tr>
+              </thead>
+              <tbody id="workload-table-body">
+                <tr><td colspan="4" class="no-data">Calculating workload metrics...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Details Modal -->
+    <div class="modal" id="details-modal">
+      <div class="modal-card">
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+        <h2 id="modal-lead-title" style="margin-bottom: 20px; font-weight:800; border-left:4px solid #3b82f6; padding-left:10px;">Lead Detail Log</h2>
+        
+        <div id="modal-lead-details" style="font-size:0.92rem; display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:24px;">
+          <!-- Loaded dynamically -->
+        </div>
+
+        <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top:20px;">
+          <h4 style="margin: 0 0 12px 0; color:#60a5fa;">Counsellor Timeline Notes</h4>
+          <div style="max-height: 200px; overflow-y:auto; margin-bottom: 20px; display:flex; flex-direction:column; gap:10px;" id="modal-notes-timeline">
+            <!-- Loaded dynamically -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="config.js"></script>
+    <script>
+      const token = localStorage.getItem('token');
+      const role = localStorage.getItem('role');
+
+      // Authentication Lock
+      if (!token || role !== 'admin') {
+        localStorage.clear();
+        window.location.href = 'login.html';
+      }
+
+      document.getElementById('admin-name').textContent = localStorage.getItem('userName') || 'System Admin';
+
+      let statusChartInstance = null;
+      let branchChartInstance = null;
+      let counsellorsList = [];
+
+      // Toast notification helper
+      function showToast(message) {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.style.display = 'block';
+        setTimeout(() => { toast.style.display = 'none'; }, 3000);
+      }
+
+      // Tab Switcher
+      function switchTab(tabId) {
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+        // Set active
+        event.currentTarget.classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+
+        if (tabId === 'leads-tab') fetchLeads();
+        else if (tabId === 'users-tab') fetchUsers();
+        else if (tabId === 'analytics-tab') fetchAnalytics();
+      }
+
+      // Fetch active counsellors to populate assignment selectors
+      async function fetchCounsellors() {
+        try {
+          const res = await fetch(`${API_URL}/api/admin/counsellors`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            counsellorsList = data.data;
+            const filterSelect = document.getElementById('lead-filter-counsellor');
+            
+            // Clear prior dynamic items
+            filterSelect.innerHTML = '<option value="">All Counsellors</option><option value="unassigned">Unassigned</option>';
+            
+            counsellorsList.forEach(c => {
+              const opt = document.createElement('option');
+              opt.value = c._id;
+              opt.textContent = c.name;
+              filterSelect.appendChild(opt);
+            });
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
+      // ── LEADS MANAGEMENT LOGIC ──
+
+      async function fetchLeads() {
+        const search = document.getElementById('lead-search').value;
+        const status = document.getElementById('lead-filter-status').value;
+        const priority = document.getElementById('lead-filter-priority').value;
+        const assignedTo = document.getElementById('lead-filter-counsellor').value;
+
+        const params = new URLSearchParams();
+        if (search) params.append('search', search);
+        if (status) params.append('status', status);
+        if (priority) params.append('priority', priority);
+        if (assignedTo) params.append('assignedTo', assignedTo);
+
+        try {
+          const res = await fetch(`${API_URL}/api/admin/leads?${params.toString()}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const data = await res.json();
+          const tbody = document.getElementById('leads-table-body');
+          tbody.innerHTML = '';
+
+          if (res.ok && data.success) {
+            const leads = data.data.leads;
+            if (leads.length === 0) {
+              tbody.innerHTML = '<tr><td colspan="8" class="no-data">No lead records match your search criteria.</td></tr>';
+              return;
+            }
+
+            leads.forEach(lead => {
+              const tr = document.createElement('tr');
+              
+              // Counsellor assignment select options
+              let assignSelect = `<select class="action-select" onchange="assignLead('${lead._id}', this.value)">
+                <option value="">Unassigned</option>`;
+              counsellorsList.forEach(c => {
+                assignSelect += `<option value="${c._id}" ${lead.assignedTo && lead.assignedTo._id === c._id ? 'selected' : ''}>${c.name}</option>`;
+              });
+              assignSelect += `</select>`;
+
+              tr.innerHTML = `
+                <td>
+                  <div style="font-weight:700;color:white;">${escapeHTML(lead.name)}</div>
+                  <div style="font-size:0.8rem;color:#64748b;">${escapeHTML(lead.phone)} | ${escapeHTML(lead.email)}</div>
+                </td>
+                <td><span class="badge badge-branch">${escapeHTML(lead.preferredBranch)}</span></td>
+                <td>${escapeHTML(lead.preferredState)}</td>
+                <td>${escapeHTML(lead.budget)}</td>
+                <td>
+                  <select class="action-select status-badge status-${lead.status}" onchange="updateLeadStatus('${lead._id}', this.value)">
+                    <option value="new" ${lead.status === 'new' ? 'selected' : ''}>New</option>
+                    <option value="contacted" ${lead.status === 'contacted' ? 'selected' : ''}>Contacted</option>
+                    <option value="in_progress" ${lead.status === 'in_progress' ? 'selected' : ''}>In Progress</option>
+                    <option value="counselled" ${lead.status === 'counselled' ? 'selected' : ''}>Counselled</option>
+                    <option value="closed" ${lead.status === 'closed' ? 'selected' : ''}>Closed</option>
+                    <option value="dropped" ${lead.status === 'dropped' ? 'selected' : ''}>Dropped</option>
+                  </select>
+                </td>
+                <td>
+                  <select class="action-select" onchange="updateLeadPriority('${lead._id}', this.value)">
+                    <option value="low" ${lead.priority === 'low' ? 'selected' : ''}>Low</option>
+                    <option value="medium" ${lead.priority === 'medium' ? 'selected' : ''}>Medium</option>
+                    <option value="high" ${lead.priority === 'high' ? 'selected' : ''}>High</option>
+                  </select>
+                </td>
+                <td>${assignSelect}</td>
+                <td style="text-align:right;">
+                  <button class="btn-toggle btn-toggle-activate" style="padding:6px 10px;margin-right:5px;" onclick="openLeadModal('${lead._id}')">View</button>
+                  <button class="btn-toggle btn-toggle-deactivate" style="padding:6px 10px;" onclick="deleteLead('${lead._id}')">Delete</button>
+                </td>
+              `;
+              tbody.appendChild(tr);
+            });
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
+      async function assignLead(leadId, counsellorId) {
+        try {
+          const res = await fetch(`${API_URL}/api/admin/leads/${leadId}/assign`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ assignedTo: counsellorId || null })
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            showToast('Lead assigned successfully');
+            fetchLeads();
+          }
+        } catch (err) {
+          showToast('Connection error');
+        }
+      }
+
+      async function updateLeadStatus(leadId, status) {
+        try {
+          const res = await fetch(`${API_URL}/api/admin/leads/${leadId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ status })
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            showToast('Status updated');
+            fetchLeads();
+          }
+        } catch (err) {
+          showToast('Connection error');
+        }
+      }
+
+      async function updateLeadPriority(leadId, priority) {
+        try {
+          const res = await fetch(`${API_URL}/api/admin/leads/${leadId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ priority })
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            showToast('Priority updated');
+          }
+        } catch (err) {
+          showToast('Connection error');
+        }
+      }
+
+      async function deleteLead(id) {
+        if (!confirm('Permanently delete this counselling request?')) return;
+        try {
+          const res = await fetch(`${API_URL}/api/admin/leads/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          if (res.ok) {
+            showToast('Lead deleted successfully');
+            fetchLeads();
+          }
+        } catch (err) {
+          showToast('Connection error');
+        }
+      }
+
+      function resetLeadFilters() {
+        document.getElementById('lead-search').value = '';
+        document.getElementById('lead-filter-status').value = '';
+        document.getElementById('lead-filter-priority').value = '';
+        document.getElementById('lead-filter-counsellor').value = '';
+        fetchLeads();
+      }
+
+      function exportLeadsCSV() {
+        window.open(`${API_URL}/api/admin/leads/export?Authorization=Bearer+${token}`, '_blank');
+        // If query token is handled differently, we can redirect directly
+        const downloadLink = document.createElement('a');
+        downloadLink.href = `${API_URL}/api/admin/leads/export`;
+        // We need Authorization header. Fetch blob first is cleaner.
+        fetch(`${API_URL}/api/admin/leads/export`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+        .then(res => res.blob())
+        .then(blob => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `leads_export_${new Date().toISOString().slice(0,10)}.csv`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          showToast('CSV downloaded');
+        })
+        .catch(() => showToast('Export failed', 'error'));
+      }
+
+      // Lead Details Modal
+      async function openLeadModal(id) {
+        try {
+          const res = await fetch(`${API_URL}/api/admin/leads/${id}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            const lead = data.data;
+            document.getElementById('modal-lead-title').textContent = `${escapeHTML(lead.name)} Details`;
+            
+            const detailPane = document.getElementById('modal-lead-details');
+            detailPane.innerHTML = `
+              <div><span>Email</span><strong>${escapeHTML(lead.email)}</strong></div>
+              <div><span>Phone</span><strong>${escapeHTML(lead.phone)}</strong></div>
+              <div><span>JEE Rank</span><strong>${escapeHTML(lead.jeeRank) || 'None'}</strong></div>
+              <div><span>Category</span><strong>${escapeHTML(lead.category)}</strong></div>
+              <div><span>Branch Preference</span><strong>${escapeHTML(lead.preferredBranch)}</strong></div>
+              <div><span>State Preference</span><strong>${escapeHTML(lead.preferredState)}</strong></div>
+              <div><span>Budget Limit</span><strong>${escapeHTML(lead.budget)}</strong></div>
+              <div><span>Source</span><strong>${escapeHTML(lead.source)}</strong></div>
+              <div style="grid-column: span 2;"><span>Message</span><p style="margin:4px 0 0 0; color:#e2e8f0;">${escapeHTML(lead.message) || 'No message provided'}</p></div>
+            `;
+
+            const timeline = document.getElementById('modal-notes-timeline');
+            timeline.innerHTML = '';
+            if (lead.notes.length === 0) {
+              timeline.innerHTML = '<p style="color:#64748b;font-size:0.85rem;margin:0;">No counsellor notes logged.</p>';
+            } else {
+              lead.notes.forEach(note => {
+                const item = document.createElement('div');
+                item.className = 'note-item';
+                item.style.background = 'rgba(255,255,255,0.02)';
+                item.innerHTML = `
+                  <div class="note-header">
+                    <strong>${escapeHTML(note.addedBy?.name || 'Counsellor')} (${escapeHTML(note.addedBy?.role)})</strong>
+                    <span>${new Date(note.addedAt).toLocaleString('en-IN')}</span>
+                  </div>
+                  <div class="note-content">${escapeHTML(note.text)}</div>
+                `;
+                timeline.appendChild(item);
+              });
+            }
+
+            document.getElementById('details-modal').classList.add('open');
+          }
+        } catch (err) {
+          showToast('Failed to load lead details');
+        }
+      }
+
+      function closeModal() {
+        document.getElementById('details-modal').classList.remove('open');
+      }
+
+      // ── USER OPERATIONS LOGIC ──
+
+      async function fetchUsers() {
+        const search = document.getElementById('user-search').value;
+        const roleFilter = document.getElementById('user-filter-role').value;
+
+        const params = new URLSearchParams();
+        if (search) params.append('search', search);
+        if (roleFilter) params.append('role', roleFilter);
+
+        try {
+          const res = await fetch(`${API_URL}/api/admin/users?${params.toString()}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const data = await res.json();
+          const tbody = document.getElementById('users-table-body');
+          tbody.innerHTML = '';
+
+          if (res.ok && data.success) {
+            const users = data.data;
+            if (users.length === 0) {
+              tbody.innerHTML = '<tr><td colspan="6" class="no-data">No user accounts found.</td></tr>';
+              return;
+            }
+
+            users.forEach(user => {
+              const tr = document.createElement('tr');
+
+              const isUserActive = user.isActive;
+              const toggleBtn = isUserActive
+                ? `<button class="btn-toggle btn-toggle-deactivate" onclick="toggleUserStatus('${user._id}', false)">Deactivate</button>`
+                : `<button class="btn-toggle btn-toggle-activate" onclick="toggleUserStatus('${user._id}', true)">Activate</button>`;
+
+              tr.innerHTML = `
+                <td>
+                  <div style="font-weight:700;color:white;">${escapeHTML(user.name)}</div>
+                  <div style="font-size:0.8rem;color:#64748b;">Joined: ${new Date(user.createdAt).toLocaleDateString('en-IN')}</div>
+                </td>
+                <td>${escapeHTML(user.email)}</td>
+                <td>${escapeHTML(user.phone)}</td>
+                <td>
+                  <select class="action-select badge role-${user.role}" onchange="changeUserRole('${user._id}', this.value)">
+                    <option value="student" ${user.role === 'student' ? 'selected' : ''}>Student</option>
+                    <option value="counsellor" ${user.role === 'counsellor' ? 'selected' : ''}>Counsellor</option>
+                    <option value="admin" ${user.role === 'admin' ? 'selected' : ''}>Admin</option>
+                  </select>
+                </td>
+                <td><span class="badge ${isUserActive ? 'status-active' : 'status-inactive'}">${isUserActive ? 'Active' : 'Deactivated'}</span></td>
+                <td style="text-align:right;">${toggleBtn}</td>
+              `;
+              tbody.appendChild(tr);
+            });
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
+      async function toggleUserStatus(id, isActive) {
+        try {
+          const res = await fetch(`${API_URL}/api/admin/users/${id}/status`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ isActive })
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            showToast(isActive ? 'User account activated' : 'User account deactivated');
+            fetchUsers();
+          } else {
+            showToast(data.error || 'Failed to update account status');
+          }
+        } catch (err) {
+          showToast('Connection error');
+        }
+      }
+
+      async function changeUserRole(id, roleVal) {
+        try {
+          const res = await fetch(`${API_URL}/api/admin/users/${id}/role`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ role: roleVal })
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            showToast(`Role changed to ${roleVal}`);
+            fetchCounsellors(); // Refresh counsellors list for assignment dropdown
+            fetchUsers();
+          } else {
+            showToast(data.error || 'Failed to update role');
+          }
+        } catch (err) {
+          showToast('Connection error');
+        }
+      }
+
+      function resetUserFilters() {
+        document.getElementById('user-search').value = '';
+        document.getElementById('user-filter-role').value = '';
+        fetchUsers();
+      }
+
+      // ── ANALYTICS HUB LOGIC ──
+
+      async function fetchAnalytics() {
+        try {
+          const res = await fetch(`${API_URL}/api/admin/stats`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            const stats = data.data;
+
+            // Update stats cards
+            document.getElementById('analytic-total-leads').textContent = stats.totalLeads;
+            document.getElementById('analytic-total-users').textContent = stats.totalUsers;
+            document.getElementById('analytic-total-counsellors').textContent = stats.totalCounsellors;
+            document.getElementById('analytic-conversion').textContent = stats.conversionRate;
+
+            // Render Charts
+            renderStatusChart(stats.leadsByStatus);
+            renderBranchChart(stats.topBranches);
+
+            // Render Workload list
+            const workloadTbody = document.getElementById('workload-table-body');
+            workloadTbody.innerHTML = '';
+            if (stats.counsellorsWorkload.length === 0) {
+              workloadTbody.innerHTML = '<tr><td colspan="4" class="no-data">No counsellors found. Promote users in user operations tab.</td></tr>';
+              return;
+            }
+
+            stats.counsellorsWorkload.forEach(cw => {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `
+                <td style="font-weight:700;color:white;">${escapeHTML(cw.name)}</td>
+                <td>${escapeHTML(cw.email)}</td>
+                <td><span class="badge" style="background:rgba(245,158,11,0.15);color:#f59e0b;">${cw.openLeads} Open</span></td>
+                <td>${cw.totalLeads} Total</td>
+              `;
+              workloadTbody.appendChild(tr);
+            });
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
+      function renderStatusChart(statusData) {
+        const ctx = document.getElementById('statusChart').getContext('2d');
+        if (statusChartInstance) statusChartInstance.destroy();
+
+        statusChartInstance = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: ['New', 'Contacted', 'In Progress', 'Completed', 'Closed', 'Dropped'],
+            datasets: [{
+              data: [
+                statusData.new || 0,
+                statusData.contacted || 0,
+                statusData.in_progress || 0,
+                statusData.counselled || 0,
+                statusData.closed || 0,
+                statusData.dropped || 0
+              ],
+              backgroundColor: ['#3b82f6', '#fbbf24', '#a78bfa', '#10b981', '#cbd5e1', '#f87171'],
+              borderWidth: 0
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'right',
+                labels: { color: '#94a3b8', boxWidth: 12, font: { family: 'Inter' } }
+              }
+            }
+          }
+        });
+      }
+
+      function renderBranchChart(branchData) {
+        const ctx = document.getElementById('branchChart').getContext('2d');
+        if (branchChartInstance) branchChartInstance.destroy();
+
+        const labels = branchData.map(b => b.branch || 'Not Specified');
+        const values = branchData.map(b => b.count);
+
+        branchChartInstance = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Counselling Requests',
+              data: values,
+              backgroundColor: '#3b82f6',
+              borderRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                grid: { color: 'rgba(255,255,255,0.05)' },
+                ticks: { color: '#94a3b8', font: { family: 'Inter' } }
+              },
+              x: {
+                grid: { display: false },
+                ticks: { color: '#94a3b8', font: { family: 'Inter' } }
+              }
+            },
+            plugins: {
+              legend: { display: false }
+            }
+          }
+        });
+      }
+
+      // Input Event listeners
+      document.getElementById('lead-search').addEventListener('input', debounce(fetchLeads, 300));
+      document.getElementById('lead-filter-status').addEventListener('change', fetchLeads);
+      document.getElementById('lead-filter-priority').addEventListener('change', fetchLeads);
+      document.getElementById('lead-filter-counsellor').addEventListener('change', fetchLeads);
+
+      document.getElementById('user-search').addEventListener('input', debounce(fetchUsers, 300));
+      document.getElementById('user-filter-role').addEventListener('change', fetchUsers);
+
+      function debounce(func, delay) {
+        let timeout;
+        return function (...args) {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => func.apply(this, args), delay);
+        };
+      }
+
+      function escapeHTML(str) {
+        if (!str) return '';
+        return str
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      function handleLogout() {
+        localStorage.clear();
+        window.location.href = 'login.html';
+      }
+      document.getElementById('btn-logout').addEventListener('click', handleLogout);
+
+      // Init Load
+      async function init() {
+        await fetchCounsellors();
+        fetchLeads();
+      }
+
+      init();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,718 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Student Dashboard | BtechHelpline</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body.student-body {
+        background: #0f172a;
+        color: #f8fafc;
+        font-family: 'Inter', system-ui, sans-serif;
+        min-height: 100vh;
+      }
+
+      .dashboard-container {
+        width: min(100% - 32px, 1200px);
+        margin: 0 auto;
+        padding: 40px 0;
+      }
+
+      header.dash-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .dash-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1.3rem;
+        font-weight: 900;
+        color: #3b82f6;
+      }
+
+      .dash-brand span span {
+        color: #f59e0b;
+      }
+
+      .btn-logout {
+        padding: 10px 18px;
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        color: #f87171;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s;
+      }
+
+      .btn-logout:hover {
+        background: rgba(239, 68, 68, 0.2);
+        color: #ef4444;
+      }
+
+      .grid-layout {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 30px;
+      }
+
+      .card {
+        background: rgba(30, 41, 59, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        padding: 24px;
+      }
+
+      .card h2 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #ffffff;
+        border-left: 4px solid #3b82f6;
+        padding-left: 10px;
+      }
+
+      /* Profile form */
+      .profile-form label {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #cbd5e1;
+        margin-bottom: 16px;
+      }
+
+      .profile-form input, .profile-form select {
+        width: 100%;
+        padding: 10px 14px;
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        color: #ffffff;
+        outline: none;
+        transition: border-color 0.3s;
+        font-size: 0.9rem;
+      }
+
+      .profile-form input:focus, .profile-form select:focus {
+        border-color: #3b82f6;
+      }
+
+      .btn-save {
+        width: 100%;
+        padding: 12px;
+        background: #2563eb;
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: opacity 0.2s;
+        margin-top: 10px;
+      }
+
+      .btn-save:hover {
+        opacity: 0.9;
+      }
+
+      /* Leads List */
+      .leads-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .btn-request {
+        padding: 10px 16px;
+        background: linear-gradient(135deg, #10b981, #059669);
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 0.88rem;
+        transition: opacity 0.2;
+      }
+
+      .btn-request:hover {
+        opacity: 0.9;
+      }
+
+      .lead-item {
+        background: rgba(15, 23, 42, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 18px;
+        margin-bottom: 15px;
+        transition: transform 0.2s;
+      }
+
+      .lead-item:hover {
+        transform: translateY(-2px);
+      }
+
+      .lead-item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 12px;
+      }
+
+      .lead-item-header h3 {
+        font-size: 1.05rem;
+        font-weight: 700;
+        margin: 0;
+        color: #ffffff;
+      }
+
+      .status-badge {
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 4px 8px;
+        border-radius: 6px;
+        text-transform: uppercase;
+      }
+
+      .status-new { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+      .status-contacted { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+      .status-in_progress { background: rgba(139, 92, 246, 0.15); color: #a78bfa; }
+      .status-counselled { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+      .status-closed { background: rgba(100, 116, 139, 0.15); color: #cbd5e1; }
+      .status-dropped { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+
+      .lead-details {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 10px;
+        font-size: 0.85rem;
+        color: #94a3b8;
+      }
+
+      .lead-details span strong {
+        color: #cbd5e1;
+      }
+
+      .no-leads {
+        text-align: center;
+        padding: 40px 20px;
+        color: #64748b;
+      }
+
+      .no-leads p {
+        margin-top: 10px;
+      }
+
+      /* Lead Modal */
+      .modal {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(15, 23, 42, 0.8);
+        backdrop-filter: blur(8px);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        padding: 20px;
+      }
+
+      .modal.open {
+        display: flex;
+      }
+
+      .modal-card {
+        background: #1e293b;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 30px;
+        width: 100%;
+        max-width: 500px;
+        position: relative;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 20px; right: 20px;
+        background: none;
+        border: none;
+        color: #94a3b8;
+        font-size: 1.5rem;
+        cursor: pointer;
+      }
+
+      .modal-close:hover {
+        color: #ffffff;
+      }
+
+      .modal-card h2 {
+        font-size: 1.3rem;
+        font-weight: 800;
+        margin-bottom: 20px;
+        color: #ffffff;
+      }
+
+      .form-msg {
+        text-align: center;
+        padding: 10px;
+        border-radius: 6px;
+        font-size: 0.88rem;
+        margin-bottom: 15px;
+        display: none;
+      }
+
+      .form-msg.success { display: block; background: rgba(16, 185, 129, 0.15); color: #34d399; }
+      .form-msg.error { display: block; background: rgba(239, 68, 68, 0.15); color: #f87171; }
+
+      /* Toast */
+      .toast {
+        position: fixed;
+        bottom: 24px; right: 24px;
+        background: #1e293b;
+        border-left: 4px solid #10b981;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 8px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        z-index: 1100;
+        display: none;
+      }
+
+      @media (max-width: 768px) {
+        .grid-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body class="student-body">
+    <div class="dashboard-container">
+      
+      <!-- Header -->
+      <header class="dash-header">
+        <div class="dash-brand">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" style="width: 24px; fill: white;">
+              <path d="M2.5 7.2 12 2.8l9.5 4.4-9.5 4.4-9.5-4.4Z" />
+              <path d="M6.4 10.1v4.5c0 1.8 2.5 3.2 5.6 3.2s5.6-1.4 5.6-3.2v-4.5L12 12.7l-5.6-2.6Z" />
+            </svg>
+          </span>
+          <span>Btechhelpline<span>.com</span></span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 15px;">
+          <span id="student-name-welcome" style="font-weight: 600; color: #60a5fa;">Loading...</span>
+          <button class="btn-logout" id="btn-logout">Logout</button>
+        </div>
+      </header>
+
+      <div class="grid-layout">
+        
+        <!-- Profile Column -->
+        <section class="card">
+          <h2>My Profile Info</h2>
+          <div class="form-msg" id="profile-msg"></div>
+          <form class="profile-form" id="profile-form">
+            <label>
+              Full Name
+              <input type="text" id="profile-name" required />
+            </label>
+            <label>
+              Email Address
+              <input type="email" id="profile-email" disabled style="opacity: 0.6; cursor: not-allowed;" />
+            </label>
+            <label>
+              Mobile Number
+              <input type="tel" id="profile-phone" required />
+            </label>
+            <label>
+              JEE Mains Rank
+              <input type="text" id="profile-jeeRank" />
+            </label>
+            <label>
+              Preferred Course/Branch
+              <select id="profile-branch">
+                <option value="">Select Branch</option>
+                <option>Computer Science Engineering</option>
+                <option>AI & Data Science</option>
+                <option>Electronics & Communication</option>
+                <option>Mechanical Engineering</option>
+                <option>Civil Engineering</option>
+                <option>Electrical Engineering</option>
+                <option>Information Technology</option>
+                <option>Not Sure</option>
+              </select>
+            </label>
+            <label>
+              Preferred State
+              <select id="profile-state">
+                <option value="">Select State</option>
+                <option>Andaman and Nicobar Islands</option>
+                <option>Andhra Pradesh</option>
+                <option>Arunachal Pradesh</option>
+                <option>Assam</option>
+                <option>Bihar</option>
+                <option>Chandigarh</option>
+                <option>Chhattisgarh</option>
+                <option>Dadra and Nagar Haveli and Daman and Diu</option>
+                <option>Delhi NCR</option>
+                <option>Goa</option>
+                <option>Gujarat</option>
+                <option>Haryana</option>
+                <option>Himachal Pradesh</option>
+                <option>Jammu and Kashmir</option>
+                <option>Jharkhand</option>
+                <option>Karnataka</option>
+                <option>Kerala</option>
+                <option>Ladakh</option>
+                <option>Lakshadweep</option>
+                <option>Madhya Pradesh</option>
+                <option>Maharashtra</option>
+                <option>Manipur</option>
+                <option>Meghalaya</option>
+                <option>Mizoram</option>
+                <option>Nagaland</option>
+                <option>Odisha</option>
+                <option>Puducherry</option>
+                <option>Punjab</option>
+                <option>Rajasthan</option>
+                <option>Sikkim</option>
+                <option>Tamil Nadu</option>
+                <option>Telangana</option>
+                <option>Tripura</option>
+                <option>Uttar Pradesh</option>
+                <option>Uttarakhand</option>
+                <option>West Bengal</option>
+                <option>Other</option>
+              </select>
+            </label>
+            <button type="submit" class="btn-save" id="btn-save-profile">Save Changes</button>
+          </form>
+        </section>
+
+        <!-- Requests Column -->
+        <section class="card">
+          <div class="leads-header">
+            <h2 style="margin: 0;">My Counselling Requests</h2>
+            <button class="btn-request" id="btn-open-modal">Request Consultation</button>
+          </div>
+
+          <div id="leads-list">
+            <div class="no-leads">Loading requests...</div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- Request Modal -->
+    <div class="modal" id="request-modal">
+      <div class="modal-card">
+        <button class="modal-close" id="btn-close-modal">&times;</button>
+        <h2>New Counselling Request</h2>
+        <div class="form-msg" id="modal-msg"></div>
+        <form class="profile-form" id="request-form">
+          <label>
+            Preferred Branch
+            <select id="req-branch" required>
+              <option value="">Select Branch</option>
+              <option>Computer Science Engineering</option>
+              <option>AI & Data Science</option>
+              <option>Electronics & Communication</option>
+              <option>Mechanical Engineering</option>
+              <option>Civil Engineering</option>
+              <option>Electrical Engineering</option>
+              <option>Information Technology</option>
+              <option>Not Sure</option>
+            </select>
+          </label>
+          <label>
+            Preferred State
+            <select id="req-state" required>
+              <option value="">Select State</option>
+              <option>Andaman and Nicobar Islands</option>
+              <option>Andhra Pradesh</option>
+              <option>Arunachal Pradesh</option>
+              <option>Assam</option>
+              <option>Bihar</option>
+              <option>Chandigarh</option>
+              <option>Chhattisgarh</option>
+              <option>Dadra and Nagar Haveli and Daman and Diu</option>
+              <option>Delhi NCR</option>
+              <option>Goa</option>
+              <option>Gujarat</option>
+              <option>Haryana</option>
+              <option>Himachal Pradesh</option>
+              <option>Jammu and Kashmir</option>
+              <option>Jharkhand</option>
+              <option>Karnataka</option>
+              <option>Kerala</option>
+              <option>Ladakh</option>
+              <option>Lakshadweep</option>
+              <option>Madhya Pradesh</option>
+              <option>Maharashtra</option>
+              <option>Manipur</option>
+              <option>Meghalaya</option>
+              <option>Mizoram</option>
+              <option>Nagaland</option>
+              <option>Odisha</option>
+              <option>Puducherry</option>
+              <option>Punjab</option>
+              <option>Rajasthan</option>
+              <option>Sikkim</option>
+              <option>Tamil Nadu</option>
+              <option>Telangana</option>
+              <option>Tripura</option>
+              <option>Uttar Pradesh</option>
+              <option>Uttarakhand</option>
+              <option>West Bengal</option>
+              <option>Other</option>
+            </select>
+          </label>
+          <label>
+            Budget Range
+            <select id="req-budget" required>
+              <option value="">Select Budget</option>
+              <option>Below 2 Lakh / Year</option>
+              <option>2 – 5 Lakh / Year</option>
+              <option>5 – 8 Lakh / Year</option>
+              <option>8 – 12 Lakh / Year</option>
+              <option>Above 12 Lakh / Year</option>
+              <option>Not Sure</option>
+            </select>
+          </label>
+          <label>
+            Counselling Category
+            <select id="req-category">
+              <option>General</option>
+              <option>OBC</option>
+              <option>SC</option>
+              <option>ST</option>
+              <option>EWS</option>
+            </select>
+          </label>
+          <label>
+            Any Message / Question?
+            <textarea id="req-message" style="width:100%;height:80px;background:rgba(15,23,42,0.6);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:white;padding:10px;outline:none;" placeholder="Tell us if you have any questions..."></textarea>
+          </label>
+          <button type="submit" class="btn-save" id="btn-submit-request" style="background:#10b981;">Submit Request</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="config.js"></script>
+    <script>
+      const token = localStorage.getItem('token');
+      const role = localStorage.getItem('role');
+
+      if (!token || role !== 'student') {
+        localStorage.clear();
+        window.location.href = 'login.html';
+      }
+
+      // Helper to show toasts
+      function showToast(message) {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.style.display = 'block';
+        setTimeout(() => { toast.style.display = 'none'; }, 3000);
+      }
+
+      // Fetch Profile Data
+      async function fetchProfile() {
+        try {
+          const res = await fetch(`${API_URL}/api/user/me`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            const user = data.data;
+            document.getElementById('student-name-welcome').textContent = user.name;
+            document.getElementById('profile-name').value = user.name;
+            document.getElementById('profile-email').value = user.email;
+            document.getElementById('profile-phone').value = user.phone;
+            document.getElementById('profile-jeeRank').value = user.jeeRank || '';
+            document.getElementById('profile-branch').value = user.preferredBranch || '';
+            document.getElementById('profile-state').value = user.preferredState || '';
+          } else {
+            handleLogout();
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
+      // Fetch Leads
+      async function fetchLeads() {
+        try {
+          const res = await fetch(`${API_URL}/api/user/my-leads`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const data = await res.json();
+          const listDiv = document.getElementById('leads-list');
+          listDiv.innerHTML = '';
+
+          if (res.ok && data.success) {
+            const leads = data.data;
+            if (leads.length === 0) {
+              listDiv.innerHTML = `
+                <div class="no-leads">
+                  <p>You haven't submitted any consultation requests yet.</p>
+                </div>
+              `;
+              return;
+            }
+
+            leads.forEach(lead => {
+              const div = document.createElement('div');
+              div.className = 'lead-item';
+              const createdDate = new Date(lead.createdAt).toLocaleDateString('en-IN', {
+                day: 'numeric', month: 'short', year: 'numeric'
+              });
+              
+              div.innerHTML = `
+                <div class="lead-item-header">
+                  <h3>Counselling Consultation Request</h3>
+                  <span class="status-badge status-${lead.status}">${lead.status.replace('_', ' ')}</span>
+                </div>
+                <div class="lead-details">
+                  <span>Branch: <strong>${escapeHTML(lead.preferredBranch)}</strong></span>
+                  <span>State: <strong>${escapeHTML(lead.preferredState)}</strong></span>
+                  <span>Budget: <strong>${escapeHTML(lead.budget)}</strong></span>
+                  <span>Date: <strong>${createdDate}</strong></span>
+                </div>
+              `;
+              listDiv.appendChild(div);
+            });
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
+      function escapeHTML(str) {
+        if (!str) return '';
+        return str
+          .toString()
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      // Save Profile info
+      document.getElementById('profile-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const msg = document.getElementById('profile-msg');
+        msg.style.display = 'none';
+
+        const name = document.getElementById('profile-name').value.trim();
+        const phone = document.getElementById('profile-phone').value.trim();
+        const jeeRank = document.getElementById('profile-jeeRank').value.trim();
+        const branch = document.getElementById('profile-branch').value;
+        const state = document.getElementById('profile-state').value;
+
+        try {
+          const res = await fetch(`${API_URL}/api/user/me`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ name, phone, jeeRank, preferredBranch: branch, preferredState: state })
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            msg.textContent = 'Profile updated successfully!';
+            msg.className = 'form-msg success';
+            document.getElementById('student-name-welcome').textContent = name;
+            localStorage.setItem('userName', name);
+          } else {
+            msg.textContent = data.error || 'Update failed';
+            msg.className = 'form-msg error';
+          }
+        } catch (err) {
+          msg.textContent = 'Server connection error';
+          msg.className = 'form-msg error';
+        }
+      });
+
+      // Submit new lead request
+      document.getElementById('request-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const msg = document.getElementById('modal-msg');
+        msg.style.display = 'none';
+
+        const branch = document.getElementById('req-branch').value;
+        const state = document.getElementById('req-state').value;
+        const budget = document.getElementById('req-budget').value;
+        const category = document.getElementById('req-category').value;
+        const message = document.getElementById('req-message').value;
+
+        const name = localStorage.getItem('userName');
+        const mobile = document.getElementById('profile-phone').value;
+        const email = localStorage.getItem('userEmail');
+        const jeeRank = document.getElementById('profile-jeeRank').value;
+
+        try {
+          const res = await fetch(`${API_URL}/api/leads`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ name, mobile, email, jeeRank, branch, state, budget, category, message })
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            msg.textContent = 'Consultation request submitted!';
+            msg.className = 'form-msg success';
+            document.getElementById('request-form').reset();
+            fetchLeads();
+            setTimeout(closeModal, 1500);
+          } else {
+            msg.textContent = data.error || 'Failed to submit request';
+            msg.className = 'form-msg error';
+          }
+        } catch (err) {
+          msg.textContent = 'Server connection error';
+          msg.className = 'form-msg error';
+        }
+      });
+
+      // Modal management
+      const modal = document.getElementById('request-modal');
+      document.getElementById('btn-open-modal').addEventListener('click', () => {
+        document.getElementById('modal-msg').style.display = 'none';
+        modal.classList.add('open');
+      });
+      
+      const closeModal = () => { modal.classList.remove('open'); };
+      document.getElementById('btn-close-modal').addEventListener('click', closeModal);
+
+      // Logout
+      function handleLogout() {
+        localStorage.clear();
+        window.location.href = 'login.html';
+      }
+      document.getElementById('btn-logout').addEventListener('click', handleLogout);
+
+      // Init
+      fetchProfile();
+      fetchLeads();
+    </script>
+  </body>
+</html>
