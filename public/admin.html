@@ -10,8 +10,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
       body.admin-body {
-        background: #0f172a;
-        color: #f8fafc;
+        background: var(--soft);
+        color: var(--ink);
         font-family: 'Inter', system-ui, sans-serif;
         min-height: 100vh;
       }
@@ -22,14 +22,25 @@
         padding: 40px 0;
       }
 
-      /* Header */
       header.dash-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--line);
+        box-shadow: 0 4px 30px rgba(15, 23, 42, 0.03);
+        transition: background 0.3s, box-shadow 0.3s;
+      }
+
+      .dash-header-container {
+        width: min(100% - 32px, 1280px);
+        margin: 0 auto;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 30px;
-        padding-bottom: 20px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 16px 0;
       }
 
       .dash-brand {
@@ -38,18 +49,29 @@
         gap: 10px;
         font-size: 1.3rem;
         font-weight: 900;
-        color: #3b82f6;
+        color: var(--blue);
+      }
+
+      /* Back to top button */
+      #back-to-top.visible {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+      #back-to-top:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
       }
 
       .dash-brand span span {
-        color: #f59e0b;
+        color: var(--orange-dark);
       }
 
       .btn-logout {
         padding: 10px 18px;
-        background: rgba(239, 68, 68, 0.1);
-        border: 1px solid rgba(239, 68, 68, 0.2);
-        color: #f87171;
+        background: rgba(239, 68, 68, 0.05);
+        border: 1px solid rgba(239, 68, 68, 0.15);
+        color: #dc2626;
         border-radius: 10px;
         cursor: pointer;
         font-weight: 600;
@@ -58,8 +80,8 @@
       }
 
       .btn-logout:hover {
-        background: rgba(239, 68, 68, 0.2);
-        color: #ef4444;
+        background: rgba(239, 68, 68, 0.1);
+        color: #b91c1c;
       }
 
       /* Tabs Navigation */
@@ -67,14 +89,14 @@
         display: flex;
         gap: 12px;
         margin-bottom: 30px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        border-bottom: 1px solid var(--line);
         padding-bottom: 12px;
       }
 
       .tab-btn {
         background: none;
         border: none;
-        color: #94a3b8;
+        color: var(--muted);
         padding: 10px 20px;
         font-weight: 600;
         font-size: 0.95rem;
@@ -84,14 +106,14 @@
       }
 
       .tab-btn:hover {
-        color: #ffffff;
-        background: rgba(255, 255, 255, 0.03);
+        color: var(--ink);
+        background: var(--soft);
       }
 
       .tab-btn.active {
-        color: #ffffff;
-        background: rgba(59, 130, 246, 0.15);
-        border: 1px solid rgba(59, 130, 246, 0.3);
+        color: var(--blue);
+        background: #eff6ff;
+        border: 1px solid rgba(37, 99, 235, 0.2);
       }
 
       .tab-content {
@@ -117,14 +139,15 @@
       }
 
       .stat-card {
-        background: rgba(30, 41, 59, 0.4);
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        background: var(--white);
+        border: 1px solid var(--line);
         border-radius: 16px;
         padding: 20px;
+        box-shadow: var(--shadow-sm);
       }
 
       .stat-card h3 {
-        color: #94a3b8;
+        color: var(--muted);
         font-size: 0.8rem;
         text-transform: uppercase;
         letter-spacing: 0.05em;
@@ -134,14 +157,14 @@
       .stat-card .value {
         font-size: 1.8rem;
         font-weight: 800;
-        color: #ffffff;
+        color: var(--ink);
         margin: 0;
       }
 
       /* Controls Panel */
       .controls-panel {
-        background: rgba(30, 41, 59, 0.3);
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        background: var(--white);
+        border: 1px solid var(--line);
         border-radius: 16px;
         padding: 20px;
         margin-bottom: 25px;
@@ -150,6 +173,7 @@
         gap: 15px;
         align-items: center;
         justify-content: space-between;
+        box-shadow: var(--shadow-sm);
       }
 
       .filters {
@@ -160,14 +184,20 @@
       }
 
       .filters input, .filters select {
-        background: rgba(15, 23, 42, 0.8);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        color: white;
+        background: var(--white);
+        border: 1px solid var(--line);
+        color: var(--ink);
         padding: 10px 14px;
         border-radius: 10px;
         outline: none;
         font-size: 0.9rem;
         min-width: 160px;
+        transition: all 0.3s;
+      }
+
+      .filters input:focus, .filters select:focus {
+        border-color: var(--blue);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
       }
 
       .btn-action {
@@ -183,23 +213,28 @@
       }
 
       .btn-reset {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        color: #cbd5e1;
+        background: var(--soft);
+        border: 1px solid var(--line);
+        color: var(--ink);
       }
 
       .btn-export {
-        background: linear-gradient(135deg, #10b981, #059669);
+        background: linear-gradient(135deg, var(--green), var(--green-dark));
         border: none;
         color: white;
+        box-shadow: 0 4px 12px rgba(16,185,129,0.15);
       }
 
       /* Tables styling */
       .table-wrapper {
-        background: rgba(30, 41, 59, 0.4);
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        background: var(--white);
+        border: 1px solid var(--line);
         border-radius: 20px;
         overflow-x: auto;
+        width: 100%;
+        max-width: 100%;
+        -webkit-overflow-scrolling: touch;
+        box-shadow: var(--shadow-sm);
       }
 
       .admin-table {
@@ -210,22 +245,22 @@
       }
 
       .admin-table th {
-        background: rgba(15, 23, 42, 0.6);
+        background: var(--soft);
         padding: 16px 20px;
         font-weight: 600;
-        color: #94a3b8;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--ink);
+        border-bottom: 1px solid var(--line);
       }
 
       .admin-table td {
         padding: 16px 20px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        color: #cbd5e1;
+        border-bottom: 1px solid var(--line);
+        color: #334155;
         white-space: nowrap;
       }
 
       .admin-table tr:hover td {
-        background: rgba(255, 255, 255, 0.01);
+        background: var(--soft);
       }
 
       /* Badges & tags */
@@ -237,22 +272,27 @@
         text-transform: uppercase;
       }
 
-      .role-admin { background: rgba(239, 68, 68, 0.15); color: #f87171; }
-      .role-counsellor { background: rgba(139, 92, 246, 0.15); color: #a78bfa; }
-      .role-student { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+      .role-admin { background: #fef2f2; color: var(--rose); }
+      .role-counsellor { background: #f5f3ff; color: var(--violet); }
+      .role-student { background: #eff6ff; color: var(--blue); }
 
-      .status-active { background: rgba(16, 185, 129, 0.15); color: #34d399; }
-      .status-inactive { background: rgba(100, 116, 139, 0.15); color: #94a3b8; }
+      .status-active { background: #ecfdf5; color: var(--green-dark); }
+      .status-inactive { background: #f1f5f9; color: var(--muted); }
 
       /* Action controls */
       .action-select {
-        background: #1e293b;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        color: white;
+        background: var(--white);
+        border: 1px solid var(--line);
+        color: var(--ink);
         padding: 6px 10px;
         border-radius: 6px;
         outline: none;
         font-size: 0.85rem;
+        transition: all 0.3s;
+      }
+
+      .action-select:focus {
+        border-color: var(--blue);
       }
 
       .btn-toggle {
@@ -262,16 +302,22 @@
         font-size: 0.8rem;
         cursor: pointer;
         border: none;
+        transition: all 0.2s;
       }
 
-      .btn-toggle-deactivate { background: rgba(239, 68, 68, 0.15); color: #f87171; }
-      .btn-toggle-activate { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+      .btn-toggle:hover {
+        opacity: 0.9;
+        transform: translateY(-0.5px);
+      }
+
+      .btn-toggle-deactivate { background: #fef2f2; color: var(--rose); }
+      .btn-toggle-activate { background: #ecfdf5; color: var(--green-dark); }
 
       /* Slide-out Panel / Detail Modal */
       .modal {
         position: fixed;
         top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(15, 23, 42, 0.8);
+        background: rgba(15, 23, 42, 0.4);
         backdrop-filter: blur(8px);
         display: none;
         justify-content: center;
@@ -283,8 +329,8 @@
       .modal.open { display: flex; }
 
       .modal-card {
-        background: #1e293b;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: var(--white);
+        border: 1px solid var(--line);
         border-radius: 20px;
         padding: 30px;
         width: 100%;
@@ -292,6 +338,31 @@
         position: relative;
         max-height: 90vh;
         overflow-y: auto;
+        box-shadow: var(--shadow-lg);
+        color: var(--ink);
+      }
+
+      .profile-form label {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--muted);
+        margin-bottom: 16px;
+      }
+
+      .profile-form input, .profile-form select, .profile-form textarea {
+        background: var(--white) !important;
+        border: 1px solid var(--line) !important;
+        color: var(--ink) !important;
+        outline: none;
+        transition: all 0.3s;
+      }
+
+      .profile-form input:focus, .profile-form select:focus, .profile-form textarea:focus {
+        border-color: var(--blue) !important;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
       }
 
       .modal-close {
@@ -299,9 +370,13 @@
         top: 20px; right: 20px;
         background: none;
         border: none;
-        color: #94a3b8;
+        color: var(--muted);
         font-size: 1.5rem;
         cursor: pointer;
+      }
+
+      .modal-close:hover {
+        color: var(--ink);
       }
 
       /* Analytics charts */
@@ -313,17 +388,18 @@
       }
 
       .chart-card {
-        background: rgba(30, 41, 59, 0.4);
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        background: var(--white);
+        border: 1px solid var(--line);
         border-radius: 20px;
         padding: 24px;
+        box-shadow: var(--shadow-sm);
       }
 
       .chart-card h3 {
         margin: 0 0 20px 0;
         font-size: 1.1rem;
         font-weight: 700;
-        color: #ffffff;
+        color: var(--ink);
       }
 
       .chart-container {
@@ -335,18 +411,19 @@
       .no-data {
         text-align: center;
         padding: 40px 20px;
-        color: #64748b;
+        color: var(--muted);
       }
 
       .toast {
         position: fixed;
         bottom: 24px; right: 24px;
-        background: #1e293b;
-        border-left: 4px solid #10b981;
-        color: white;
+        background: var(--white);
+        border: 1px solid var(--line);
+        border-left: 4px solid var(--green);
+        color: var(--ink);
         padding: 12px 24px;
         border-radius: 8px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        box-shadow: var(--shadow);
         z-index: 1100;
         display: none;
       }
@@ -359,13 +436,12 @@
     </style>
   </head>
   <body class="admin-body">
-    <div class="admin-container">
-      
-      <!-- Header -->
-      <header class="dash-header">
+    <!-- Header -->
+    <header class="dash-header">
+      <div class="dash-header-container">
         <div class="dash-brand">
           <span class="brand-mark" aria-hidden="true">
-            <svg viewBox="0 0 24 24" style="width: 24px; fill: white;">
+            <svg viewBox="0 0 24 24" style="width: 24px; fill: var(--white);">
               <path d="M2.5 7.2 12 2.8l9.5 4.4-9.5 4.4-9.5-4.4Z" />
               <path d="M6.4 10.1v4.5c0 1.8 2.5 3.2 5.6 3.2s5.6-1.4 5.6-3.2v-4.5L12 12.7l-5.6-2.6Z" />
             </svg>
@@ -376,7 +452,12 @@
           <span id="admin-name" style="font-weight: 600; color: #ef4444;">Admin Portal</span>
           <button class="btn-logout" id="btn-logout">Logout</button>
         </div>
-      </header>
+      </div>
+      <!-- Scroll Progress Bar -->
+      <div id="scroll-progress" style="position: absolute; bottom: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--blue), var(--orange-dark)); width: 0%; transition: width 0.1s ease-out; z-index: 101;"></div>
+    </header>
+
+    <div class="admin-container" style="padding-top: 24px;">
 
       <!-- Tabs Nav -->
       <nav class="tabs-nav">
@@ -530,12 +611,28 @@
             <p class="value" id="analytic-total-leads">0</p>
           </div>
           <div class="stat-card">
+            <h3>Pending Leads</h3>
+            <p class="value" id="analytic-pending-leads" style="color: #fbbf24;">0</p>
+          </div>
+          <div class="stat-card">
             <h3>Registered Members</h3>
             <p class="value" id="analytic-total-users" style="color: #60a5fa;">0</p>
           </div>
           <div class="stat-card">
             <h3>Active Counsellors</h3>
             <p class="value" id="analytic-total-counsellors" style="color: #a78bfa;">0</p>
+          </div>
+          <div class="stat-card">
+            <h3>Colleges in DB</h3>
+            <p class="value" id="analytic-total-colleges" style="color: #38bdf8;">0</p>
+          </div>
+          <div class="stat-card">
+            <h3>Avg placement</h3>
+            <p class="value" id="analytic-avg-placement" style="color: #34d399;">0 LPA</p>
+          </div>
+          <div class="stat-card">
+            <h3>Max placement</h3>
+            <p class="value" id="analytic-max-placement" style="color: #f59e0b;">0 LPA</p>
           </div>
           <div class="stat-card">
             <h3>Lead Conversion</h3>
@@ -676,6 +773,11 @@
             <input type="url" id="crud-college-website" placeholder="e.g. https://home.iitd.ac.in" style="width: 100%; padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none;" />
           </label>
           
+          <label style="margin-bottom: 0;">
+            Image URL
+            <input type="url" id="crud-college-image" placeholder="e.g. https://domain.com/image.jpg" style="width: 100%; padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none;" />
+          </label>
+          
           <label style="grid-column: 1/-1; margin-bottom: 0;">
             Branches Offered (comma separated)
             <input type="text" id="crud-college-branches" placeholder="e.g. Computer Science Engineering, Electrical Engineering" style="width: 100%; padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none;" />
@@ -804,8 +906,8 @@
 
               tr.innerHTML = `
                 <td>
-                  <div style="font-weight:700;color:white;">${escapeHTML(lead.name)}</div>
-                  <div style="font-size:0.8rem;color:#64748b;">${escapeHTML(lead.phone)} | ${escapeHTML(lead.email)}</div>
+                  <div style="font-weight:700;color:var(--ink);">${escapeHTML(lead.name)}</div>
+                  <div style="font-size:0.8rem;color:var(--muted);">${escapeHTML(lead.phone)} | ${escapeHTML(lead.email)}</div>
                 </td>
                 <td><span class="badge badge-branch">${escapeHTML(lead.preferredBranch)}</span></td>
                 <td>${escapeHTML(lead.preferredState)}</td>
@@ -1037,8 +1139,8 @@
 
               tr.innerHTML = `
                 <td>
-                  <div style="font-weight:700;color:white;">${escapeHTML(user.name)}</div>
-                  <div style="font-size:0.8rem;color:#64748b;">Joined: ${new Date(user.createdAt).toLocaleDateString('en-IN')}</div>
+                  <div style="font-weight:700;color:var(--ink);">${escapeHTML(user.name)}</div>
+                  <div style="font-size:0.8rem;color:var(--muted);">Joined: ${new Date(user.createdAt).toLocaleDateString('en-IN')}</div>
                 </td>
                 <td>${escapeHTML(user.email)}</td>
                 <td>${escapeHTML(user.phone)}</td>
@@ -1124,8 +1226,12 @@
 
             // Update stats cards
             document.getElementById('analytic-total-leads').textContent = stats.totalLeads;
+            document.getElementById('analytic-pending-leads').textContent = stats.pendingLeads;
             document.getElementById('analytic-total-users').textContent = stats.totalUsers;
             document.getElementById('analytic-total-counsellors').textContent = stats.totalCounsellors;
+            document.getElementById('analytic-total-colleges').textContent = stats.totalColleges;
+            document.getElementById('analytic-avg-placement').textContent = `₹${stats.avgPlacement.toFixed(1)} LPA`;
+            document.getElementById('analytic-max-placement').textContent = `₹${stats.maxPlacement.toFixed(1)} LPA`;
             document.getElementById('analytic-conversion').textContent = stats.conversionRate;
 
             // Render Charts
@@ -1143,9 +1249,9 @@
             stats.counsellorsWorkload.forEach(cw => {
               const tr = document.createElement('tr');
               tr.innerHTML = `
-                <td style="font-weight:700;color:white;">${escapeHTML(cw.name)}</td>
+                <td style="font-weight:700;color:var(--ink);">${escapeHTML(cw.name)}</td>
                 <td>${escapeHTML(cw.email)}</td>
-                <td><span class="badge" style="background:rgba(245,158,11,0.15);color:#f59e0b;">${cw.openLeads} Open</span></td>
+                <td><span class="badge" style="background:#fffbeb;color:var(--orange-dark);">${cw.openLeads} Open</span></td>
                 <td>${cw.totalLeads} Total</td>
               `;
               workloadTbody.appendChild(tr);
@@ -1183,7 +1289,7 @@
             plugins: {
               legend: {
                 position: 'right',
-                labels: { color: '#94a3b8', boxWidth: 12, font: { family: 'Inter' } }
+                labels: { color: '#475569', boxWidth: 12, font: { family: 'Inter' } }
               }
             }
           }
@@ -1213,12 +1319,12 @@
             maintainAspectRatio: false,
             scales: {
               y: {
-                grid: { color: 'rgba(255,255,255,0.05)' },
-                ticks: { color: '#94a3b8', font: { family: 'Inter' } }
+                grid: { color: 'rgba(15,23,42,0.08)' },
+                ticks: { color: '#475569', font: { family: 'Inter' } }
               },
               x: {
                 grid: { display: false },
-                ticks: { color: '#94a3b8', font: { family: 'Inter' } }
+                ticks: { color: '#475569', font: { family: 'Inter' } }
               }
             },
             plugins: {
@@ -1289,15 +1395,16 @@
               const rankText = col.nirfRank ? `#${col.nirfRank}` : 'N/A';
               const feesText = col.feesPerYear ? `₹${(col.feesPerYear / 100000).toFixed(2)} L` : 'N/A';
               
+              const badgeClass = `badge-${col.type.toLowerCase()}`;
               tr.innerHTML = `
                 <td>
-                  <div style="font-weight:700;color:white;">${escapeHTML(col.name)}</div>
-                  <div style="font-size:0.8rem;color:#64748b;">📍 ${escapeHTML(col.city)}, ${escapeHTML(col.state)}</div>
+                  <div style="font-weight:700;color:var(--ink);">${escapeHTML(col.name)}</div>
+                  <div style="font-size:0.8rem;color:var(--muted);">📍 ${escapeHTML(col.city)}, ${escapeHTML(col.state)}</div>
                 </td>
-                <td><span class="badge role-student" style="background:rgba(59,130,246,0.1); color:#60a5fa;">${col.type}</span></td>
+                <td><span class="badge ${badgeClass}">${col.type}</span></td>
                 <td>${rankText}</td>
                 <td>${escapeHTML(col.cutoffRankCSE)}</td>
-                <td><strong style="color:#34d399;">₹${col.avgPlacement.toFixed(1)} LPA</strong></td>
+                <td><strong style="color:var(--green-dark);">₹${col.avgPlacement.toFixed(1)} LPA</strong></td>
                 <td>${feesText}</td>
                 <td style="text-align:right;">
                   <button class="btn-toggle btn-toggle-activate" style="padding:6px 10px;margin-right:5px;" onclick="openEditCollegeModal('${col._id}')">Edit</button>
@@ -1351,6 +1458,7 @@
             document.getElementById('crud-college-avg').value = col.avgPlacement;
             document.getElementById('crud-college-highest').value = col.highestPlacement;
             document.getElementById('crud-college-website').value = col.website || '';
+            document.getElementById('crud-college-image').value = col.imageUrl || '';
             document.getElementById('crud-college-branches').value = col.branches ? col.branches.join(', ') : '';
             document.getElementById('crud-college-description').value = col.description;
           } else {
@@ -1383,13 +1491,14 @@
         const avgPlacement = Number(document.getElementById('crud-college-avg').value);
         const highestPlacement = Number(document.getElementById('crud-college-highest').value);
         const website = document.getElementById('crud-college-website').value.trim();
+        const imageUrl = document.getElementById('crud-college-image').value.trim() || null;
         const description = document.getElementById('crud-college-description').value.trim();
         
         const branchesVal = document.getElementById('crud-college-branches').value;
         const branches = branchesVal ? branchesVal.split(',').map(b => b.trim()).filter(Boolean) : [];
 
         const payload = {
-          name, type, nirfRank, city, state, admissionMode, cutoffRankCSE, feesPerYear, avgPlacement, highestPlacement, website, description, branches
+          name, type, nirfRank, city, state, admissionMode, cutoffRankCSE, feesPerYear, avgPlacement, highestPlacement, website, imageUrl, description, branches
         };
 
         const url = id ? `${API_URL}/api/admin/colleges/${id}` : `${API_URL}/api/admin/colleges`;
@@ -1444,9 +1553,51 @@
       async function init() {
         await fetchCounsellors();
         fetchLeads();
+
+        // Close modals on backdrop click
+        const detailsModal = document.getElementById('details-modal');
+        detailsModal.addEventListener('click', (e) => {
+          if (e.target === detailsModal) closeModal();
+        });
+
+        const collegeFormModal = document.getElementById('college-form-modal');
+        collegeFormModal.addEventListener('click', (e) => {
+          if (e.target === collegeFormModal) closeCollegeFormModal();
+        });
       }
 
       init();
+
+      // Scroll handling for sticky header progress and back-to-top
+      window.addEventListener('scroll', () => {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+        const scrollBar = document.getElementById('scroll-progress');
+        if (scrollBar) scrollBar.style.width = scrolled + '%';
+        
+        const backToTop = document.getElementById('back-to-top');
+        if (backToTop) {
+          if (winScroll > 300) {
+            backToTop.classList.add('visible');
+          } else {
+            backToTop.classList.remove('visible');
+          }
+        }
+      });
+
+      const backToTopBtn = document.getElementById('back-to-top');
+      if (backToTopBtn) {
+        backToTopBtn.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
     </script>
+    <!-- Back to Top Button -->
+    <button id="back-to-top" title="Go to top" style="position: fixed; bottom: 30px; right: 30px; z-index: 99; border: none; outline: none; background: linear-gradient(135deg, var(--blue), var(--blue-dark)); color: white; cursor: pointer; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4); opacity: 0; visibility: hidden; transition: all 0.3s ease; transform: translateY(10px);">
+      <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round;">
+        <polyline points="18 15 12 9 6 15"></polyline>
+      </svg>
+    </button>
   </body>
 </html>

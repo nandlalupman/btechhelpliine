@@ -31,7 +31,7 @@
 
 *,*::before,*::after { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
 
 body {
   margin: 0;
@@ -68,8 +68,8 @@ button, input, select { font: inherit; }
 }
 
 .nav {
-  min-height: 72px;
-  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  min-height: 64px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
 }
 
 .brand {
@@ -90,12 +90,12 @@ button, input, select { font: inherit; }
 .brand-mark svg { width: 22px; fill: currentColor; }
 
 .nav-menu {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 0.9rem; font-weight: 600;
+  display: flex; align-items: center; gap: 2px;
+  font-size: 0.84rem; font-weight: 600;
 }
 
 .nav-menu a:not(.nav-cta) {
-  color: var(--ink); padding: 8px 14px; border-radius: 8px;
+  color: var(--ink); padding: 7px 11px; border-radius: 8px;
   transition: all var(--transition);
 }
 
@@ -108,8 +108,8 @@ button, input, select { font: inherit; }
 }
 
 .nav-cta, .btn {
-  min-height: 44px; display: inline-flex; align-items: center; justify-content: center;
-  border: 0; border-radius: var(--radius); padding: 0 24px;
+  min-height: 40px; display: inline-flex; align-items: center; justify-content: center;
+  border: 0; border-radius: var(--radius); padding: 0 20px;
   font-weight: 700; cursor: pointer; transition: all var(--transition);
   text-align: center; white-space: nowrap;
 }
@@ -118,7 +118,8 @@ button, input, select { font: inherit; }
   color: var(--white);
   background: linear-gradient(135deg, var(--blue), var(--blue-dark));
   box-shadow: var(--shadow-blue);
-  font-size: 0.88rem;
+  font-size: 0.82rem;
+  margin-left: 6px;
 }
 
 .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 16px 40px rgba(37,99,235,0.35); }
@@ -955,7 +956,7 @@ input::placeholder { color: #94a3b8; }
   .menu-toggle { display: flex; }
 
   .nav-menu {
-    position: fixed; inset: 72px 14px auto;
+    position: fixed; inset: 64px 14px auto;
     display: grid; gap: 4px; padding: 16px;
     border: 1px solid var(--line); border-radius: var(--radius-lg);
     background: rgba(255,255,255,0.98);

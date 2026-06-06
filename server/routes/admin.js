@@ -291,9 +291,24 @@ router.put(
 router.get('/stats', async (req, res) => {
   try {
     const totalLeads = await Lead.countDocuments();
+    const pendingLeads = await Lead.countDocuments({ status: 'new' });
     const totalUsers = await User.countDocuments();
     const activeUsers = await User.countDocuments({ isActive: true });
     const totalCounsellors = await User.countDocuments({ role: 'counsellor' });
+    const totalColleges = await College.countDocuments();
+
+    // Average and Max placement packages in the system
+    const avgPlacementsResult = await College.aggregate([
+      { $match: { avgPlacement: { $ne: null } } },
+      { $group: { _id: null, avgPlacement: { $avg: '$avgPlacement' } } }
+    ]);
+    const avgPlacement = avgPlacementsResult.length > 0 ? parseFloat(avgPlacementsResult[0].avgPlacement.toFixed(1)) : 0;
+
+    const maxPlacementResult = await College.aggregate([
+      { $match: { highestPlacement: { $ne: null } } },
+      { $group: { _id: null, maxPlacement: { $max: '$highestPlacement' } } }
+    ]);
+    const maxPlacement = maxPlacementResult.length > 0 ? parseFloat(maxPlacementResult[0].maxPlacement.toFixed(1)) : 0;
 
     // Conversion rate
     const counselledCount = await Lead.countDocuments({ status: 'counselled' });
@@ -371,9 +386,13 @@ router.get('/stats', async (req, res) => {
       success: true,
       data: {
         totalLeads,
+        pendingLeads,
         totalUsers,
         activeUsers,
         totalCounsellors,
+        totalColleges,
+        avgPlacement,
+        maxPlacement,
         conversionRate,
         leadsByStatus,
         topBranches: topBranches.map((b) => ({ branch: b._id, count: b.count })),
@@ -433,7 +452,8 @@ router.post(
       highestPlacement,
       description,
       branches,
-      website
+      website,
+      imageUrl
     } = req.body;
 
     try {
@@ -456,7 +476,8 @@ router.post(
         highestPlacement,
         description,
         branches: branches || [],
-        website
+        website,
+        imageUrl
       });
 
       await college.save();

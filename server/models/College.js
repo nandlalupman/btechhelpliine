@@ -60,6 +60,11 @@ const CollegeSchema = new mongoose.Schema(
       type: [String],
       default: ['Computer Science Engineering', 'Electronics & Communication Engineering', 'Electrical Engineering', 'Mechanical Engineering', 'Civil Engineering'],
     },
+    imageUrl: {
+      type: String,
+      trim: true,
+      default: null,
+    },
     website: {
       type: String,
       trim: true,

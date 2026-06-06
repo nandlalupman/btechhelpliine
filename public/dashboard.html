@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="styles.css" />
     <style>
       body.student-body {
-        background: #0f172a;
-        color: #f8fafc;
+        background: var(--soft);
+        color: var(--ink);
         font-family: 'Inter', system-ui, sans-serif;
         min-height: 100vh;
       }
@@ -21,12 +21,24 @@
       }
 
       header.dash-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--line);
+        box-shadow: 0 4px 30px rgba(15, 23, 42, 0.03);
+        transition: background 0.3s, box-shadow 0.3s;
+      }
+
+      .dash-header-container {
+        width: min(100% - 32px, 1200px);
+        margin: 0 auto;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 40px;
-        padding-bottom: 20px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 16px 0;
       }
 
       .dash-brand {
@@ -35,18 +47,33 @@
         gap: 10px;
         font-size: 1.3rem;
         font-weight: 900;
-        color: #3b82f6;
+        color: var(--blue);
+      }
+
+      /* Back to top button */
+      #back-to-top.visible {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+      #back-to-top:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+      }
+      /* Status update select styling */
+      .status-update-select:hover {
+        border-color: var(--blue) !important;
       }
 
       .dash-brand span span {
-        color: #f59e0b;
+        color: var(--orange-dark);
       }
 
       .btn-logout {
         padding: 10px 18px;
-        background: rgba(239, 68, 68, 0.1);
-        border: 1px solid rgba(239, 68, 68, 0.2);
-        color: #f87171;
+        background: rgba(239, 68, 68, 0.05);
+        border: 1px solid rgba(239, 68, 68, 0.15);
+        color: #dc2626;
         border-radius: 10px;
         cursor: pointer;
         font-weight: 600;
@@ -55,8 +82,8 @@
       }
 
       .btn-logout:hover {
-        background: rgba(239, 68, 68, 0.2);
-        color: #ef4444;
+        background: rgba(239, 68, 68, 0.1);
+        color: #b91c1c;
       }
 
       .grid-layout {
@@ -66,18 +93,19 @@
       }
 
       .card {
-        background: rgba(30, 41, 59, 0.4);
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        background: var(--white);
+        border: 1px solid var(--line);
         border-radius: 20px;
         padding: 24px;
+        box-shadow: var(--shadow-sm);
       }
 
       .card h2 {
         font-size: 1.25rem;
         font-weight: 700;
         margin-bottom: 20px;
-        color: #ffffff;
-        border-left: 4px solid #3b82f6;
+        color: var(--ink);
+        border-left: 4px solid var(--blue);
         padding-left: 10px;
       }
 
@@ -88,41 +116,44 @@
         gap: 6px;
         font-size: 0.85rem;
         font-weight: 600;
-        color: #cbd5e1;
+        color: var(--muted);
         margin-bottom: 16px;
       }
 
       .profile-form input, .profile-form select {
         width: 100%;
         padding: 10px 14px;
-        background: rgba(15, 23, 42, 0.6);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: var(--white);
+        border: 1px solid var(--line);
         border-radius: 8px;
-        color: #ffffff;
+        color: var(--ink);
         outline: none;
-        transition: border-color 0.3s;
+        transition: all 0.3s;
         font-size: 0.9rem;
       }
 
       .profile-form input:focus, .profile-form select:focus {
-        border-color: #3b82f6;
+        border-color: var(--blue);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
       }
 
       .btn-save {
         width: 100%;
         padding: 12px;
-        background: #2563eb;
+        background: linear-gradient(135deg, var(--blue), var(--blue-dark));
         border: none;
         border-radius: 8px;
         color: white;
         font-weight: 600;
         cursor: pointer;
-        transition: opacity 0.2s;
+        transition: all 0.3s;
         margin-top: 10px;
+        box-shadow: var(--shadow-blue);
       }
 
       .btn-save:hover {
-        opacity: 0.9;
+        opacity: 0.95;
+        transform: translateY(-1px);
       }
 
       /* Leads List */
@@ -135,31 +166,35 @@
 
       .btn-request {
         padding: 10px 16px;
-        background: linear-gradient(135deg, #10b981, #059669);
+        background: linear-gradient(135deg, var(--green), var(--green-dark));
         border: none;
         border-radius: 8px;
         color: white;
         font-weight: 600;
         cursor: pointer;
         font-size: 0.88rem;
-        transition: opacity 0.2;
+        transition: all 0.3s;
+        box-shadow: 0 4px 12px rgba(16,185,129,0.2);
       }
 
       .btn-request:hover {
-        opacity: 0.9;
+        opacity: 0.95;
+        transform: translateY(-1px);
       }
 
       .lead-item {
-        background: rgba(15, 23, 42, 0.4);
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        background: var(--soft);
+        border: 1px solid var(--line);
         border-radius: 12px;
         padding: 18px;
         margin-bottom: 15px;
-        transition: transform 0.2s;
+        transition: all 0.3s var(--transition);
       }
 
       .lead-item:hover {
         transform: translateY(-2px);
+        box-shadow: var(--shadow-sm);
+        border-color: #cbd5e1;
       }
 
       .lead-item-header {
@@ -173,7 +208,7 @@
         font-size: 1.05rem;
         font-weight: 700;
         margin: 0;
-        color: #ffffff;
+        color: var(--ink);
       }
 
       .status-badge {
@@ -184,29 +219,29 @@
         text-transform: uppercase;
       }
 
-      .status-new { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
-      .status-contacted { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
-      .status-in_progress { background: rgba(139, 92, 246, 0.15); color: #a78bfa; }
-      .status-counselled { background: rgba(16, 185, 129, 0.15); color: #34d399; }
-      .status-closed { background: rgba(100, 116, 139, 0.15); color: #cbd5e1; }
-      .status-dropped { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+      .status-new { background: #eff6ff; color: var(--blue); }
+      .status-contacted { background: #fffbeb; color: var(--orange-dark); }
+      .status-in_progress { background: #f5f3ff; color: var(--violet); }
+      .status-counselled { background: #ecfdf5; color: var(--green-dark); }
+      .status-closed { background: #f1f5f9; color: var(--muted); }
+      .status-dropped { background: #fef2f2; color: var(--rose); }
 
       .lead-details {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
         gap: 10px;
         font-size: 0.85rem;
-        color: #94a3b8;
+        color: var(--muted);
       }
 
       .lead-details span strong {
-        color: #cbd5e1;
+        color: var(--ink);
       }
 
       .no-leads {
         text-align: center;
         padding: 40px 20px;
-        color: #64748b;
+        color: var(--muted);
       }
 
       .no-leads p {
@@ -217,7 +252,7 @@
       .modal {
         position: fixed;
         top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(15, 23, 42, 0.8);
+        background: rgba(15, 23, 42, 0.4);
         backdrop-filter: blur(8px);
         display: none;
         justify-content: center;
@@ -231,14 +266,16 @@
       }
 
       .modal-card {
-        background: #1e293b;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: var(--white);
+        border: 1px solid var(--line);
         border-radius: 20px;
         padding: 30px;
         width: 100%;
         max-width: 500px;
+        max-height: 90vh;
+        overflow-y: auto;
         position: relative;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        box-shadow: var(--shadow-lg);
       }
 
       .modal-close {
@@ -246,20 +283,20 @@
         top: 20px; right: 20px;
         background: none;
         border: none;
-        color: #94a3b8;
+        color: var(--muted);
         font-size: 1.5rem;
         cursor: pointer;
       }
 
       .modal-close:hover {
-        color: #ffffff;
+        color: var(--ink);
       }
 
       .modal-card h2 {
         font-size: 1.3rem;
         font-weight: 800;
         margin-bottom: 20px;
-        color: #ffffff;
+        color: var(--ink);
       }
 
       .form-msg {
@@ -271,27 +308,28 @@
         display: none;
       }
 
-      .form-msg.success { display: block; background: rgba(16, 185, 129, 0.15); color: #34d399; }
-      .form-msg.error { display: block; background: rgba(239, 68, 68, 0.15); color: #f87171; }
+      .form-msg.success { display: block; background: #ecfdf5; color: var(--green-dark); }
+      .form-msg.error { display: block; background: #fef2f2; color: var(--rose); }
 
       /* Toast */
       .toast {
         position: fixed;
         bottom: 24px; right: 24px;
-        background: #1e293b;
-        border-left: 4px solid #10b981;
-        color: white;
+        background: var(--white);
+        border: 1px solid var(--line);
+        border-left: 4px solid var(--green);
+        color: var(--ink);
         padding: 12px 24px;
         border-radius: 8px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        box-shadow: var(--shadow);
         z-index: 1100;
         display: none;
       }
 
       /* College Explorer styles */
       .college-card {
-        background: rgba(15, 23, 42, 0.4);
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        background: var(--white);
+        border: 1px solid var(--line);
         border-radius: 16px;
         padding: 20px;
         display: flex;
@@ -301,13 +339,14 @@
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         overflow: hidden;
+        box-shadow: var(--shadow-sm);
       }
 
       .college-card:hover {
         transform: translateY(-4px);
-        background: rgba(15, 23, 42, 0.6);
-        border-color: rgba(59, 130, 246, 0.3);
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+        background: var(--white);
+        border-color: var(--blue);
+        box-shadow: var(--shadow);
       }
 
       .college-badge {
@@ -319,22 +358,22 @@
         display: inline-block;
       }
 
-      .badge-iit { background: rgba(239, 68, 68, 0.15); color: #f87171; }
-      .badge-nit { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
-      .badge-iiit { background: rgba(139, 92, 246, 0.15); color: #a78bfa; }
-      .badge-bits { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
-      .badge-vit { background: rgba(16, 185, 129, 0.15); color: #34d399; }
-      .badge-state { background: rgba(6, 182, 212, 0.15); color: #22d3ee; }
-      .badge-private { background: rgba(236, 72, 153, 0.15); color: #f472b6; }
-      .badge-other { background: rgba(100, 116, 139, 0.15); color: #cbd5e1; }
+      .badge-iit { background: #fef2f2; color: #dc2626; }
+      .badge-nit { background: #eff6ff; color: #2563eb; }
+      .badge-iiit { background: #f5f3ff; color: #7c3aed; }
+      .badge-bits { background: #fffbeb; color: #d97706; }
+      .badge-vit { background: #ecfdf5; color: #059669; }
+      .badge-state { background: #ecfeff; color: #0891b2; }
+      .badge-private { background: #fdf2f8; color: #db2777; }
+      .badge-other { background: #f1f5f9; color: #475569; }
 
       .college-meta-item {
         display: flex;
         justify-content: space-between;
         font-size: 0.8rem;
-        color: #94a3b8;
+        color: var(--muted);
         margin-top: 6px;
-        border-bottom: 1px dashed rgba(255,255,255,0.05);
+        border-bottom: 1px dashed var(--line);
         padding-bottom: 6px;
       }
 
@@ -344,18 +383,19 @@
       }
 
       .college-meta-item strong {
-        color: #cbd5e1;
+        color: var(--ink);
       }
 
       .branch-tag {
         display: inline-block;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: var(--soft);
+        border: 1px solid var(--line);
         padding: 4px 10px;
         border-radius: 6px;
         font-size: 0.78rem;
-        color: #cbd5e1;
+        color: var(--ink);
         margin: 4px;
+        font-weight: 500;
       }
 
       @media (max-width: 768px) {
@@ -367,13 +407,12 @@
 
   </head>
   <body class="student-body">
-    <div class="dashboard-container">
-      
-      <!-- Header -->
-      <header class="dash-header">
+    <!-- Header -->
+    <header class="dash-header">
+      <div class="dash-header-container">
         <div class="dash-brand">
           <span class="brand-mark" aria-hidden="true">
-            <svg viewBox="0 0 24 24" style="width: 24px; fill: white;">
+            <svg viewBox="0 0 24 24" style="width: 24px; fill: var(--white);">
               <path d="M2.5 7.2 12 2.8l9.5 4.4-9.5 4.4-9.5-4.4Z" />
               <path d="M6.4 10.1v4.5c0 1.8 2.5 3.2 5.6 3.2s5.6-1.4 5.6-3.2v-4.5L12 12.7l-5.6-2.6Z" />
             </svg>
@@ -381,10 +420,15 @@
           <span>Btechhelpline<span>.com</span></span>
         </div>
         <div style="display: flex; align-items: center; gap: 15px;">
-          <span id="student-name-welcome" style="font-weight: 600; color: #60a5fa;">Loading...</span>
+          <span id="student-name-welcome" style="font-weight: 600; color: var(--blue);">Loading...</span>
           <button class="btn-logout" id="btn-logout">Logout</button>
         </div>
-      </header>
+      </div>
+      <!-- Scroll Progress Bar -->
+      <div id="scroll-progress" style="position: absolute; bottom: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--blue), var(--orange-dark)); width: 0%; transition: width 0.1s ease-out; z-index: 101;"></div>
+    </header>
+
+    <div class="dashboard-container" style="padding-top: 24px;">
 
       <div class="grid-layout">
         
@@ -487,14 +531,14 @@
       <section class="card" style="margin-top: 30px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 15px;">
           <div>
-            <h2 style="margin: 0; border-left: 4px solid #10b981; padding-left: 10px;">College Explorer</h2>
-            <p style="margin: 4px 0 0 0; color: #94a3b8; font-size: 0.9rem;">Find and filter top IITs, NITs, BITS, VIT, and NIRF engineering colleges</p>
+            <h2 style="margin: 0; border-left: 4px solid var(--blue); padding-left: 10px;">College Explorer</h2>
+            <p style="margin: 4px 0 0 0; color: var(--muted); font-size: 0.9rem;">Find and filter top IITs, NITs, BITS, VIT, and NIRF engineering colleges</p>
           </div>
           
           <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
-            <input type="text" id="college-search" placeholder="Search by name..." style="padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none; font-size: 0.88rem; width: 200px;" />
+            <input type="text" id="college-search" placeholder="Search by name..." style="padding: 10px 14px; background: var(--white); border: 1px solid var(--line); border-radius: 8px; color: var(--ink); outline: none; font-size: 0.88rem; width: 200px; transition: all 0.3s;" />
             
-            <select id="filter-type" style="padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none; font-size: 0.88rem; cursor: pointer;">
+            <select id="filter-type" style="padding: 10px 14px; background: var(--white); border: 1px solid var(--line); border-radius: 8px; color: var(--ink); outline: none; font-size: 0.88rem; cursor: pointer; transition: all 0.3s;">
               <option value="">All Types</option>
               <option value="IIT">IIT</option>
               <option value="NIT">NIT</option>
@@ -505,7 +549,7 @@
               <option value="Private">Private</option>
             </select>
             
-            <select id="filter-state" style="padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none; font-size: 0.88rem; cursor: pointer;">
+            <select id="filter-state" style="padding: 10px 14px; background: var(--white); border: 1px solid var(--line); border-radius: 8px; color: var(--ink); outline: none; font-size: 0.88rem; cursor: pointer; transition: all 0.3s;">
               <option value="">All States</option>
               <option>Assam</option>
               <option>Bihar</option>
@@ -622,9 +666,9 @@
           </label>
           <label>
             Any Message / Question?
-            <textarea id="req-message" style="width:100%;height:80px;background:rgba(15,23,42,0.6);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:white;padding:10px;outline:none;" placeholder="Tell us if you have any questions..."></textarea>
+            <textarea id="req-message" style="width:100%;height:80px;background:var(--white);border:1px solid var(--line);border-radius:8px;color:var(--ink);padding:10px;outline:none;transition:all 0.3s;" placeholder="Tell us if you have any questions..."></textarea>
           </label>
-          <button type="submit" class="btn-save" id="btn-submit-request" style="background:#10b981;">Submit Request</button>
+          <button type="submit" class="btn-save" id="btn-submit-request" style="background: linear-gradient(135deg, var(--green), var(--green-dark)); box-shadow: 0 4px 12px rgba(16,185,129,0.2);">Submit Request</button>
         </form>
       </div>
     </div>
@@ -723,6 +767,17 @@
                   <span>State: <strong>${escapeHTML(lead.preferredState)}</strong></span>
                   <span>Budget: <strong>${escapeHTML(lead.budget)}</strong></span>
                   <span>Date: <strong>${createdDate}</strong></span>
+                </div>
+                <div style="margin-top: 16px; border-top: 1px solid var(--line); padding-top: 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
+                  <span style="font-size: 0.8rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Update Request Status:</span>
+                  <select class="status-update-select" onchange="updateLeadStatus('${lead._id}', this.value)" style="padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; font-size: 0.82rem; background: var(--white); color: var(--ink); font-weight: 600; cursor: pointer; outline: none; transition: all 0.3s;">
+                    <option value="new" ${lead.status === 'new' ? 'selected' : ''} ${lead.status !== 'new' ? 'disabled' : ''}>New / Request Sent</option>
+                    <option value="contacted" ${lead.status === 'contacted' ? 'selected' : ''} ${lead.status !== 'contacted' ? 'disabled' : ''}>Contacted</option>
+                    <option value="in_progress" ${lead.status === 'in_progress' ? 'selected' : ''}>Ongoing</option>
+                    <option value="counselled" ${lead.status === 'counselled' ? 'selected' : ''}>Successful / Completed</option>
+                    <option value="dropped" ${lead.status === 'dropped' ? 'selected' : ''}>Failed / Dropped</option>
+                    <option value="closed" ${lead.status === 'closed' ? 'selected' : ''}>Cancelled</option>
+                  </select>
                 </div>
               `;
               listDiv.appendChild(div);
@@ -833,6 +888,9 @@
       
       const closeModal = () => { modal.classList.remove('open'); };
       document.getElementById('btn-close-modal').addEventListener('click', closeModal);
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+      });
 
       // Logout
       function handleLogout() {
@@ -840,6 +898,74 @@
         window.location.href = 'login.html';
       }
       document.getElementById('btn-logout').addEventListener('click', handleLogout);
+
+      // Get cover image for college
+      function getCollegeImageUrl(col) {
+        if (col.imageUrl) return col.imageUrl;
+        const nameLower = col.name.toLowerCase();
+        if (nameLower.includes('mnit') || nameLower.includes('malaviya national')) {
+          return 'assets/colleges/mnit.webp';
+        }
+        if (nameLower.includes('arya')) {
+          return 'assets/colleges/arya.webp';
+        }
+        if (nameLower.includes('jecrc')) {
+          return 'assets/colleges/jecrc.webp';
+        }
+        if (nameLower.includes('poornima')) {
+          return 'assets/colleges/poornima.webp';
+        }
+        if (nameLower.includes('skit') || nameLower.includes('swami keshvanand')) {
+          return 'assets/colleges/skit.webp';
+        }
+        if (nameLower.includes('vit jaipur') || (nameLower.includes('vivekananda') && nameLower.includes('technology'))) {
+          return 'assets/colleges/vit.webp';
+        }
+        if (col.type === 'IIT') {
+          return 'https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=600&q=80';
+        }
+        if (col.type === 'NIT') {
+          return 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=600&q=80';
+        }
+        if (col.type === 'IIIT') {
+          return 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=600&q=80';
+        }
+        return 'https://images.unsplash.com/photo-1498243691581-b145c3f54a91?auto=format&fit=crop&w=600&q=80';
+      }
+
+      function getCollegeGradient(type) {
+        if (type === 'IIT') return 'linear-gradient(135deg, #7f1d1d, #dc2626)'; // Red gradient
+        if (type === 'NIT') return 'linear-gradient(135deg, #1e3a8a, #2563eb)'; // Blue gradient
+        if (type === 'IIIT') return 'linear-gradient(135deg, #4c1d95, #7c3aed)'; // Violet gradient
+        if (type === 'BITS') return 'linear-gradient(135deg, #78350f, #d97706)'; // Gold gradient
+        if (type === 'VIT') return 'linear-gradient(135deg, #064e3b, #10b981)'; // Emerald gradient
+        return 'linear-gradient(135deg, #0f172a, #334155)'; // Slate gradient
+      }
+
+      window.requestGuidanceForCollege = function(name, state) {
+        closeCollegeModal();
+        document.getElementById('modal-msg').style.display = 'none';
+        const requestModal = document.getElementById('request-modal');
+        requestModal.classList.add('open');
+        
+        // Pre-fill state
+        const stateSelect = document.getElementById('req-state');
+        if (stateSelect) {
+          stateSelect.value = "";
+          for (let option of stateSelect.options) {
+            if (option.text.toLowerCase() === state.toLowerCase()) {
+              stateSelect.value = option.value;
+              break;
+            }
+          }
+        }
+        
+        // Pre-fill message
+        const messageBox = document.getElementById('req-message');
+        if (messageBox) {
+          messageBox.value = `I am interested in getting admission guidance for ${name}.`;
+        }
+      };
 
       // Fetch and Filter Colleges
       async function initStatesFilter() {
@@ -898,19 +1024,32 @@
               const feesText = col.feesPerYear ? `₹${(col.feesPerYear / 100000).toFixed(2)} L/yr` : 'N/A';
               const badgeClass = `badge-${col.type.toLowerCase()}`;
               
+              const imageUrl = getCollegeImageUrl(col);
+              const initials = col.name ? col.name.split(' ').map(w => w[0]).join('').substring(0, 3).toUpperCase() : '';
+              const imgHtml = `
+                <div style="width: 100%; height: 120px; border-radius: 10px; overflow: hidden; margin-bottom: 12px; background: ${getCollegeGradient(col.type)}; position: relative; display: flex; align-items: center; justify-content: center; color: white;">
+                  <span style="font-size: 1.5rem; font-weight: 900; opacity: 0.25; letter-spacing: 0.05em; position: absolute; pointer-events: none;">${initials}</span>
+                  <img src="${imageUrl}" alt="${escapeHTML(col.name)}" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;" onerror="this.style.display='none';" />
+                </div>
+              `;
+
               card.innerHTML = `
+                ${imgHtml}
                 <div>
-                  <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; gap: 8px;">
+                  <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 8px;">
                     <span class="college-badge ${badgeClass}">${col.type}</span>
-                    <span style="font-size: 0.78rem; font-weight: 600; color: #3b82f6;">${rankText}</span>
+                    <span style="font-size: 0.78rem; font-weight: 600; color: var(--blue);">${rankText}</span>
                   </div>
-                  <h3 style="margin: 0 0 6px 0; font-size: 1.15rem; font-weight: 800; color: white;">${escapeHTML(col.name)}</h3>
-                  <div style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 16px;">
+                  <h3 style="margin: 0 0 6px 0; font-size: 1.15rem; font-weight: 800; color: var(--ink);">${escapeHTML(col.name)}</h3>
+                  <div style="font-size: 0.82rem; color: var(--muted); margin-bottom: 12px;">
                     <span>📍 ${escapeHTML(col.city)}, ${escapeHTML(col.state)}</span>
                   </div>
+                  <p style="font-size: 0.78rem; color: var(--muted); line-height: 1.5; margin: 0 0 14px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                    ${escapeHTML(col.description)}
+                  </p>
                 </div>
                 
-                <div style="background: rgba(15, 23, 42, 0.4); padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03);">
+                <div style="background: var(--soft); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--line); margin-top: auto;">
                   <div class="college-meta-item">
                     <span>Admission Mode:</span>
                     <strong>${escapeHTML(col.admissionMode)}</strong>
@@ -948,7 +1087,7 @@
           if (res.ok && data.success) {
             const col = data.data;
             
-            const rankBadge = col.nirfRank ? `<span style="background: rgba(59,130,246,0.15); color:#60a5fa; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 700;">NIRF Rank: #${col.nirfRank}</span>` : '';
+            const rankBadge = col.nirfRank ? `<span style="background: #eff6ff; color: var(--blue); padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 700;">NIRF Rank: #${col.nirfRank}</span>` : '';
             const typeClass = `badge-${col.type.toLowerCase()}`;
             const feesText = col.feesPerYear ? `₹${col.feesPerYear.toLocaleString('en-IN')} / Year` : 'N/A';
             const highestPackage = col.highestPlacement >= 100 ? `₹${(col.highestPlacement / 100).toFixed(2)} Cr` : `₹${col.highestPlacement.toFixed(1)} LPA`;
@@ -958,59 +1097,74 @@
               branchesHTML = col.branches.map(b => `<span class="branch-tag">${escapeHTML(b)}</span>`).join('');
             }
             
+            const initials = col.name ? col.name.split(' ').map(w => w[0]).join('').substring(0, 3).toUpperCase() : '';
+            const modalImgHtml = `
+              <div style="width: 100%; height: 220px; border-radius: 12px; overflow: hidden; margin-bottom: 20px; background: ${getCollegeGradient(col.type)}; position: relative; display: flex; align-items: center; justify-content: center; color: white;">
+                <span style="font-size: 3rem; font-weight: 900; opacity: 0.25; letter-spacing: 0.05em; position: absolute; pointer-events: none;">${initials}</span>
+                <img src="${getCollegeImageUrl(col)}" alt="${escapeHTML(col.name)}" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;" onerror="this.style.display='none';" />
+              </div>
+            `;
+
             collegeModalContent.innerHTML = `
+              ${modalImgHtml}
+
               <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 16px; flex-wrap: wrap;">
                 <span class="college-badge ${typeClass}" style="font-size: 0.85rem; padding: 4px 10px;">${col.type}</span>
                 ${rankBadge}
-                <span style="color: #94a3b8; font-size: 0.9rem;">📍 ${escapeHTML(col.city)}, ${escapeHTML(col.state)}</span>
+                <span style="color: var(--muted); font-size: 0.9rem;">📍 ${escapeHTML(col.city)}, ${escapeHTML(col.state)}</span>
               </div>
               
-              <h2 style="color: white; font-size: 1.85rem; font-weight: 900; margin: 0 0 16px 0; line-height: 1.25;">${escapeHTML(col.name)}</h2>
+              <h2 style="color: var(--ink); font-size: 1.85rem; font-weight: 900; margin: 0 0 16px 0; line-height: 1.25;">${escapeHTML(col.name)}</h2>
               
-              <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin: 0 0 24px 0;">${escapeHTML(col.description)}</p>
+              <p style="color: #334155; font-size: 0.95rem; line-height: 1.6; margin: 0 0 24px 0;">${escapeHTML(col.description)}</p>
               
               <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px;">
-                <div style="background: rgba(15,23,42,0.4); border: 1px solid rgba(255,255,255,0.05); padding: 14px 18px; border-radius: 12px;">
-                  <span style="display:block; font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px;">Placement Stats</span>
+                <div style="background: var(--soft); border: 1px solid var(--line); padding: 14px 18px; border-radius: 12px;">
+                  <span style="display:block; font-size: 0.8rem; color: var(--muted); text-transform: uppercase; margin-bottom: 4px;">Placement Stats</span>
                   <div style="display:flex; justify-content:space-between; margin-bottom: 6px;">
-                    <span style="font-size:0.9rem; color:#cbd5e1;">Average Package:</span>
-                    <strong style="color: #34d399; font-size:0.95rem;">₹${col.avgPlacement.toFixed(1)} LPA</strong>
+                    <span style="font-size:0.9rem; color: var(--muted);">Average Package:</span>
+                    <strong style="color: var(--green-dark); font-size:0.95rem;">₹${col.avgPlacement.toFixed(1)} LPA</strong>
                   </div>
                   <div style="display:flex; justify-content:space-between;">
-                    <span style="font-size:0.9rem; color:#cbd5e1;">Highest Package:</span>
-                    <strong style="color: #10b981; font-size:0.95rem;">${highestPackage}</strong>
+                    <span style="font-size:0.9rem; color: var(--muted);">Highest Package:</span>
+                    <strong style="color: var(--green-dark); font-size:0.95rem;">${highestPackage}</strong>
                   </div>
                 </div>
                 
-                <div style="background: rgba(15,23,42,0.4); border: 1px solid rgba(255,255,255,0.05); padding: 14px 18px; border-radius: 12px;">
-                  <span style="display:block; font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px;">Admission Details</span>
+                <div style="background: var(--soft); border: 1px solid var(--line); padding: 14px 18px; border-radius: 12px;">
+                  <span style="display:block; font-size: 0.8rem; color: var(--muted); text-transform: uppercase; margin-bottom: 4px;">Admission Details</span>
                   <div style="display:flex; justify-content:space-between; margin-bottom: 6px;">
-                    <span style="font-size:0.9rem; color:#cbd5e1;">Admission Mode:</span>
-                    <strong style="color:#ffffff; font-size:0.95rem;">${escapeHTML(col.admissionMode)}</strong>
+                    <span style="font-size:0.9rem; color: var(--muted);">Admission Mode:</span>
+                    <strong style="color: var(--ink); font-size:0.95rem;">${escapeHTML(col.admissionMode)}</strong>
                   </div>
                   <div style="display:flex; justify-content:space-between; margin-bottom: 6px;">
-                    <span style="font-size:0.9rem; color:#cbd5e1;">CSE Cutoff Rank:</span>
-                    <strong style="color:#60a5fa; font-size:0.95rem;">${escapeHTML(col.cutoffRankCSE)}</strong>
+                    <span style="font-size:0.9rem; color: var(--muted);">CSE Cutoff Rank:</span>
+                    <strong style="color: var(--blue); font-size:0.95rem;">${escapeHTML(col.cutoffRankCSE)}</strong>
                   </div>
                   <div style="display:flex; justify-content:space-between;">
-                    <span style="font-size:0.9rem; color:#cbd5e1;">Yearly Fees:</span>
-                    <strong style="color:#ffffff; font-size:0.95rem;">${feesText}</strong>
+                    <span style="font-size:0.9rem; color: var(--muted);">Yearly Fees:</span>
+                    <strong style="color: var(--ink); font-size:0.95rem;">${feesText}</strong>
                   </div>
                 </div>
               </div>
               
               <div style="margin-bottom: 24px;">
-                <h4 style="color: white; margin: 0 0 10px 0; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em;">Available Engineering Branches</h4>
+                <h4 style="color: var(--ink); margin: 0 0 10px 0; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 800;">Available Engineering Branches</h4>
                 <div style="margin-left:-4px; margin-right:-4px;">
                   ${branchesHTML}
                 </div>
               </div>
               
-              ${col.website ? `
-                <div style="text-align: right; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 20px;">
-                  <a href="${escapeHTML(col.website)}" target="_blank" class="btn-request" style="text-decoration:none; display:inline-block; background: linear-gradient(135deg, #3b82f6, #1d4ed8);">Visit Official Website ↗</a>
-                </div>
-              ` : ''}
+              <div style="display: flex; gap: 12px; justify-content: flex-end; border-top: 1px solid var(--line); padding-top: 20px; margin-top: 20px; flex-wrap: wrap;">
+                ${col.website ? `
+                  <a href="${escapeHTML(col.website)}" target="_blank" style="text-decoration:none; display:inline-flex; align-items:center; background: #eff6ff; border: 1px solid rgba(37,99,235,0.2); color: var(--blue); padding:10px 18px; border-radius:10px; font-weight:600; font-size:0.9rem; transition:all 0.3s; gap:6px;">
+                    Visit Website ↗
+                  </a>
+                ` : ''}
+                <button onclick="requestGuidanceForCollege('${escapeHTML(col.name)}', '${escapeHTML(col.state)}')" class="btn-request" style="display:inline-flex; align-items:center; background: linear-gradient(135deg, var(--green), var(--green-dark)); color:white; border:none; padding:10px 18px; border-radius:10px; font-weight:600; font-size:0.9rem; cursor:pointer; gap:6px; box-shadow:0 4px 12px rgba(16,185,129,0.15);">
+                  Apply / Request Guidance 🎓
+                </button>
+              </div>
             `;
           } else {
             collegeModalContent.innerHTML = `<div style="text-align:center; padding:40px; color:#f87171;">${data.error || 'Failed to load details'}</div>`;
@@ -1022,6 +1176,9 @@
       
       const closeCollegeModal = () => { collegeModal.classList.remove('open'); };
       document.getElementById('btn-close-college-modal').addEventListener('click', closeCollegeModal);
+      collegeModal.addEventListener('click', (e) => {
+        if (e.target === collegeModal) closeCollegeModal();
+      });
 
       // Event listeners for filters
       document.getElementById('college-search').addEventListener('input', fetchColleges);
@@ -1035,6 +1192,63 @@
         fetchColleges();
       });
 
+      // Scroll handling for sticky header progress and back-to-top
+      window.addEventListener('scroll', () => {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+        const scrollBar = document.getElementById('scroll-progress');
+        if (scrollBar) scrollBar.style.width = scrolled + '%';
+        
+        const backToTop = document.getElementById('back-to-top');
+        if (backToTop) {
+          if (winScroll > 300) {
+            backToTop.classList.add('visible');
+          } else {
+            backToTop.classList.remove('visible');
+          }
+        }
+      });
+
+      const backToTopBtn = document.getElementById('back-to-top');
+      if (backToTopBtn) {
+        backToTopBtn.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      // Globally register updateLeadStatus
+      window.updateLeadStatus = async function(leadId, newStatus) {
+        try {
+          const res = await fetch(`${API_URL}/api/user/my-leads/${leadId}/status`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ status: newStatus })
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            showToast('Request status updated successfully!');
+            fetchLeads();
+          } else {
+            showToast(data.error || 'Failed to update status');
+            fetchLeads();
+          }
+        } catch (err) {
+          console.error(err);
+          showToast('Server connection error');
+          fetchLeads();
+        }
+      };
+
     </script>
+    <!-- Back to Top Button -->
+    <button id="back-to-top" title="Go to top" style="position: fixed; bottom: 30px; right: 30px; z-index: 99; border: none; outline: none; background: linear-gradient(135deg, var(--blue), var(--blue-dark)); color: white; cursor: pointer; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4); opacity: 0; visibility: hidden; transition: all 0.3s ease; transform: translateY(10px);">
+      <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round;">
+        <polyline points="18 15 12 9 6 15"></polyline>
+      </svg>
+    </button>
   </body>
 </html>

@@ -210,107 +210,92 @@
     }
     </script>
     <style>
-      /* College Explorer styles */
-      .explorer-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 24px;
-        margin-top: 24px;
+      /* ── College Explorer Section ── */
+      .explorer-section { background: linear-gradient(180deg, #f0f4ff 0%, #f8fafc 100%); }
+
+      .explorer-search-wrap { display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px; }
+
+      .explorer-search-bar {
+        display: flex; align-items: center;
+        background: #ffffff; border: 2px solid #e2e8f0; border-radius: 14px; padding: 4px;
+        transition: border-color 0.3s, box-shadow 0.3s;
       }
+      .explorer-search-bar:focus-within { border-color: #3b82f6; box-shadow: 0 0 0 4px rgba(59,130,246,0.1); }
+      .explorer-search-bar input {
+        flex: 1; background: none; border: none; outline: none; color: #0f172a;
+        font-size: 1rem; padding: 14px 18px; font-family: inherit;
+      }
+      .explorer-search-bar input::placeholder { color: #94a3b8; }
+      .explorer-search-icon {
+        display: flex; align-items: center; justify-content: center; width: 48px; height: 48px;
+        background: linear-gradient(135deg, #2563eb, #1d4ed8); border-radius: 10px; border: none;
+        color: white; font-size: 1.1rem; cursor: pointer; flex-shrink: 0;
+        transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+      }
+      .explorer-search-icon:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(37,99,235,0.4); }
+
+      .explorer-filters { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+      .explorer-filter-pill {
+        padding: 10px 18px; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 10px;
+        color: #334155; font-size: 0.88rem; font-family: inherit; font-weight: 500;
+        cursor: pointer; outline: none; transition: all 0.25s;
+        -webkit-appearance: none; -moz-appearance: none; appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px;
+      }
+      .explorer-filter-pill:hover, .explorer-filter-pill:focus { border-color: #3b82f6; background: #eff6ff; color: #1e40af; }
+
+      .explorer-results-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 2px; }
+      .explorer-results-count { font-size: 0.85rem; color: #64748b; font-weight: 600; }
+
+      .explorer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 20px; }
       .explorer-card {
-        background: rgba(15, 23, 42, 0.4);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        border-radius: 16px;
-        padding: 24px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        cursor: pointer;
+        background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 0;
+        display: flex; flex-direction: column; cursor: pointer;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
+        overflow: hidden; box-shadow: 0 1px 3px rgba(15,23,42,0.06);
       }
+      .explorer-card:hover { transform: translateY(-4px); border-color: #bfdbfe; box-shadow: 0 12px 32px rgba(15,23,42,0.1); }
 
-      .explorer-card:hover {
-        transform: translateY(-4px);
-        background: rgba(15, 23, 42, 0.6);
-        border-color: rgba(59, 130, 246, 0.3);
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+      .explorer-card-img {
+        width: 100%; height: 140px; overflow: hidden;
+        background: linear-gradient(135deg, #e0e7ff 0%, #dbeafe 50%, #e0f2fe 100%);
+        display: flex; align-items: center; justify-content: center;
       }
+      .explorer-card-img img { width: 100%; height: 100%; object-fit: cover; }
+      .explorer-card-img-placeholder { font-size: 2rem; font-weight: 900; color: #2563eb; opacity: 0.2; letter-spacing: 0.05em; }
+      .explorer-card-body { padding: 18px 20px 20px; flex: 1; display: flex; flex-direction: column; }
+      .explorer-card-desc { font-size: 0.78rem; color: #64748b; line-height: 1.5; margin: 8px 0 14px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-      .college-badge {
-        padding: 4px 10px;
-        border-radius: 6px;
-        font-size: 0.72rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        display: inline-block;
-      }
+      .college-badge { padding: 3px 8px; border-radius: 5px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; display: inline-block; letter-spacing: 0.04em; }
+      .badge-iit { background: #fef2f2; color: #dc2626; }
+      .badge-nit { background: #eff6ff; color: #2563eb; }
+      .badge-iiit { background: #f5f3ff; color: #7c3aed; }
+      .badge-bits { background: #fffbeb; color: #d97706; }
+      .badge-vit { background: #ecfdf5; color: #059669; }
+      .badge-state { background: #ecfeff; color: #0891b2; }
+      .badge-private { background: #fdf2f8; color: #db2777; }
+      .badge-other { background: #f1f5f9; color: #475569; }
 
-      .badge-iit { background: rgba(239, 68, 68, 0.15); color: #f87171; }
-      .badge-nit { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
-      .badge-iiit { background: rgba(139, 92, 246, 0.15); color: #a78bfa; }
-      .badge-bits { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
-      .badge-vit { background: rgba(16, 185, 129, 0.15); color: #34d399; }
-      .badge-state { background: rgba(6, 182, 212, 0.15); color: #22d3ee; }
-      .badge-private { background: rgba(236, 72, 153, 0.15); color: #f472b6; }
-      .badge-other { background: rgba(100, 116, 139, 0.15); color: #cbd5e1; }
+      .college-meta-item { display: flex; justify-content: space-between; font-size: 0.8rem; color: #64748b; margin-top: 6px; padding-bottom: 6px; border-bottom: 1px solid #f1f5f9; }
+      .college-meta-item:last-child { border-bottom: none; padding-bottom: 0; }
+      .college-meta-item strong { color: #0f172a; }
 
-      .college-meta-item {
-        display: flex;
-        justify-content: space-between;
-        font-size: 0.8rem;
-        color: #94a3b8;
-        margin-top: 8px;
-        border-bottom: 1px dashed rgba(255,255,255,0.05);
-        padding-bottom: 6px;
-      }
+      .explorer-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.5); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 1100; padding: 20px; }
+      .explorer-modal.open { display: flex; animation: fadeIn 0.2s ease; }
+      @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+      .explorer-modal-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 20px; padding: 32px; width: 100%; max-width: 640px; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 25px 60px rgba(15,23,42,0.2); animation: slideUp 0.3s cubic-bezier(0.4,0,0.2,1); }
+      @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+      .explorer-modal-close { position: absolute; top: 16px; right: 16px; background: #f1f5f9; border: 1px solid #e2e8f0; color: #64748b; width: 36px; height: 36px; border-radius: 10px; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+      .explorer-modal-close:hover { background: #fee2e2; border-color: #fecaca; color: #dc2626; }
+      .explorer-modal-card h2 { font-size: 1.4rem; font-weight: 800; margin-bottom: 6px; color: #0f172a; }
 
-      /* Modal overrides for public page */
-      .explorer-modal {
-        position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(15, 23, 42, 0.8);
-        backdrop-filter: blur(8px);
-        display: none;
-        justify-content: center;
-        align-items: center;
-        z-index: 1100;
-        padding: 20px;
-      }
-      .explorer-modal.open {
-        display: flex;
-      }
-      .explorer-modal-card {
-        background: #1e293b;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 20px;
-        padding: 30px;
-        width: 100%;
-        max-width: 600px;
-        max-height: 90vh;
-        overflow-y: auto;
-        position: relative;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-      }
-      .explorer-modal-close {
-        position: absolute;
-        top: 20px; right: 20px;
-        background: none;
-        border: none;
-        color: #94a3b8;
-        font-size: 1.5rem;
-        cursor: pointer;
-      }
-      .explorer-modal-close:hover {
-        color: #ffffff;
-      }
-      
-      .explorer-modal-card h2 {
-        font-size: 1.5rem;
-        font-weight: 800;
-        margin-bottom: 10px;
-        color: #ffffff;
+      @media (max-width: 640px) {
+        .explorer-search-bar input { font-size: 0.92rem; padding: 12px 14px; }
+        .explorer-filters { gap: 8px; }
+        .explorer-filter-pill { padding: 8px 14px; font-size: 0.82rem; padding-right: 30px; }
+        .explorer-grid { grid-template-columns: 1fr; }
+        .explorer-card-img { height: 120px; }
       }
     </style>
   </head>
@@ -332,7 +317,8 @@
         </button>
 
         <div class="nav-menu" id="nav-menu">
-          <a href="#colleges">Colleges</a>
+          <a href="#colleges-explorer">Explore Colleges</a>
+          <a href="#colleges">NIRF Rankings</a>
           <a href="#branches">Courses</a>
           <a href="#cutoffs">JEE Cutoffs</a>
           <a href="#guide">Admission Guide</a>
@@ -411,6 +397,46 @@
           <div class="stat-item reveal">
             <span class="stat-number" data-target="100" data-suffix="%">0</span>
             <span class="stat-label">Free Counselling</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════ COLLEGE EXPLORER ═══════════ -->
+      <section class="section-pad explorer-section" id="colleges-explorer" aria-labelledby="explorer-heading">
+        <div class="container">
+          <div style="text-align: center; margin-bottom: 36px;" class="reveal">
+            <span class="section-badge green">🎓 Explore 200+ Top Colleges</span>
+            <h2 id="explorer-heading" style="color: var(--ink); margin-top: 10px; font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 900;">Find Your Dream Engineering College</h2>
+            <p style="color: var(--muted); max-width: 600px; margin: 8px auto 0; font-size: 0.95rem;">Search by name, filter by type or state — discover IITs, NITs, BITS, IIITs and more</p>
+          </div>
+
+          <div class="explorer-search-wrap">
+            <div class="explorer-search-bar">
+              <input type="text" id="explorer-search" placeholder="Search colleges... e.g. IIT Bombay, NIT Trichy, VIT Vellore" />
+              <button class="explorer-search-icon" type="button" aria-label="Search">🔍</button>
+            </div>
+            <div class="explorer-filters">
+              <select id="explorer-type" class="explorer-filter-pill">
+                <option value="">All Types</option>
+                <option value="IIT">IIT</option>
+                <option value="NIT">NIT</option>
+                <option value="IIIT">IIIT</option>
+                <option value="BITS">BITS</option>
+                <option value="VIT">VIT</option>
+                <option value="State">State Gov</option>
+                <option value="Private">Private</option>
+              </select>
+              <select id="explorer-state" class="explorer-filter-pill">
+                <option value="">All States</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="explorer-results-bar">
+            <span class="explorer-results-count" id="explorer-results-count"></span>
+          </div>
+          <div id="explorer-grid" class="explorer-grid reveal">
+            <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #64748b;">Loading college directory...</div>
           </div>
         </div>
       </section>
@@ -589,41 +615,6 @@
         </div>
       </section>
 
-      <!-- ═══════════ COLLEGE EXPLORER ═══════════ -->
-      <section class="section-pad soft-band" id="colleges-explorer" aria-labelledby="explorer-heading">
-        <div class="container">
-          <div class="section-title reveal" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 24px; margin-bottom: 40px; text-align: left;">
-            <div>
-              <span class="section-badge green">🎓 Directory &amp; Predictor</span>
-              <h2 id="explorer-heading" style="margin-top: 8px;">College Explorer</h2>
-              <p style="margin-bottom: 0;">Search, filter, and explore all 120+ top engineering colleges across India</p>
-            </div>
-            
-            <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: flex-start; z-index: 10;">
-              <input type="text" id="explorer-search" placeholder="Search by name..." style="padding: 12px 16px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none; font-size: 0.88rem; width: 220px; font-family: inherit;" />
-              
-              <select id="explorer-type" style="padding: 12px 16px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none; font-size: 0.88rem; cursor: pointer; font-family: inherit;">
-                <option value="">All Types</option>
-                <option value="IIT">IIT</option>
-                <option value="NIT">NIT</option>
-                <option value="IIIT">IIIT</option>
-                <option value="BITS">BITS</option>
-                <option value="VIT">VIT</option>
-                <option value="State">State Gov</option>
-                <option value="Private">Private</option>
-              </select>
-              
-              <select id="explorer-state" style="padding: 12px 16px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none; font-size: 0.88rem; cursor: pointer; font-family: inherit;">
-                <option value="">All States</option>
-              </select>
-            </div>
-          </div>
-
-          <div id="explorer-grid" class="explorer-grid reveal">
-            <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #64748b;">Loading college directory...</div>
-          </div>
-        </div>
-      </section>
 
       <!-- ═══════════ BRANCHES ═══════════ -->
       <section class="section-pad" id="branches" aria-labelledby="branches-heading">
@@ -993,6 +984,8 @@
         const explorerModalContent = document.getElementById('explorer-college-modal-content');
         const closeExplorerModalBtn = document.getElementById('btn-close-explorer-modal');
 
+        const explorerResultsCount = document.getElementById('explorer-results-count');
+
         // Escape helper to prevent XSS
         function escapeHTML(str) {
           if (!str) return '';
@@ -1003,6 +996,50 @@
             .replace(/"/g, '&quot;')
             .replace(/'/g, '&#039;');
         }
+
+        // Get cover image for college
+        function getCollegeImageUrl(col) {
+          if (col.imageUrl) return col.imageUrl;
+          const nameLower = col.name.toLowerCase();
+          if (nameLower.includes('mnit') || nameLower.includes('malaviya national')) {
+            return 'assets/colleges/mnit.webp';
+          }
+          if (nameLower.includes('arya')) {
+            return 'assets/colleges/arya.webp';
+          }
+          if (nameLower.includes('jecrc')) {
+            return 'assets/colleges/jecrc.webp';
+          }
+          if (nameLower.includes('poornima')) {
+            return 'assets/colleges/poornima.webp';
+          }
+          if (nameLower.includes('skit') || nameLower.includes('swami keshvanand')) {
+            return 'assets/colleges/skit.webp';
+          }
+          if (nameLower.includes('vit jaipur') || (nameLower.includes('vivekananda') && nameLower.includes('technology'))) {
+            return 'assets/colleges/vit.webp';
+          }
+          if (col.type === 'IIT') {
+            return 'https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=600&q=80';
+          }
+          if (col.type === 'NIT') {
+            return 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=600&q=80';
+          }
+          if (col.type === 'IIIT') {
+            return 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=600&q=80';
+          }
+          return 'https://images.unsplash.com/photo-1498243691581-b145c3f54a91?auto=format&fit=crop&w=600&q=80';
+        }
+
+        function getCollegeGradient(type) {
+          if (type === 'IIT') return 'linear-gradient(135deg, #7f1d1d, #dc2626)';
+          if (type === 'NIT') return 'linear-gradient(135deg, #1e3a8a, #2563eb)';
+          if (type === 'IIIT') return 'linear-gradient(135deg, #4c1d95, #7c3aed)';
+          if (type === 'BITS') return 'linear-gradient(135deg, #78350f, #d97706)';
+          if (type === 'VIT') return 'linear-gradient(135deg, #064e3b, #10b981)';
+          return 'linear-gradient(135deg, #0f172a, #334155)';
+        }
+
 
         // Fetch dynamic states list once
         async function initExplorerStates() {
@@ -1044,6 +1081,9 @@
 
             if (res.ok && data.success) {
               const colleges = data.data;
+              explorerResultsCount.textContent = colleges.length > 0 
+                ? `Showing ${colleges.length} college${colleges.length !== 1 ? 's' : ''}`
+                : '';
               if (colleges.length === 0) {
                 explorerGrid.innerHTML = `
                   <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #64748b;">
@@ -1062,30 +1102,41 @@
                 const feesText = col.feesPerYear ? `₹${(col.feesPerYear / 100000).toFixed(2)} L/yr` : 'N/A';
                 const badgeClass = `badge-${col.type.toLowerCase()}`;
 
+                const imageUrl = getCollegeImageUrl(col);
+                const initials = col.name ? col.name.split(' ').map(w => w[0]).join('').substring(0, 3).toUpperCase() : '';
+                const imgHtml = `
+                  <div class="explorer-card-img" style="background: ${getCollegeGradient(col.type)}; position: relative; display: flex; align-items: center; justify-content: center; color: white;">
+                    <span style="font-size: 1.5rem; font-weight: 900; opacity: 0.25; letter-spacing: 0.05em; position: absolute; pointer-events: none;">${initials}</span>
+                    <img src="${imageUrl}" alt="${escapeHTML(col.name)}" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;" onerror="this.style.display='none';" />
+                  </div>
+                `;
+
                 card.innerHTML = `
-                  <div>
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; gap: 8px;">
+                  ${imgHtml}
+                  <div class="explorer-card-body">
+
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 8px;">
                       <span class="college-badge ${badgeClass}">${col.type}</span>
-                      <span style="font-size: 0.78rem; font-weight: 600; color: #3b82f6;">${rankText}</span>
+                      <span style="font-size: 0.78rem; font-weight: 600; color: var(--blue);">${rankText}</span>
                     </div>
-                    <h3 style="margin: 0 0 6px 0; font-size: 1.15rem; font-weight: 800; color: white;">${escapeHTML(col.name)}</h3>
-                    <div style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 16px;">
+                    <h3 style="margin: 0 0 6px 0; font-size: 1.1rem; font-weight: 800; color: var(--ink); line-height: 1.3;">${escapeHTML(col.name)}</h3>
+                    <div style="font-size: 0.8rem; color: var(--muted); margin-bottom: 10px;">
                       <span>📍 ${escapeHTML(col.city)}, ${escapeHTML(col.state)}</span>
                     </div>
-                  </div>
-                  
-                  <div style="background: rgba(15, 23, 42, 0.4); padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03);">
-                    <div class="college-meta-item">
-                      <span>Admission Mode:</span>
-                      <strong>${escapeHTML(col.admissionMode)}</strong>
-                    </div>
-                    <div class="college-meta-item">
-                      <span>Avg Package:</span>
-                      <strong style="color: #34d399;">₹${col.avgPlacement.toFixed(1)} LPA</strong>
-                    </div>
-                    <div class="college-meta-item">
-                      <span>Fees:</span>
-                      <strong>${feesText}</strong>
+                    <p class="explorer-card-desc">${escapeHTML(col.description)}</p>
+                    <div style="background: var(--soft); padding: 12px; border-radius: 10px; border: 1px solid var(--line); margin-top: auto; display: flex; flex-direction: column; gap: 6px;">
+                      <div class="college-meta-item">
+                        <span>Admission:</span>
+                        <strong>${escapeHTML(col.admissionMode)}</strong>
+                      </div>
+                      <div class="college-meta-item">
+                        <span>Avg Package:</span>
+                        <strong style="color: var(--green-dark);">₹${col.avgPlacement.toFixed(1)} LPA</strong>
+                      </div>
+                      <div class="college-meta-item">
+                        <span>Fees:</span>
+                        <strong>${feesText}</strong>
+                      </div>
                     </div>
                   </div>
                 `;
@@ -1113,58 +1164,64 @@
               const col = data.data;
               const rankText = col.nirfRank ? `NIRF Rank: #${col.nirfRank}` : 'NIRF Rank: N/A';
               const feesText = col.feesPerYear ? `₹${(col.feesPerYear / 100000).toFixed(2)} L/yr (approx)` : 'N/A';
+              const initials = col.name ? col.name.split(' ').map(w => w[0]).join('').substring(0, 3).toUpperCase() : '';
               
               explorerModalContent.innerHTML = `
+                <div style="width: 100%; height: 220px; border-radius: 12px; overflow: hidden; margin-bottom: 20px; background: ${getCollegeGradient(col.type)}; position: relative; display: flex; align-items: center; justify-content: center; color: white;">
+                  <span style="font-size: 3rem; font-weight: 900; opacity: 0.25; letter-spacing: 0.05em; position: absolute; pointer-events: none;">${initials}</span>
+                  <img src="${getCollegeImageUrl(col)}" alt="${escapeHTML(col.name)}" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;" onerror="this.style.display='none';" />
+                </div>
+                
                 <div style="margin-bottom: 20px;">
                   <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 8px; flex-wrap: wrap;">
                     <span class="college-badge badge-${col.type.toLowerCase()}">${col.type}</span>
-                    <span style="font-size: 0.85rem; font-weight: 700; color: #60a5fa;">${rankText}</span>
+                    <span style="font-size: 0.85rem; font-weight: 700; color: var(--blue);">${rankText}</span>
                   </div>
-                  <h2>${escapeHTML(col.name)}</h2>
-                  <p style="color:#94a3b8; font-size:0.9rem; margin: 4px 0 0 0;">📍 ${escapeHTML(col.city)}, ${escapeHTML(col.state)}</p>
+                  <h2 style="color: var(--ink); margin-top: 4px;">${escapeHTML(col.name)}</h2>
+                  <p style="color: var(--muted); font-size: 0.9rem; margin: 4px 0 0 0;">📍 ${escapeHTML(col.city)}, ${escapeHTML(col.state)}</p>
                 </div>
                 
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 24px;">
-                  <div style="background:rgba(15,23,42,0.4); padding:15px; border-radius:10px; border: 1px solid rgba(255,255,255,0.03);">
-                    <div style="font-size:0.8rem; color:#64748b; margin-bottom: 4px;">Admission Mode</div>
-                    <strong style="color:white; font-size:1.05rem;">${escapeHTML(col.admissionMode)}</strong>
+                  <div style="background: var(--soft); padding: 15px; border-radius: 10px; border: 1px solid var(--line);">
+                    <div style="font-size:0.8rem; color: var(--muted); margin-bottom: 4px;">Admission Mode</div>
+                    <strong style="color: var(--ink); font-size:1.05rem;">${escapeHTML(col.admissionMode)}</strong>
                   </div>
-                  <div style="background:rgba(15,23,42,0.4); padding:15px; border-radius:10px; border: 1px solid rgba(255,255,255,0.03);">
-                    <div style="font-size:0.8rem; color:#64748b; margin-bottom: 4px;">Cutoff CSE</div>
-                    <strong style="color:#60a5fa; font-size:1.05rem;">${escapeHTML(col.cutoffRankCSE)}</strong>
+                  <div style="background: var(--soft); padding: 15px; border-radius: 10px; border: 1px solid var(--line);">
+                    <div style="font-size:0.8rem; color: var(--muted); margin-bottom: 4px;">Cutoff CSE</div>
+                    <strong style="color: var(--blue); font-size:1.05rem;">${escapeHTML(col.cutoffRankCSE)}</strong>
                   </div>
-                  <div style="background:rgba(15,23,42,0.4); padding:15px; border-radius:10px; border: 1px solid rgba(255,255,255,0.03);">
-                    <div style="font-size:0.8rem; color:#64748b; margin-bottom: 4px;">Average Package</div>
-                    <strong style="color:#34d399; font-size:1.15rem;">₹${col.avgPlacement.toFixed(1)} LPA</strong>
+                  <div style="background: var(--soft); padding: 15px; border-radius: 10px; border: 1px solid var(--line);">
+                    <div style="font-size:0.8rem; color: var(--muted); margin-bottom: 4px;">Average Package</div>
+                    <strong style="color: var(--green-dark); font-size:1.15rem;">₹${col.avgPlacement.toFixed(1)} LPA</strong>
                   </div>
-                  <div style="background:rgba(15,23,42,0.4); padding:15px; border-radius:10px; border: 1px solid rgba(255,255,255,0.03);">
-                    <div style="font-size:0.8rem; color:#64748b; margin-bottom: 4px;">Highest Package</div>
-                    <strong style="color:#f59e0b; font-size:1.15rem;">₹${col.highestPlacement.toFixed(1)} LPA</strong>
+                  <div style="background: var(--soft); padding: 15px; border-radius: 10px; border: 1px solid var(--line);">
+                    <div style="font-size:0.8rem; color: var(--muted); margin-bottom: 4px;">Highest Package</div>
+                    <strong style="color: var(--orange-dark); font-size:1.15rem;">₹${col.highestPlacement.toFixed(1)} LPA</strong>
                   </div>
-                  <div style="background:rgba(15,23,42,0.4); padding:15px; border-radius:10px; border: 1px solid rgba(255,255,255,0.03); grid-column: 1/-1;">
-                    <div style="font-size:0.8rem; color:#64748b; margin-bottom: 4px;">Academic Fees</div>
-                    <strong style="color:white; font-size:1.05rem;">${feesText}</strong>
+                  <div style="background: var(--soft); padding: 15px; border-radius: 10px; border: 1px solid var(--line); grid-column: 1/-1;">
+                    <div style="font-size:0.8rem; color: var(--muted); margin-bottom: 4px;">Academic Fees</div>
+                    <strong style="color: var(--ink); font-size:1.05rem;">${feesText}</strong>
                   </div>
                 </div>
                 
                 <div style="margin-bottom: 24px;">
-                  <h4 style="color:white; margin:0 0 8px 0; font-size:1rem;">About Institution</h4>
-                  <p style="color:#94a3b8; font-size:0.88rem; line-height:1.6; margin:0;">${escapeHTML(col.description)}</p>
+                  <h4 style="color: var(--ink); margin:0 0 8px 0; font-size:1rem; font-weight: 800;">About Institution</h4>
+                  <p style="color: #475569; font-size:0.88rem; line-height:1.6; margin:0;">${escapeHTML(col.description)}</p>
                 </div>
                 
                 <div style="margin-bottom: 24px;">
-                  <h4 style="color:white; margin:0 0 10px 0; font-size:1rem;">Offered B.Tech Branches</h4>
+                  <h4 style="color: var(--ink); margin:0 0 10px 0; font-size:1rem; font-weight: 800;">Offered B.Tech Branches</h4>
                   <div style="display:flex; flex-wrap:wrap; gap:8px;">
                     ${col.branches && col.branches.length > 0 
-                      ? col.branches.map(b => `<span style="background:rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.05); color:#cbd5e1; padding:5px 10px; border-radius:6px; font-size:0.78rem;">${escapeHTML(b)}</span>`).join('')
-                      : '<span style="color:#64748b; font-size:0.85rem;">Information not specified</span>'
+                      ? col.branches.map(b => `<span style="background: #f1f5f9; border: 1px solid var(--line); color: #334155; padding:5px 10px; border-radius:6px; font-size:0.78rem; font-weight: 500;">${escapeHTML(b)}</span>`).join('')
+                      : '<span style="color: var(--muted); font-size:0.85rem;">Information not specified</span>'
                     }
                   </div>
                 </div>
                 
                 ${col.website ? `
-                  <div style="text-align: right; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 20px;">
-                    <a href="${escapeHTML(col.website)}" target="_blank" style="text-decoration:none; display:inline-block; background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; padding: 10px 20px; border-radius: 8px; font-weight: 700; font-size: 0.88rem;">Visit Official Website ↗</a>
+                  <div style="text-align: right; border-top: 1px solid var(--line); padding-top: 20px;">
+                    <a href="${escapeHTML(col.website)}" target="_blank" style="text-decoration:none; display:inline-block; background: linear-gradient(135deg, var(--blue), var(--blue-dark)); color: white; padding: 10px 20px; border-radius: 8px; font-weight: 700; font-size: 0.88rem; box-shadow: 0 4px 12px rgba(37,99,235,0.25);">Visit Official Website ↗</a>
                   </div>
                 ` : ''}
               `;
@@ -1178,9 +1235,19 @@
 
         const closeExplorerModal = () => { explorerModal.classList.remove('open'); };
         closeExplorerModalBtn.addEventListener('click', closeExplorerModal);
+        explorerModal.addEventListener('click', (e) => {
+          if (e.target === explorerModal) closeExplorerModal();
+        });
+
+        // Debounce utility
+        let searchTimer;
+        function debouncedSearch() {
+          clearTimeout(searchTimer);
+          searchTimer = setTimeout(fetchExplorerColleges, 300);
+        }
 
         // Event listeners for explorer filters
-        explorerSearch.addEventListener('input', fetchExplorerColleges);
+        explorerSearch.addEventListener('input', debouncedSearch);
         explorerType.addEventListener('change', fetchExplorerColleges);
         explorerState.addEventListener('change', fetchExplorerColleges);
 

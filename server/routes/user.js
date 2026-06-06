@@ -132,4 +132,39 @@ router.get('/my-leads', async (req, res) => {
   }
 });
 
+// PUT /my-leads/:id/status — Update own lead status
+router.put(
+  '/my-leads/:id/status',
+  [
+    body('status')
+      .isIn(['in_progress', 'counselled', 'dropped', 'closed'])
+      .withMessage('Invalid lead status option'),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success: false, error: errors.array()[0].msg });
+    }
+
+    const { id } = req.params;
+    const { status } = req.body;
+
+    try {
+      const lead = await Lead.findOne({ _id: id, userId: req.user.userId });
+      if (!lead) {
+        return res.status(404).json({ success: false, error: 'Lead not found or unauthorized' });
+      }
+
+      lead.status = status;
+      await lead.save();
+
+      res.json({ success: true, message: 'Status updated successfully!', data: lead });
+    } catch (err) {
+      console.error('Update student lead status error:', err.message);
+      res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+  }
+);
+
 module.exports = router;
+
