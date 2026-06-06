@@ -49,18 +49,18 @@ app.use(
   })
 );
 
-// Global Rate Limiting (15 minutes, 100 requests per IP)
+// Global Rate Limiting (15 minutes, 100 requests per IP in production)
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: process.env.NODE_ENV === 'production' ? 100 : 10000,
   message: { success: false, error: 'Too many requests from this IP. Please try again after 15 minutes.' },
 });
 app.use(globalLimiter);
 
-// Auth Rate Limiting (15 minutes, 15 requests per IP)
+// Auth Rate Limiting (15 minutes, 15 requests per IP in production)
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 15,
+  max: process.env.NODE_ENV === 'production' ? 15 : 10000,
   message: { success: false, error: 'Too many auth attempts. Please try again after 15 minutes.' },
 });
 
