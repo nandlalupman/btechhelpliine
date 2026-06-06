@@ -19,7 +19,9 @@ if (process.env.NODE_ENV === 'production') {
 const app = express();
 
 // Connect to MongoDB
-connectDB();
+if (!process.env.VERCEL) {
+  connectDB();
+}
 
 // Security headers
 app.use(helmet({
