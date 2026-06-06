@@ -382,8 +382,10 @@
       <nav class="tabs-nav">
         <button class="tab-btn active" onclick="switchTab('leads-tab')">Leads Management</button>
         <button class="tab-btn" onclick="switchTab('users-tab')">User Operations</button>
+        <button class="tab-btn" onclick="switchTab('colleges-tab')">College Database</button>
         <button class="tab-btn" onclick="switchTab('analytics-tab')">Analytics Hub</button>
       </nav>
+
 
       <!-- ═══════════ LEADS TAB ═══════════ -->
       <section class="tab-content active" id="leads-tab">
@@ -476,7 +478,50 @@
         </div>
       </section>
 
+      <!-- ═══════════ COLLEGES TAB ═══════════ -->
+      <section class="tab-content" id="colleges-tab">
+        <div class="controls-panel">
+          <div class="filters">
+            <input type="text" id="admin-college-search" placeholder="Search by college name..." oninput="fetchAdminColleges()" />
+            <select id="admin-college-filter-type" onchange="fetchAdminColleges()">
+              <option value="">All Types</option>
+              <option value="IIT">IIT</option>
+              <option value="NIT">NIT</option>
+              <option value="IIIT">IIIT</option>
+              <option value="BITS">BITS</option>
+              <option value="VIT">VIT</option>
+              <option value="State">State Gov</option>
+              <option value="Private">Private</option>
+            </select>
+            <button class="btn-action btn-reset" onclick="resetAdminCollegeFilters()">Reset</button>
+          </div>
+          <button class="btn-action btn-export" onclick="openAddCollegeModal()" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); border:none; color:white;">
+            + Add New College
+          </button>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>College Details</th>
+                <th>Type</th>
+                <th>NIRF Rank</th>
+                <th>Cutoff CSE</th>
+                <th>Avg Placement</th>
+                <th>Fees (Per Yr)</th>
+                <th style="text-align: right;">Manage</th>
+              </tr>
+            </thead>
+            <tbody id="colleges-table-body">
+              <tr><td colspan="7" class="no-data">Loading college directory...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
       <!-- ═══════════ ANALYTICS TAB ═══════════ -->
+
       <section class="tab-content" id="analytics-tab">
         <!-- Analytics Cards -->
         <div class="stats-grid">
@@ -559,6 +604,97 @@
     <!-- Toast -->
     <div class="toast" id="toast"></div>
 
+    <!-- College Form Modal (Add & Edit) -->
+    <div class="modal" id="college-form-modal">
+      <div class="modal-card" style="max-width: 650px;">
+        <button class="modal-close" onclick="closeCollegeFormModal()">&times;</button>
+        <h2 id="college-modal-title" style="margin-bottom: 20px; font-weight:800; border-left:4px solid #3b82f6; padding-left:10px;">Add New College</h2>
+        <form id="college-crud-form" class="profile-form" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+          <input type="hidden" id="crud-college-id" />
+          
+          <label style="grid-column: 1/-1;">
+            College Name
+            <input type="text" id="crud-college-name" placeholder="e.g. IIT Delhi" required style="width: 100%; padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none;" />
+          </label>
+          
+          <label style="margin-bottom: 0;">
+            Type
+            <select id="crud-college-type" required style="width: 100%; padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none;">
+              <option value="IIT">IIT</option>
+              <option value="NIT">NIT</option>
+              <option value="IIIT">IIIT</option>
+              <option value="BITS">BITS</option>
+              <option value="VIT">VIT</option>
+              <option value="State">State Gov</option>
+              <option value="Private">Private</option>
+              <option value="Other">Other</option>
+            </select>
+          </label>
+          
+          <label style="margin-bottom: 0;">
+            NIRF Rank
+            <input type="number" id="crud-college-nirf" placeholder="e.g. 15 (leave blank if none)" style="width: 100%; padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none;" />
+          </label>
+          
+          <label style="margin-bottom: 0;">
+            City
+            <input type="text" id="crud-college-city" placeholder="e.g. New Delhi" required style="width: 100%; padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none;" />
+          </label>
+          
+          <label style="margin-bottom: 0;">
+            State
+            <input type="text" id="crud-college-state" placeholder="e.g. Delhi" required style="width: 100%; padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none;" />
+          </label>
+          
+          <label style="margin-bottom: 0;">
+            Admission Mode
+            <input type="text" id="crud-college-admission" placeholder="e.g. JEE Advanced" required style="width: 100%; padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none;" />
+          </label>
+          
+          <label style="margin-bottom: 0;">
+            CSE Cutoff Rank
+            <input type="text" id="crud-college-cutoff" placeholder="e.g. ~150" required style="width: 100%; padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none;" />
+          </label>
+          
+          <label style="margin-bottom: 0;">
+            Yearly Fees (INR)
+            <input type="number" id="crud-college-fees" placeholder="e.g. 225000" required style="width: 100%; padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none;" />
+          </label>
+          
+          <label style="margin-bottom: 0;">
+            Average Placement (LPA)
+            <input type="number" step="0.1" id="crud-college-avg" placeholder="e.g. 22.2" required style="width: 100%; padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none;" />
+          </label>
+          
+          <label style="margin-bottom: 0;">
+            Highest Placement (LPA)
+            <input type="number" step="0.1" id="crud-college-highest" placeholder="e.g. 210.0" required style="width: 100%; padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none;" />
+          </label>
+          
+          <label style="margin-bottom: 0;">
+            Website URL
+            <input type="url" id="crud-college-website" placeholder="e.g. https://home.iitd.ac.in" style="width: 100%; padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none;" />
+          </label>
+          
+          <label style="grid-column: 1/-1; margin-bottom: 0;">
+            Branches Offered (comma separated)
+            <input type="text" id="crud-college-branches" placeholder="e.g. Computer Science Engineering, Electrical Engineering" style="width: 100%; padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none;" />
+          </label>
+          
+          <label style="grid-column: 1/-1;">
+            Description
+            <textarea id="crud-college-description" required style="width: 100%; height: 80px; padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none;" placeholder="Provide brief description of the college..."></textarea>
+          </label>
+          
+          <div style="grid-column: 1/-1; text-align: right; margin-top: 10px; display: flex; justify-content: flex-end; gap: 10px;">
+            <button type="button" class="btn-action btn-reset" onclick="closeCollegeFormModal()" style="margin: 0;">Cancel</button>
+            <button type="submit" class="btn-action btn-export" style="margin: 0; background: linear-gradient(135deg, #10b981, #059669);">Save College</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
     <script src="config.js"></script>
     <script>
       const token = localStorage.getItem('token');
@@ -595,8 +731,10 @@
 
         if (tabId === 'leads-tab') fetchLeads();
         else if (tabId === 'users-tab') fetchUsers();
+        else if (tabId === 'colleges-tab') fetchAdminColleges();
         else if (tabId === 'analytics-tab') fetchAnalytics();
       }
+
 
       // Fetch active counsellors to populate assignment selectors
       async function fetchCounsellors() {
@@ -1123,7 +1261,186 @@
       }
       document.getElementById('btn-logout').addEventListener('click', handleLogout);
 
+      // ── COLLEGE MANAGEMENT LOGIC ──
+
+      async function fetchAdminColleges() {
+        const search = document.getElementById('admin-college-search').value;
+        const type = document.getElementById('admin-college-filter-type').value;
+
+        const params = new URLSearchParams();
+        if (search) params.append('search', search);
+        if (type) params.append('type', type);
+
+        try {
+          const res = await fetch(`${API_URL}/api/colleges?${params.toString()}`);
+          const data = await res.json();
+          const tbody = document.getElementById('colleges-table-body');
+          tbody.innerHTML = '';
+
+          if (res.ok && data.success) {
+            const colleges = data.data;
+            if (colleges.length === 0) {
+              tbody.innerHTML = '<tr><td colspan="7" class="no-data">No college records found.</td></tr>';
+              return;
+            }
+
+            colleges.forEach(col => {
+              const tr = document.createElement('tr');
+              const rankText = col.nirfRank ? `#${col.nirfRank}` : 'N/A';
+              const feesText = col.feesPerYear ? `₹${(col.feesPerYear / 100000).toFixed(2)} L` : 'N/A';
+              
+              tr.innerHTML = `
+                <td>
+                  <div style="font-weight:700;color:white;">${escapeHTML(col.name)}</div>
+                  <div style="font-size:0.8rem;color:#64748b;">📍 ${escapeHTML(col.city)}, ${escapeHTML(col.state)}</div>
+                </td>
+                <td><span class="badge role-student" style="background:rgba(59,130,246,0.1); color:#60a5fa;">${col.type}</span></td>
+                <td>${rankText}</td>
+                <td>${escapeHTML(col.cutoffRankCSE)}</td>
+                <td><strong style="color:#34d399;">₹${col.avgPlacement.toFixed(1)} LPA</strong></td>
+                <td>${feesText}</td>
+                <td style="text-align:right;">
+                  <button class="btn-toggle btn-toggle-activate" style="padding:6px 10px;margin-right:5px;" onclick="openEditCollegeModal('${col._id}')">Edit</button>
+                  <button class="btn-toggle btn-toggle-deactivate" style="padding:6px 10px;" onclick="deleteCollege('${col._id}')">Delete</button>
+                </td>
+              `;
+              tbody.appendChild(tr);
+            });
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
+      function resetAdminCollegeFilters() {
+        document.getElementById('admin-college-search').value = '';
+        document.getElementById('admin-college-filter-type').value = '';
+        fetchAdminColleges();
+      }
+
+      // College Form Modal Controls
+      const collegeFormModal = document.getElementById('college-form-modal');
+      const collegeCrudForm = document.getElementById('college-crud-form');
+
+      function openAddCollegeModal() {
+        document.getElementById('crud-college-id').value = '';
+        document.getElementById('college-modal-title').textContent = 'Add New College';
+        collegeCrudForm.reset();
+        collegeFormModal.classList.add('open');
+      }
+
+      async function openEditCollegeModal(id) {
+        document.getElementById('college-modal-title').textContent = 'Edit College Details';
+        collegeFormModal.classList.add('open');
+        
+        try {
+          const res = await fetch(`${API_URL}/api/colleges/${id}`);
+          const data = await res.json();
+          
+          if (res.ok && data.success) {
+            const col = data.data;
+            document.getElementById('crud-college-id').value = col._id;
+            document.getElementById('crud-college-name').value = col.name;
+            document.getElementById('crud-college-type').value = col.type;
+            document.getElementById('crud-college-nirf').value = col.nirfRank || '';
+            document.getElementById('crud-college-city').value = col.city;
+            document.getElementById('crud-college-state').value = col.state;
+            document.getElementById('crud-college-admission').value = col.admissionMode;
+            document.getElementById('crud-college-cutoff').value = col.cutoffRankCSE;
+            document.getElementById('crud-college-fees').value = col.feesPerYear;
+            document.getElementById('crud-college-avg').value = col.avgPlacement;
+            document.getElementById('crud-college-highest').value = col.highestPlacement;
+            document.getElementById('crud-college-website').value = col.website || '';
+            document.getElementById('crud-college-branches').value = col.branches ? col.branches.join(', ') : '';
+            document.getElementById('crud-college-description').value = col.description;
+          } else {
+            showToast(data.error || 'Failed to load details');
+            closeCollegeFormModal();
+          }
+        } catch (err) {
+          showToast('Connection error');
+          closeCollegeFormModal();
+        }
+      }
+
+      function closeCollegeFormModal() {
+        collegeFormModal.classList.remove('open');
+      }
+
+      // Handle College Save/Update Form Submit
+      collegeCrudForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const id = document.getElementById('crud-college-id').value;
+        const name = document.getElementById('crud-college-name').value.trim();
+        const type = document.getElementById('crud-college-type').value;
+        const nirfRank = document.getElementById('crud-college-nirf').value ? Number(document.getElementById('crud-college-nirf').value) : null;
+        const city = document.getElementById('crud-college-city').value.trim();
+        const state = document.getElementById('crud-college-state').value.trim();
+        const admissionMode = document.getElementById('crud-college-admission').value.trim();
+        const cutoffRankCSE = document.getElementById('crud-college-cutoff').value.trim();
+        const feesPerYear = Number(document.getElementById('crud-college-fees').value);
+        const avgPlacement = Number(document.getElementById('crud-college-avg').value);
+        const highestPlacement = Number(document.getElementById('crud-college-highest').value);
+        const website = document.getElementById('crud-college-website').value.trim();
+        const description = document.getElementById('crud-college-description').value.trim();
+        
+        const branchesVal = document.getElementById('crud-college-branches').value;
+        const branches = branchesVal ? branchesVal.split(',').map(b => b.trim()).filter(Boolean) : [];
+
+        const payload = {
+          name, type, nirfRank, city, state, admissionMode, cutoffRankCSE, feesPerYear, avgPlacement, highestPlacement, website, description, branches
+        };
+
+        const url = id ? `${API_URL}/api/admin/colleges/${id}` : `${API_URL}/api/admin/colleges`;
+        const method = id ? 'PUT' : 'POST';
+
+        try {
+          const res = await fetch(url, {
+            method: method,
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+          });
+          const data = await res.json();
+          
+          if (res.ok && data.success) {
+            showToast(id ? 'College updated successfully!' : 'College added successfully!');
+            closeCollegeFormModal();
+            fetchAdminColleges();
+          } else {
+            alert(data.error || 'Failed to save college details');
+          }
+        } catch (err) {
+          showToast('Connection error');
+        }
+      });
+
+      async function deleteCollege(id) {
+        if (!confirm('Are you sure you want to permanently delete this college from the directory?')) return;
+        
+        try {
+          const res = await fetch(`${API_URL}/api/admin/colleges/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const data = await res.json();
+          
+          if (res.ok && data.success) {
+            showToast('College deleted successfully');
+            fetchAdminColleges();
+          } else {
+            showToast(data.error || 'Failed to delete');
+          }
+        } catch (err) {
+          showToast('Connection error');
+        }
+      }
+
       // Init Load
+
       async function init() {
         await fetchCounsellors();
         fetchLeads();

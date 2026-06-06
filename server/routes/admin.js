@@ -2,7 +2,9 @@ const express = require('express');
 const { body, validationResult } = require('express-validator');
 const Lead = require('../models/Lead');
 const User = require('../models/User');
+const College = require('../models/College');
 const { verifyToken, requireRole } = require('../middleware/auth');
+
 
 const router = express.Router();
 
@@ -397,4 +399,123 @@ router.get('/counsellors', async (req, res) => {
   }
 });
 
+// POST /colleges — Add a new college (Admin only)
+router.post(
+  '/colleges',
+  [
+    body('name').trim().notEmpty().withMessage('College name is required'),
+    body('type').isIn(['IIT', 'NIT', 'IIIT', 'BITS', 'VIT', 'State', 'Private', 'Other']).withMessage('Invalid college type'),
+    body('city').trim().notEmpty().withMessage('City is required'),
+    body('state').trim().notEmpty().withMessage('State is required'),
+    body('admissionMode').trim().notEmpty().withMessage('Admission mode is required'),
+    body('feesPerYear').isNumeric().withMessage('Fees per year must be a number'),
+    body('cutoffRankCSE').trim().notEmpty().withMessage('Cutoff rank is required'),
+    body('avgPlacement').isNumeric().withMessage('Average placement must be a number'),
+    body('highestPlacement').isNumeric().withMessage('Highest placement must be a number'),
+    body('description').trim().notEmpty().withMessage('Description is required'),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success: false, error: errors.array()[0].msg });
+    }
+
+    const {
+      name,
+      type,
+      nirfRank,
+      city,
+      state,
+      admissionMode,
+      feesPerYear,
+      cutoffRankCSE,
+      avgPlacement,
+      highestPlacement,
+      description,
+      branches,
+      website
+    } = req.body;
+
+    try {
+      // Check if already exists
+      const existing = await College.findOne({ name });
+      if (existing) {
+        return res.status(400).json({ success: false, error: 'A college with this name is already registered' });
+      }
+
+      const college = new College({
+        name,
+        type,
+        nirfRank: nirfRank || null,
+        city,
+        state,
+        admissionMode,
+        feesPerYear,
+        cutoffRankCSE,
+        avgPlacement,
+        highestPlacement,
+        description,
+        branches: branches || [],
+        website
+      });
+
+      await college.save();
+      res.status(201).json({ success: true, message: 'College added successfully', data: college });
+    } catch (err) {
+      console.error('Admin add college error:', err.message);
+      res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+  }
+);
+
+// PUT /colleges/:id — Update a college (Admin only)
+router.put(
+  '/colleges/:id',
+  async (req, res) => {
+    try {
+      const college = await College.findById(req.params.id);
+      if (!college) {
+        return res.status(404).json({ success: false, error: 'College not found' });
+      }
+
+      // Check if name is being changed and is already taken
+      if (req.body.name && req.body.name !== college.name) {
+        const existing = await College.findOne({ name: req.body.name });
+        if (existing) {
+          return res.status(400).json({ success: false, error: 'A college with this name is already registered' });
+        }
+      }
+
+      const updated = await College.findByIdAndUpdate(
+        req.params.id,
+        { $set: req.body },
+        { new: true, runValidators: true }
+      );
+
+      res.json({ success: true, message: 'College updated successfully', data: updated });
+    } catch (err) {
+      console.error('Admin update college error:', err.message);
+      res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+  }
+);
+
+// DELETE /colleges/:id — Delete a college (Admin only)
+router.delete(
+  '/colleges/:id',
+  async (req, res) => {
+    try {
+      const college = await College.findByIdAndDelete(req.params.id);
+      if (!college) {
+        return res.status(404).json({ success: false, error: 'College not found' });
+      }
+      res.json({ success: true, message: 'College deleted successfully' });
+    } catch (err) {
+      console.error('Admin delete college error:', err.message);
+      res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+  }
+);
+
 module.exports = router;
+

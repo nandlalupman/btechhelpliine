@@ -78,6 +78,8 @@ app.use('/api/leads', require('./routes/leads'));
 app.use('/api/user', require('./routes/user'));
 app.use('/api/counsellor', require('./routes/counsellor'));
 app.use('/api/admin', require('./routes/admin'));
+app.use('/api/colleges', require('./routes/colleges'));
+
 
 // Health check API
 app.get('/health', (req, res) => {

@@ -288,12 +288,83 @@
         display: none;
       }
 
+      /* College Explorer styles */
+      .college-card {
+        background: rgba(15, 23, 42, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .college-card:hover {
+        transform: translateY(-4px);
+        background: rgba(15, 23, 42, 0.6);
+        border-color: rgba(59, 130, 246, 0.3);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+      }
+
+      .college-badge {
+        padding: 3px 8px;
+        border-radius: 6px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        display: inline-block;
+      }
+
+      .badge-iit { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+      .badge-nit { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+      .badge-iiit { background: rgba(139, 92, 246, 0.15); color: #a78bfa; }
+      .badge-bits { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+      .badge-vit { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+      .badge-state { background: rgba(6, 182, 212, 0.15); color: #22d3ee; }
+      .badge-private { background: rgba(236, 72, 153, 0.15); color: #f472b6; }
+      .badge-other { background: rgba(100, 116, 139, 0.15); color: #cbd5e1; }
+
+      .college-meta-item {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.8rem;
+        color: #94a3b8;
+        margin-top: 6px;
+        border-bottom: 1px dashed rgba(255,255,255,0.05);
+        padding-bottom: 6px;
+      }
+
+      .college-meta-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+
+      .college-meta-item strong {
+        color: #cbd5e1;
+      }
+
+      .branch-tag {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 0.78rem;
+        color: #cbd5e1;
+        margin: 4px;
+      }
+
       @media (max-width: 768px) {
         .grid-layout {
           grid-template-columns: 1fr;
         }
       }
     </style>
+
   </head>
   <body class="student-body">
     <div class="dashboard-container">
@@ -410,9 +481,58 @@
             <div class="no-leads">Loading requests...</div>
           </div>
         </section>
-
       </div>
+
+      <!-- College Explorer Section -->
+      <section class="card" style="margin-top: 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 15px;">
+          <div>
+            <h2 style="margin: 0; border-left: 4px solid #10b981; padding-left: 10px;">College Explorer</h2>
+            <p style="margin: 4px 0 0 0; color: #94a3b8; font-size: 0.9rem;">Find and filter top IITs, NITs, BITS, VIT, and NIRF engineering colleges</p>
+          </div>
+          
+          <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+            <input type="text" id="college-search" placeholder="Search by name..." style="padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none; font-size: 0.88rem; width: 200px;" />
+            
+            <select id="filter-type" style="padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none; font-size: 0.88rem; cursor: pointer;">
+              <option value="">All Types</option>
+              <option value="IIT">IIT</option>
+              <option value="NIT">NIT</option>
+              <option value="IIIT">IIIT</option>
+              <option value="BITS">BITS</option>
+              <option value="VIT">VIT</option>
+              <option value="State">State Gov</option>
+              <option value="Private">Private</option>
+            </select>
+            
+            <select id="filter-state" style="padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none; font-size: 0.88rem; cursor: pointer;">
+              <option value="">All States</option>
+              <option>Assam</option>
+              <option>Bihar</option>
+              <option>Delhi NCR</option>
+              <option>Goa</option>
+              <option>Jharkhand</option>
+              <option>Karnataka</option>
+              <option>Madhya Pradesh</option>
+              <option>Maharashtra</option>
+              <option>Odisha</option>
+              <option>Punjab</option>
+              <option>Rajasthan</option>
+              <option>Tamil Nadu</option>
+              <option>Telangana</option>
+              <option>Uttarakhand</option>
+              <option>West Bengal</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="colleges-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+          <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #64748b;">Loading colleges...</div>
+        </div>
+      </section>
+
     </div>
+
 
     <!-- Request Modal -->
     <div class="modal" id="request-modal">
@@ -511,6 +631,17 @@
 
     <!-- Toast -->
     <div class="toast" id="toast"></div>
+
+    <!-- College Details Modal -->
+    <div class="modal" id="college-modal">
+      <div class="modal-card" style="max-width: 650px;">
+        <button class="modal-close" id="btn-close-college-modal">&times;</button>
+        <div id="college-modal-content">
+          <!-- Loaded dynamically -->
+        </div>
+      </div>
+    </div>
+
 
     <script src="config.js"></script>
     <script>
@@ -710,9 +841,200 @@
       }
       document.getElementById('btn-logout').addEventListener('click', handleLogout);
 
+      // Fetch and Filter Colleges
+      async function initStatesFilter() {
+        try {
+          const res = await fetch(`${API_URL}/api/colleges`);
+          const data = await res.json();
+          if (res.ok && data.success) {
+            const states = [...new Set(data.data.map(col => col.state))].sort();
+            const stateSelect = document.getElementById('filter-state');
+            stateSelect.innerHTML = '<option value="">All States</option>';
+            states.forEach(state => {
+              const opt = document.createElement('option');
+              opt.value = state;
+              opt.textContent = state;
+              stateSelect.appendChild(opt);
+            });
+          }
+        } catch (err) {
+          console.error('Failed to load states for filter:', err);
+        }
+      }
+
+      async function fetchColleges() {
+        const searchVal = document.getElementById('college-search').value;
+        const typeVal = document.getElementById('filter-type').value;
+        const stateVal = document.getElementById('filter-state').value;
+        
+        const params = new URLSearchParams();
+        if (searchVal) params.append('search', searchVal);
+        if (typeVal) params.append('type', typeVal);
+        if (stateVal) params.append('state', stateVal);
+        
+        try {
+          const res = await fetch(`${API_URL}/api/colleges?${params.toString()}`);
+          const data = await res.json();
+          const grid = document.getElementById('colleges-grid');
+          grid.innerHTML = '';
+          
+          if (res.ok && data.success) {
+            const colleges = data.data;
+            if (colleges.length === 0) {
+              grid.innerHTML = `
+                <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #64748b;">
+                  No matching colleges found. Try adjusting your search or filters.
+                </div>
+              `;
+              return;
+            }
+            
+            colleges.forEach(col => {
+              const card = document.createElement('div');
+              card.className = 'college-card';
+              card.setAttribute('onclick', `openCollegeDetails('${col._id}')`);
+              
+              const rankText = col.nirfRank ? `NIRF Rank: #${col.nirfRank}` : 'NIRF Rank: N/A';
+              const feesText = col.feesPerYear ? `₹${(col.feesPerYear / 100000).toFixed(2)} L/yr` : 'N/A';
+              const badgeClass = `badge-${col.type.toLowerCase()}`;
+              
+              card.innerHTML = `
+                <div>
+                  <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; gap: 8px;">
+                    <span class="college-badge ${badgeClass}">${col.type}</span>
+                    <span style="font-size: 0.78rem; font-weight: 600; color: #3b82f6;">${rankText}</span>
+                  </div>
+                  <h3 style="margin: 0 0 6px 0; font-size: 1.15rem; font-weight: 800; color: white;">${escapeHTML(col.name)}</h3>
+                  <div style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 16px;">
+                    <span>📍 ${escapeHTML(col.city)}, ${escapeHTML(col.state)}</span>
+                  </div>
+                </div>
+                
+                <div style="background: rgba(15, 23, 42, 0.4); padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03);">
+                  <div class="college-meta-item">
+                    <span>Admission Mode:</span>
+                    <strong>${escapeHTML(col.admissionMode)}</strong>
+                  </div>
+                  <div class="college-meta-item">
+                    <span>Avg Package:</span>
+                    <strong style="color: #34d399;">₹${col.avgPlacement.toFixed(1)} LPA</strong>
+                  </div>
+                  <div class="college-meta-item">
+                    <span>Fees:</span>
+                    <strong>${feesText}</strong>
+                  </div>
+                </div>
+              `;
+              grid.appendChild(card);
+            });
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
+      // Open College Details Modal
+      const collegeModal = document.getElementById('college-modal');
+      const collegeModalContent = document.getElementById('college-modal-content');
+      
+      async function openCollegeDetails(collegeId) {
+        collegeModalContent.innerHTML = '<div style="text-align:center; padding:40px; color:#64748b;">Loading college details...</div>';
+        collegeModal.classList.add('open');
+        
+        try {
+          const res = await fetch(`${API_URL}/api/colleges/${collegeId}`);
+          const data = await res.json();
+          
+          if (res.ok && data.success) {
+            const col = data.data;
+            
+            const rankBadge = col.nirfRank ? `<span style="background: rgba(59,130,246,0.15); color:#60a5fa; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 700;">NIRF Rank: #${col.nirfRank}</span>` : '';
+            const typeClass = `badge-${col.type.toLowerCase()}`;
+            const feesText = col.feesPerYear ? `₹${col.feesPerYear.toLocaleString('en-IN')} / Year` : 'N/A';
+            const highestPackage = col.highestPlacement >= 100 ? `₹${(col.highestPlacement / 100).toFixed(2)} Cr` : `₹${col.highestPlacement.toFixed(1)} LPA`;
+            
+            let branchesHTML = '';
+            if (col.branches && col.branches.length > 0) {
+              branchesHTML = col.branches.map(b => `<span class="branch-tag">${escapeHTML(b)}</span>`).join('');
+            }
+            
+            collegeModalContent.innerHTML = `
+              <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 16px; flex-wrap: wrap;">
+                <span class="college-badge ${typeClass}" style="font-size: 0.85rem; padding: 4px 10px;">${col.type}</span>
+                ${rankBadge}
+                <span style="color: #94a3b8; font-size: 0.9rem;">📍 ${escapeHTML(col.city)}, ${escapeHTML(col.state)}</span>
+              </div>
+              
+              <h2 style="color: white; font-size: 1.85rem; font-weight: 900; margin: 0 0 16px 0; line-height: 1.25;">${escapeHTML(col.name)}</h2>
+              
+              <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin: 0 0 24px 0;">${escapeHTML(col.description)}</p>
+              
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                <div style="background: rgba(15,23,42,0.4); border: 1px solid rgba(255,255,255,0.05); padding: 14px 18px; border-radius: 12px;">
+                  <span style="display:block; font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px;">Placement Stats</span>
+                  <div style="display:flex; justify-content:space-between; margin-bottom: 6px;">
+                    <span style="font-size:0.9rem; color:#cbd5e1;">Average Package:</span>
+                    <strong style="color: #34d399; font-size:0.95rem;">₹${col.avgPlacement.toFixed(1)} LPA</strong>
+                  </div>
+                  <div style="display:flex; justify-content:space-between;">
+                    <span style="font-size:0.9rem; color:#cbd5e1;">Highest Package:</span>
+                    <strong style="color: #10b981; font-size:0.95rem;">${highestPackage}</strong>
+                  </div>
+                </div>
+                
+                <div style="background: rgba(15,23,42,0.4); border: 1px solid rgba(255,255,255,0.05); padding: 14px 18px; border-radius: 12px;">
+                  <span style="display:block; font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px;">Admission Details</span>
+                  <div style="display:flex; justify-content:space-between; margin-bottom: 6px;">
+                    <span style="font-size:0.9rem; color:#cbd5e1;">Admission Mode:</span>
+                    <strong style="color:#ffffff; font-size:0.95rem;">${escapeHTML(col.admissionMode)}</strong>
+                  </div>
+                  <div style="display:flex; justify-content:space-between; margin-bottom: 6px;">
+                    <span style="font-size:0.9rem; color:#cbd5e1;">CSE Cutoff Rank:</span>
+                    <strong style="color:#60a5fa; font-size:0.95rem;">${escapeHTML(col.cutoffRankCSE)}</strong>
+                  </div>
+                  <div style="display:flex; justify-content:space-between;">
+                    <span style="font-size:0.9rem; color:#cbd5e1;">Yearly Fees:</span>
+                    <strong style="color:#ffffff; font-size:0.95rem;">${feesText}</strong>
+                  </div>
+                </div>
+              </div>
+              
+              <div style="margin-bottom: 24px;">
+                <h4 style="color: white; margin: 0 0 10px 0; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em;">Available Engineering Branches</h4>
+                <div style="margin-left:-4px; margin-right:-4px;">
+                  ${branchesHTML}
+                </div>
+              </div>
+              
+              ${col.website ? `
+                <div style="text-align: right; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 20px;">
+                  <a href="${escapeHTML(col.website)}" target="_blank" class="btn-request" style="text-decoration:none; display:inline-block; background: linear-gradient(135deg, #3b82f6, #1d4ed8);">Visit Official Website ↗</a>
+                </div>
+              ` : ''}
+            `;
+          } else {
+            collegeModalContent.innerHTML = `<div style="text-align:center; padding:40px; color:#f87171;">${data.error || 'Failed to load details'}</div>`;
+          }
+        } catch (err) {
+          collegeModalContent.innerHTML = '<div style="text-align:center; padding:40px; color:#f87171;">Server connection error</div>';
+        }
+      }
+      
+      const closeCollegeModal = () => { collegeModal.classList.remove('open'); };
+      document.getElementById('btn-close-college-modal').addEventListener('click', closeCollegeModal);
+
+      // Event listeners for filters
+      document.getElementById('college-search').addEventListener('input', fetchColleges);
+      document.getElementById('filter-type').addEventListener('change', fetchColleges);
+      document.getElementById('filter-state').addEventListener('change', fetchColleges);
+
       // Init
       fetchProfile();
       fetchLeads();
+      initStatesFilter().finally(() => {
+        fetchColleges();
+      });
+
     </script>
   </body>
 </html>

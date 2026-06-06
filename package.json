@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node server/server.js",
     "dev": "node --watch server/server.js",
-    "seed-admin": "node server/scripts/createAdmin.js"
+    "seed-admin": "node server/scripts/createAdmin.js",
+    "seed-colleges": "node server/scripts/seedColleges.js"
+
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
