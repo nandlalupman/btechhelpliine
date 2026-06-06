@@ -29,8 +29,9 @@ if (hasEmailCredentials) {
 
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 
-exports.sendVerificationEmail = async (email, name, token) => {
-  const url = `${FRONTEND_URL}/login.html?verifyToken=${token}`;
+exports.sendVerificationEmail = async (email, name, token, baseUrl) => {
+  const base = baseUrl || process.env.FRONTEND_URL || 'http://localhost:3000';
+  const url = `${base}/login.html?verifyToken=${token}`;
   
   const mailOptions = {
     from: `"BtechHelpline Support" <${process.env.EMAIL_USER || 'no-reply@btechhelpline.com'}>`,
@@ -43,8 +44,9 @@ exports.sendVerificationEmail = async (email, name, token) => {
   return transporter.sendMail(mailOptions);
 };
 
-exports.sendPasswordResetEmail = async (email, name, token) => {
-  const url = `${FRONTEND_URL}/reset-password.html?resetToken=${token}`;
+exports.sendPasswordResetEmail = async (email, name, token, baseUrl) => {
+  const base = baseUrl || process.env.FRONTEND_URL || 'http://localhost:3000';
+  const url = `${base}/reset-password.html?resetToken=${token}`;
 
   const mailOptions = {
     from: `"BtechHelpline Support" <${process.env.EMAIL_USER || 'no-reply@btechhelpline.com'}>`,
@@ -56,6 +58,7 @@ exports.sendPasswordResetEmail = async (email, name, token) => {
 
   return transporter.sendMail(mailOptions);
 };
+
 
 exports.sendLeadConfirmation = async (email, name, leadId) => {
   const mailOptions = {

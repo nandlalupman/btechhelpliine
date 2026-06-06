@@ -158,18 +158,19 @@ router.get('/verify-email/:token', async (req, res) => {
     const user = await User.findOne({ verificationToken: token });
     if (!user) {
       // Redirect to login page with a query parameter showing verification failed
-      return res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:3000'}/login.html?verified=false`);
+      return res.redirect('/login.html?verified=false');
     }
 
     user.isVerified = true;
     user.verificationToken = undefined;
     await user.save();
 
-    res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:3000'}/login.html?verified=true`);
+    res.redirect('/login.html?verified=true');
   } catch (err) {
     console.error('Verification error:', err.message);
-    res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:3000'}/login.html?verified=false`);
+    res.redirect('/login.html?verified=false');
   }
+
 });
 
 // POST /forgot-password
@@ -199,10 +200,12 @@ router.post(
 
       // Send email
       try {
-        await emailUtils.sendPasswordResetEmail(email, user.name, resetToken);
+        const baseUrl = `${req.protocol}://${req.get('host')}`;
+        await emailUtils.sendPasswordResetEmail(email, user.name, resetToken, baseUrl);
       } catch (mailErr) {
         console.error('Error sending reset email:', mailErr.message);
       }
+
 
       res.json({ success: true, message: 'Password reset link sent to your email if registered.' });
     } catch (err) {
