@@ -197,6 +197,7 @@
       .status-counselled { background: rgba(16, 185, 129, 0.15); color: #34d399; }
       .status-closed { background: rgba(100, 116, 139, 0.15); color: #cbd5e1; }
       .status-dropped { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+      .status-cancelled { background: rgba(148, 163, 184, 0.15); color: #94a3b8; }
 
       /* Expanded Details section */
       .lead-details-pane {
@@ -567,6 +568,7 @@
                         <option value="counselled" ${lead.status === 'counselled' ? 'selected' : ''}>Counselled/Completed</option>
                         <option value="closed" ${lead.status === 'closed' ? 'selected' : ''}>Closed</option>
                         <option value="dropped" ${lead.status === 'dropped' ? 'selected' : ''}>Dropped</option>
+                        <option value="cancelled" ${lead.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
                       </select>
                       <button onclick="updateStatus('${lead._id}')">Save Status</button>
                     </div>

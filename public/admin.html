@@ -279,6 +279,20 @@
       .status-active { background: #ecfdf5; color: var(--green-dark); }
       .status-inactive { background: #f1f5f9; color: var(--muted); }
 
+      /* Lead Status colors */
+      .status-new { background: #eff6ff; color: var(--blue); }
+      .status-contacted { background: #fffbeb; color: var(--orange-dark); }
+      .status-in_progress { background: #f5f3ff; color: var(--violet); }
+      .status-counselled { background: #ecfdf5; color: var(--green-dark); }
+      .status-closed { background: #f1f5f9; color: var(--muted); }
+      .status-dropped { background: #fef2f2; color: var(--rose); }
+      .status-cancelled { background: #f1f5f9; color: #64748b; }
+      .status-badge {
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
       /* Action controls */
       .action-select {
         background: var(--white);
@@ -544,6 +558,7 @@
               <option value="counselled">Counselled</option>
               <option value="closed">Closed</option>
               <option value="dropped">Dropped</option>
+              <option value="cancelled">Cancelled</option>
             </select>
 
             <select id="lead-filter-priority">
@@ -757,6 +772,79 @@
             <!-- Loaded dynamically -->
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- User/Student Details Modal -->
+    <div class="modal" id="user-details-modal">
+      <div class="modal-card" style="max-width: 600px;">
+        <button class="modal-close" onclick="closeUserDetailsModal()">&times;</button>
+        <h2 id="user-modal-title" style="margin-bottom: 20px; font-weight:800; border-left:4px solid #3b82f6; padding-left:10px;">Manage Student Profile</h2>
+        
+        <div id="user-modal-error" class="form-msg error" style="display: none; margin-bottom: 15px;"></div>
+        <div id="user-modal-success" class="form-msg success" style="display: none; margin-bottom: 15px;"></div>
+
+        <form id="user-details-form" onsubmit="saveUserDetails(event)" style="display: flex; flex-direction: column; gap: 15px;">
+          <input type="hidden" id="manage-user-id" />
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <label style="display: flex; flex-direction: column; gap: 5px; font-size: 0.85rem; font-weight: 600; color: var(--muted);">
+              Full Name
+              <input type="text" id="manage-user-name" required style="padding: 10px; border: 1px solid var(--line); border-radius: 8px; font-size: 0.9rem; background: var(--white); color: var(--ink);" />
+            </label>
+            <label style="display: flex; flex-direction: column; gap: 5px; font-size: 0.85rem; font-weight: 600; color: var(--muted);">
+              Email Address
+              <input type="email" id="manage-user-email" disabled style="padding: 10px; border: 1px solid var(--line); border-radius: 8px; font-size: 0.9rem; background: var(--soft); color: var(--muted); opacity: 0.7; cursor: not-allowed;" />
+            </label>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <label style="display: flex; flex-direction: column; gap: 5px; font-size: 0.85rem; font-weight: 600; color: var(--muted);">
+              Phone Number
+              <input type="tel" id="manage-user-phone" required style="padding: 10px; border: 1px solid var(--line); border-radius: 8px; font-size: 0.9rem; background: var(--white); color: var(--ink);" />
+            </label>
+            <label style="display: flex; flex-direction: column; gap: 5px; font-size: 0.85rem; font-weight: 600; color: var(--muted);">
+              Account Role
+              <input type="text" id="manage-user-role" disabled style="padding: 10px; border: 1px solid var(--line); border-radius: 8px; font-size: 0.9rem; background: var(--soft); color: var(--muted); opacity: 0.7; cursor: not-allowed; text-transform: capitalize;" />
+            </label>
+          </div>
+
+          <!-- Student Profile Fields (shown only for role=student) -->
+          <div id="student-only-fields" style="display: flex; flex-direction: column; gap: 15px; border-top: 1px dashed var(--line); padding-top: 15px; margin-top: 5px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+              <label style="display: flex; flex-direction: column; gap: 5px; font-size: 0.85rem; font-weight: 600; color: var(--muted);">
+                JEE Main Rank
+                <input type="text" id="manage-user-jeeRank" style="padding: 10px; border: 1px solid var(--line); border-radius: 8px; font-size: 0.9rem; background: var(--white); color: var(--ink);" />
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 5px; font-size: 0.85rem; font-weight: 600; color: var(--muted);">
+                Preferred Branch
+                <input type="text" id="manage-user-branch" style="padding: 10px; border: 1px solid var(--line); border-radius: 8px; font-size: 0.9rem; background: var(--white); color: var(--ink);" />
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 5px; font-size: 0.85rem; font-weight: 600; color: var(--muted);">
+                Preferred State
+                <input type="text" id="manage-user-state" style="padding: 10px; border: 1px solid var(--line); border-radius: 8px; font-size: 0.9rem; background: var(--white); color: var(--ink);" />
+              </label>
+            </div>
+
+            <!-- Shortlisted choices list -->
+            <div style="margin-top: 5px;">
+              <h4 style="margin: 0 0 10px 0; color: var(--ink); font-size: 0.88rem; font-weight: 700;">Shortlisted Colleges (Choices)</h4>
+              <div id="manage-user-choices" style="display: flex; flex-wrap: wrap; gap: 8px; max-height: 120px; overflow-y: auto; padding: 10px; background: var(--soft); border: 1px solid var(--line); border-radius: 8px; font-size: 0.82rem; color: var(--ink);">
+                <!-- Loaded dynamically -->
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 12px; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 20px; margin-top: 10px; flex-wrap: wrap;">
+            <button type="button" onclick="deleteUserAccount()" class="btn-toggle btn-toggle-deactivate" style="padding: 10px 18px; border-radius: 8px; font-weight: 700;">
+              Delete Account 🗑️
+            </button>
+            <div style="display: flex; gap: 12px;">
+              <button type="button" onclick="closeUserDetailsModal()" class="btn-action btn-reset" style="margin: 0;">Cancel</button>
+              <button type="submit" class="btn-action btn-export" style="margin: 0; background: linear-gradient(135deg, #10b981, #059669); color: white;">Save Profile</button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
 
@@ -982,6 +1070,7 @@
                     <option value="counselled" ${lead.status === 'counselled' ? 'selected' : ''}>Counselled</option>
                     <option value="closed" ${lead.status === 'closed' ? 'selected' : ''}>Closed</option>
                     <option value="dropped" ${lead.status === 'dropped' ? 'selected' : ''}>Dropped</option>
+                    <option value="cancelled" ${lead.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
                   </select>
                 </td>
                 <td>
@@ -1198,6 +1287,7 @@
               const toggleBtn = isUserActive
                 ? `<button class="btn-toggle btn-toggle-deactivate" onclick="toggleUserStatus('${user._id}', false)">Deactivate</button>`
                 : `<button class="btn-toggle btn-toggle-activate" onclick="toggleUserStatus('${user._id}', true)">Activate</button>`;
+              const manageBtn = `<button class="btn-toggle btn-toggle-activate" style="padding:6px 10px;margin-right:5px;background:#eff6ff;color:var(--blue);border:1px solid rgba(37,99,235,0.15);" onclick="openUserDetails('${user._id}')">Manage Details</button>`;
 
               tr.innerHTML = `
                 <td>
@@ -1214,7 +1304,10 @@
                   </select>
                 </td>
                 <td><span class="badge ${isUserActive ? 'status-active' : 'status-inactive'}">${isUserActive ? 'Active' : 'Deactivated'}</span></td>
-                <td style="text-align:right;">${toggleBtn}</td>
+                <td style="text-align:right;white-space:nowrap;">
+                  ${manageBtn}
+                  ${toggleBtn}
+                </td>
               `;
               tbody.appendChild(tr);
             });
@@ -1223,6 +1316,142 @@
           console.error(err);
         }
       }
+
+      // User details modal management
+      const userDetailsModal = document.getElementById('user-details-modal');
+
+      window.openUserDetails = async function(userId) {
+        document.getElementById('user-modal-error').style.display = 'none';
+        document.getElementById('user-modal-success').style.display = 'none';
+        document.getElementById('manage-user-id').value = userId;
+
+        try {
+          const res = await fetch(`${API_URL}/api/admin/users/${userId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            const user = data.data;
+            document.getElementById('manage-user-name').value = user.name;
+            document.getElementById('manage-user-email').value = user.email;
+            document.getElementById('manage-user-phone').value = user.phone;
+            document.getElementById('manage-user-role').value = user.role;
+
+            const studentOnlyFields = document.getElementById('student-only-fields');
+            if (user.role === 'student') {
+              studentOnlyFields.style.display = 'flex';
+              document.getElementById('manage-user-jeeRank').value = user.jeeRank || '';
+              document.getElementById('manage-user-branch').value = user.preferredBranch || '';
+              document.getElementById('manage-user-state').value = user.preferredState || '';
+
+              const choicesDiv = document.getElementById('manage-user-choices');
+              if (user.preferredColleges && user.preferredColleges.length > 0) {
+                choicesDiv.innerHTML = user.preferredColleges
+                  .map(col => `<span style="background:rgba(59,130,246,0.15);color:var(--blue);padding:4px 8px;border-radius:6px;font-weight:600;">${escapeHTML(col.name)}</span>`)
+                  .join('');
+              } else {
+                choicesDiv.innerHTML = '<span style="color:var(--muted);font-style:italic;">No colleges shortlisted yet</span>';
+              }
+            } else {
+              studentOnlyFields.style.display = 'none';
+            }
+
+            userDetailsModal.classList.add('open');
+          } else {
+            showToast(data.error || 'Failed to load user details');
+          }
+        } catch (err) {
+          console.error(err);
+          showToast('Connection error loading user details');
+        }
+      };
+
+      window.closeUserDetailsModal = function() {
+        userDetailsModal.classList.remove('open');
+      };
+
+      // Close modal on outside click
+      userDetailsModal.addEventListener('click', (e) => {
+        if (e.target === userDetailsModal) closeUserDetailsModal();
+      });
+
+      window.saveUserDetails = async function(event) {
+        event.preventDefault();
+        const errorDiv = document.getElementById('user-modal-error');
+        const successDiv = document.getElementById('user-modal-success');
+        errorDiv.style.display = 'none';
+        successDiv.style.display = 'none';
+
+        const userId = document.getElementById('manage-user-id').value;
+        const name = document.getElementById('manage-user-name').value.trim();
+        const phone = document.getElementById('manage-user-phone').value.trim();
+        const role = document.getElementById('manage-user-role').value;
+        
+        const payload = { name, phone };
+
+        if (role === 'student') {
+          payload.jeeRank = document.getElementById('manage-user-jeeRank').value.trim();
+          payload.preferredBranch = document.getElementById('manage-user-branch').value.trim();
+          payload.preferredState = document.getElementById('manage-user-state').value.trim();
+        }
+
+        try {
+          const res = await fetch(`${API_URL}/api/admin/users/${userId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            successDiv.textContent = 'Profile updated successfully!';
+            successDiv.style.display = 'block';
+            fetchUsers();
+            setTimeout(() => closeUserDetailsModal(), 1000);
+          } else {
+            errorDiv.textContent = data.error || 'Failed to save profile';
+            errorDiv.style.display = 'block';
+          }
+        } catch (err) {
+          errorDiv.textContent = 'Server connection error';
+          errorDiv.style.display = 'block';
+        }
+      };
+
+      window.deleteUserAccount = async function() {
+        const userId = document.getElementById('manage-user-id').value;
+        const confirmDelete = confirm('Are you absolutely sure you want to delete this user account? This will permanently erase their profile and all associated consultation leads/requests. THIS CANNOT BE UNDONE.');
+        if (!confirmDelete) return;
+
+        const errorDiv = document.getElementById('user-modal-error');
+        const successDiv = document.getElementById('user-modal-success');
+        errorDiv.style.display = 'none';
+        successDiv.style.display = 'none';
+
+        try {
+          const res = await fetch(`${API_URL}/api/admin/users/${userId}`, {
+            method: 'DELETE',
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            successDiv.textContent = 'User account and all leads deleted successfully!';
+            successDiv.style.display = 'block';
+            fetchUsers();
+            setTimeout(() => closeUserDetailsModal(), 1200);
+          } else {
+            errorDiv.textContent = data.error || 'Failed to delete user';
+            errorDiv.style.display = 'block';
+          }
+        } catch (err) {
+          errorDiv.textContent = 'Server connection error';
+          errorDiv.style.display = 'block';
+        }
+      };
 
       async function toggleUserStatus(id, isActive) {
         try {

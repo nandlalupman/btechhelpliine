@@ -57,6 +57,12 @@ const UserSchema = new mongoose.Schema(
     lastLogin: {
       type: Date,
     },
+    preferredColleges: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'College'
+      }
+    ]
   },
   {
     timestamps: true,

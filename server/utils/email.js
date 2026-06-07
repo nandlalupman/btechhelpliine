@@ -85,6 +85,15 @@ exports.sendStatusUpdateEmail = async (email, name, status) => {
   } else if (status === 'counselled') {
     statusText = 'Completed';
     details = 'Your counselling session is complete. You can view your recommended options on your dashboard.';
+  } else if (status === 'cancelled') {
+    statusText = 'Cancelled';
+    details = 'Your consultation request has been successfully cancelled.';
+  } else if (status === 'closed') {
+    statusText = 'Closed';
+    details = 'Your consultation request has been marked as closed.';
+  } else if (status === 'dropped') {
+    statusText = 'Dropped';
+    details = 'Your consultation request has been marked as dropped.';
   }
 
   const mailOptions = {

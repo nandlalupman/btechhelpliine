@@ -245,6 +245,7 @@
       .status-counselled { background: #ecfdf5; color: var(--green-dark); }
       .status-closed { background: #f1f5f9; color: var(--muted); }
       .status-dropped { background: #fef2f2; color: var(--rose); }
+      .status-cancelled { background: #f1f5f9; color: #64748b; }
 
       .lead-details {
         display: grid;
@@ -582,6 +583,21 @@
         </section>
       </div>
 
+      <!-- My Shortlisted Colleges (Choice List) Section -->
+      <section class="card" style="margin-top: 30px;">
+        <h2 style="margin: 0 0 4px 0; border-left: 4px solid #ef4444; padding-left: 10px; display: flex; align-items: center; gap: 8px;">
+          <svg style="width: 20px; height: 20px; fill: #ef4444;" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          My Shortlisted Colleges (Choice List)
+        </h2>
+        <p style="margin: 0 0 20px 0; color: var(--muted); font-size: 0.9rem;">Your custom priority list of shortlisted dream institutions</p>
+        
+        <div id="choices-list-container" class="colleges-grid">
+          <div class="no-leads" style="grid-column: 1 / -1;">
+            No colleges shortlisted yet. Search the explorer below and click "Shortlist" to add your dream colleges.
+          </div>
+        </div>
+      </section>
+
       <!-- College Explorer Section -->
       <section class="card" style="margin-top: 30px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 15px;">
@@ -823,17 +839,16 @@
                   <span>Budget: <strong>${escapeHTML(lead.budget)}</strong></span>
                   <span>Date: <strong>${createdDate}</strong></span>
                 </div>
-                <div style="margin-top: 16px; border-top: 1px solid var(--line); padding-top: 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
-                  <span style="font-size: 0.8rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Update Request Status:</span>
-                  <select class="status-update-select" onchange="updateLeadStatus('${lead._id}', this.value)" style="padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; font-size: 0.82rem; background: var(--white); color: var(--ink); font-weight: 600; cursor: pointer; outline: none; transition: all 0.3s;">
-                    <option value="new" ${lead.status === 'new' ? 'selected' : ''} ${lead.status !== 'new' ? 'disabled' : ''}>New / Request Sent</option>
-                    <option value="contacted" ${lead.status === 'contacted' ? 'selected' : ''} ${lead.status !== 'contacted' ? 'disabled' : ''}>Contacted</option>
-                    <option value="in_progress" ${lead.status === 'in_progress' ? 'selected' : ''}>Ongoing</option>
-                    <option value="counselled" ${lead.status === 'counselled' ? 'selected' : ''}>Successful / Completed</option>
-                    <option value="dropped" ${lead.status === 'dropped' ? 'selected' : ''}>Failed / Dropped</option>
-                    <option value="closed" ${lead.status === 'closed' ? 'selected' : ''}>Cancelled</option>
-                  </select>
-                </div>
+                ${['new', 'in_progress'].includes(lead.status) ? `
+                  <div style="margin-top: 12px; font-size: 0.8rem; color: #b45309; background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.15); padding: 8px 12px; border-radius: 8px; display: flex; align-items: center; gap: 6px; font-weight: 600;">
+                    <span style="font-size: 1rem;">⏱️</span> You will be contacted under 24 hours (SLA)
+                  </div>
+                  <div style="margin-top: 14px; border-top: 1px solid var(--line); padding-top: 12px; display: flex; align-items: center; justify-content: flex-end;">
+                    <button onclick="cancelRequest('${lead._id}')" style="background: var(--white); color: #dc2626; border: 1px solid #fca5a5; padding: 6px 14px; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 4px rgba(220, 38, 38, 0.05);">
+                      Cancel Request
+                    </button>
+                  </div>
+                ` : ''}
               `;
               listDiv.appendChild(div);
             });
@@ -1218,6 +1233,15 @@
               </div>
             `;
 
+            const isShortlisted = userChoices.some(c => c._id === collegeId || c === collegeId);
+            const choiceBtn = isShortlisted
+              ? `<button onclick="removeChoice('${col._id}')" style="display:inline-flex; align-items:center; background: var(--white); color:#ef4444; border: 1px solid #fca5a5; padding:10px 18px; border-radius:10px; font-weight:600; font-size:0.9rem; cursor:pointer; gap:6px; transition:all 0.3s;">
+                   Remove Shortlist ❤️
+                 </button>`
+              : `<button onclick="addChoice('${col._id}')" style="display:inline-flex; align-items:center; background: #eff6ff; border: 1px solid rgba(37,99,235,0.2); color:var(--blue); padding:10px 18px; border-radius:10px; font-weight:600; font-size:0.9rem; cursor:pointer; gap:6px; transition:all 0.3s;">
+                   Shortlist College 🤍
+                 </button>`;
+
             collegeModalContent.innerHTML = `
               ${modalImgHtml}
 
@@ -1269,6 +1293,7 @@
               </div>
               
               <div style="display: flex; gap: 12px; justify-content: flex-end; border-top: 1px solid var(--line); padding-top: 20px; margin-top: 20px; flex-wrap: wrap;">
+                ${choiceBtn}
                 ${col.website ? `
                   <a href="${escapeHTML(col.website)}" target="_blank" style="text-decoration:none; display:inline-flex; align-items:center; background: #eff6ff; border: 1px solid rgba(37,99,235,0.2); color: var(--blue); padding:10px 18px; border-radius:10px; font-weight:600; font-size:0.9rem; transition:all 0.3s; gap:6px;">
                     Visit Website ↗
@@ -1310,6 +1335,7 @@
       // Init
       fetchProfile();
       fetchLeads();
+      fetchChoices();
       initStatesFilter().finally(() => {
         fetchColleges();
       });
@@ -1363,6 +1389,141 @@
           showToast('Server connection error');
           fetchLeads();
         }
+      };
+
+      // Choice list management
+      let userChoices = [];
+
+      window.fetchChoices = async function() {
+        try {
+          const res = await fetch(`${API_URL}/api/user/choices`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const data = await res.json();
+          const choicesList = document.getElementById('choices-list-container');
+          
+          if (res.ok && data.success) {
+            userChoices = data.data;
+            
+            if (userChoices.length === 0) {
+              choicesList.innerHTML = `
+                <div class="no-leads" style="grid-column: 1 / -1;">
+                  No colleges shortlisted yet. Search the explorer below and click "Shortlist" to add your dream colleges.
+                </div>
+              `;
+              return;
+            }
+            
+            choicesList.innerHTML = '';
+            userChoices.forEach(col => {
+              const card = document.createElement('div');
+              card.className = 'college-card';
+              card.setAttribute('onclick', `openCollegeDetails('${col._id}')`);
+              
+              const rankText = col.nirfRank ? `NIRF Rank: #${col.nirfRank}` : 'NIRF Rank: N/A';
+              const feesText = col.feesPerYear ? `₹${(col.feesPerYear / 100000).toFixed(2)} L/yr` : 'N/A';
+              const badgeClass = `badge-${col.type.toLowerCase()}`;
+              
+              const imageUrl = getCollegeImageUrl(col);
+              const initials = col.name ? col.name.split(' ').map(w => w[0]).join('').substring(0, 3).toUpperCase() : '';
+              const imgHtml = `
+                <div style="width: 100%; height: 120px; border-radius: 10px; overflow: hidden; margin-bottom: 12px; background: ${getCollegeGradient(col.type)}; position: relative; display: flex; align-items: center; justify-content: center; color: white;">
+                  <span style="font-size: 1.5rem; font-weight: 900; opacity: 0.25; letter-spacing: 0.05em; position: absolute; pointer-events: none;">${initials}</span>
+                  <img src="${imageUrl}" alt="${escapeHTML(col.name)}" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;" onerror="this.style.display='none';" />
+                </div>
+              `;
+
+              card.innerHTML = `
+                ${imgHtml}
+                <div>
+                  <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 8px;">
+                    <span class="college-badge ${badgeClass}">${col.type}</span>
+                    <span style="font-size: 0.78rem; font-weight: 600; color: var(--blue);">${rankText}</span>
+                  </div>
+                  <h3 style="margin: 0 0 6px 0; font-size: 1.15rem; font-weight: 800; color: var(--ink);">${escapeHTML(col.name)}</h3>
+                  <div style="font-size: 0.82rem; color: var(--muted); margin-bottom: 12px;">
+                    <span>📍 ${escapeHTML(col.city)}, ${escapeHTML(col.state)}</span>
+                  </div>
+                </div>
+                
+                <div style="background: var(--soft); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--line); margin-top: auto; margin-bottom: 12px;">
+                  <div class="college-meta-item">
+                    <span>Avg Package:</span>
+                    <strong style="color: #34d399;">₹${col.avgPlacement.toFixed(1)} LPA</strong>
+                  </div>
+                  <div class="college-meta-item">
+                    <span>Fees:</span>
+                    <strong>${feesText}</strong>
+                  </div>
+                </div>
+
+                <button onclick="event.stopPropagation(); removeChoice('${col._id}')" class="btn-cancel-req" style="width: 100%; padding: 8px; font-size: 0.82rem; background: var(--white); color: #dc2626; border: 1px solid #fca5a5; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                  Remove Shortlist
+                </button>
+              `;
+              choicesList.appendChild(card);
+            });
+          }
+        } catch (err) {
+          console.error('Failed to fetch choices:', err);
+        }
+      };
+
+      window.addChoice = async function(collegeId) {
+        try {
+          const res = await fetch(`${API_URL}/api/user/choices`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ collegeId })
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            showToast('College added to your shortlist!');
+            await fetchChoices();
+            if (collegeModal.classList.contains('open')) {
+              openCollegeDetails(collegeId);
+            }
+          } else {
+            showToast(data.error || 'Failed to add college');
+          }
+        } catch (err) {
+          console.error(err);
+          showToast('Server connection error');
+        }
+      };
+
+      window.removeChoice = async function(collegeId) {
+        try {
+          const res = await fetch(`${API_URL}/api/user/choices/${collegeId}`, {
+            method: 'DELETE',
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            showToast('College removed from your shortlist.');
+            await fetchChoices();
+            if (collegeModal.classList.contains('open')) {
+              openCollegeDetails(collegeId);
+            }
+          } else {
+            showToast(data.error || 'Failed to remove college');
+          }
+        } catch (err) {
+          console.error(err);
+          showToast('Server connection error');
+        }
+      };
+
+      window.cancelRequest = async function(leadId) {
+        const confirmCancel = confirm('Are you sure you want to cancel this consultation request?');
+        if (!confirmCancel) return;
+        
+        await window.updateLeadStatus(leadId, 'cancelled');
       };
 
     </script>

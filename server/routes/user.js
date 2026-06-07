@@ -137,8 +137,8 @@ router.put(
   '/my-leads/:id/status',
   [
     body('status')
-      .isIn(['in_progress', 'counselled', 'dropped', 'closed'])
-      .withMessage('Invalid lead status option'),
+      .isIn(['cancelled'])
+      .withMessage('Invalid lead status option. Students can only cancel their requests.'),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -180,6 +180,78 @@ router.delete('/me', async (req, res) => {
     res.json({ success: true, message: 'Account deleted successfully' });
   } catch (err) {
     console.error('Delete account error:', err.message);
+    res.status(500).json({ success: false, error: 'Internal Server Error' });
+  }
+});
+
+// GET /choices — Get populated choice list
+router.get('/choices', async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).populate('preferredColleges');
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'User not found' });
+    }
+    res.json({ success: true, data: user.preferredColleges });
+  } catch (err) {
+    console.error('Get choices error:', err.message);
+    res.status(500).json({ success: false, error: 'Internal Server Error' });
+  }
+});
+
+// POST /choices — Add a college to preferred choices
+router.post(
+  '/choices',
+  [
+    body('collegeId').isMongoId().withMessage('Invalid college ID')
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success: false, error: errors.array()[0].msg });
+    }
+
+    const { collegeId } = req.body;
+
+    try {
+      const user = await User.findById(req.user.userId);
+      if (!user) {
+        return res.status(404).json({ success: false, error: 'User not found' });
+      }
+
+      // Check if already in choices
+      if (user.preferredColleges.includes(collegeId)) {
+        return res.status(400).json({ success: false, error: 'College is already in your choice list' });
+      }
+
+      user.preferredColleges.push(collegeId);
+      await user.save();
+
+      res.json({ success: true, message: 'College added to choice list successfully!', data: user.preferredColleges });
+    } catch (err) {
+      console.error('Add choice error:', err.message);
+      res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+  }
+);
+
+// DELETE /choices/:collegeId — Remove a college from choices
+router.delete('/choices/:collegeId', async (req, res) => {
+  const { collegeId } = req.params;
+
+  try {
+    const user = await User.findById(req.user.userId);
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'User not found' });
+    }
+
+    user.preferredColleges = user.preferredColleges.filter(
+      id => id.toString() !== collegeId
+    );
+    await user.save();
+
+    res.json({ success: true, message: 'College removed from choice list successfully!', data: user.preferredColleges });
+  } catch (err) {
+    console.error('Remove choice error:', err.message);
     res.status(500).json({ success: false, error: 'Internal Server Error' });
   }
 });

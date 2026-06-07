@@ -49,7 +49,7 @@ router.get('/leads/:id', async (req, res) => {
 // PUT /leads/:id/status — Update lead status
 router.put(
   '/leads/:id/status',
-  [body('status').isIn(['new', 'contacted', 'in_progress', 'counselled', 'closed', 'dropped']).withMessage('Invalid status')],
+  [body('status').isIn(['new', 'contacted', 'in_progress', 'counselled', 'closed', 'dropped', 'cancelled']).withMessage('Invalid status')],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

@@ -209,13 +209,90 @@ router.get('/users', async (req, res) => {
 // GET /users/:id — Get user detail
 router.get('/users/:id', async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).select('-password');
+    const user = await User.findById(req.params.id).select('-password').populate('preferredColleges');
     if (!user) {
       return res.status(404).json({ success: false, error: 'User not found' });
     }
     res.json({ success: true, data: user });
   } catch (err) {
     console.error('Admin fetch user detail error:', err.message);
+    res.status(500).json({ success: false, error: 'Internal Server Error' });
+  }
+});
+
+// PUT /users/:id — Update any user details (Admin only)
+router.put(
+  '/users/:id',
+  [
+    body('name').optional().trim().notEmpty().withMessage('Name cannot be empty'),
+    body('phone')
+      .optional()
+      .isLength({ min: 10, max: 10 })
+      .withMessage('Phone number must be exactly 10 digits')
+      .matches(/^[6-9]\d{9}$/)
+      .withMessage('Enter a valid Indian mobile number'),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success: false, error: errors.array()[0].msg });
+    }
+
+    const { name, phone, jeeRank, preferredBranch, preferredState } = req.body;
+
+    try {
+      const user = await User.findById(req.params.id);
+      if (!user) {
+        return res.status(404).json({ success: false, error: 'User not found' });
+      }
+
+      if (phone && phone !== user.phone) {
+        // Check if phone number is already taken
+        const existingPhone = await User.findOne({ phone });
+        if (existingPhone) {
+          return res.status(400).json({ success: false, error: 'Phone number is already taken' });
+        }
+        user.phone = phone;
+      }
+
+      if (name) user.name = name;
+      if (jeeRank !== undefined) user.jeeRank = jeeRank;
+      if (preferredBranch !== undefined) user.preferredBranch = preferredBranch;
+      if (preferredState !== undefined) user.preferredState = preferredState;
+
+      await user.save();
+
+      res.json({
+        success: true,
+        message: 'User profile updated successfully',
+        data: user,
+      });
+    } catch (err) {
+      console.error('Admin update user details error:', err.message);
+      res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+  }
+);
+
+// DELETE /users/:id — Delete any user (student, counsellor, etc.)
+router.delete('/users/:id', async (req, res) => {
+  try {
+    // Prevent self deletion
+    if (req.params.id.toString() === req.user.userId.toString()) {
+      return res.status(400).json({ success: false, error: 'You cannot delete your own admin account' });
+    }
+
+    const deletedUser = await User.findByIdAndDelete(req.params.id);
+    if (!deletedUser) {
+      return res.status(404).json({ success: false, error: 'User not found' });
+    }
+
+    // Delete associated leads for clean-up
+    await Lead.deleteMany({ userId: req.params.id });
+
+    res.json({ success: true, message: 'User and all associated leads deleted successfully' });
+  } catch (err) {
+    console.error('Admin delete user error:', err.message);
     res.status(500).json({ success: false, error: 'Internal Server Error' });
   }
 });
