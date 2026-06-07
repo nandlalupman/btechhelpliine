@@ -32,6 +32,7 @@ app.use(helmet({
 const whitelist = [
   'https://www.btechhelpline.com',
   'https://btechhelpline.com',
+  'https://btechhelpliine.vercel.app',
   'http://localhost:5500',
   'http://127.0.0.1:5500',
   'http://localhost:3000',
@@ -42,10 +43,23 @@ app.use(
   cors({
     origin: (origin, callback) => {
       if (!origin || whitelist.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
+        return callback(null, true);
       }
+      
+      try {
+        const url = new URL(origin);
+        // Allow any Vercel deployments associated with this project name
+        if (
+          url.hostname === 'btechhelpliine.vercel.app' ||
+          (url.hostname.endsWith('.vercel.app') && url.hostname.startsWith('btechhelpliine'))
+        ) {
+          return callback(null, true);
+        }
+      } catch (e) {
+        // Invalid URL format
+      }
+
+      callback(new Error('Not allowed by CORS'));
     },
     credentials: true,
   })
