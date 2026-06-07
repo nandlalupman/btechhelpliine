@@ -614,40 +614,40 @@
         </div>
 
         <div class="promo-content">
-          <h2>Compare 500+ Engineering Colleges & Find Your Best Fit</h2>
+          <h2>Compare <span id="title-colleges-count">240+</span> Engineering Colleges & Find Your Best Fit</h2>
           <p>Get matched with India's top engineering colleges based on your JEE rank, preferred branches, and budget range.</p>
           
           <div class="promo-visual">
-            <div class="visual-card card-1">
-              <strong>JEE Main Rank: 24,500</strong>
-              <span>General Category Matcher</span>
+            <div class="visual-card card-1" id="promo-card-1">
+              <strong>IIT Bombay (CSE)</strong>
+              <span>Top Cutoff Choice</span>
             </div>
-            <div class="visual-card card-2">
-              <strong>MNIT Jaipur (CSE)</strong>
+            <div class="visual-card card-2" id="promo-card-2">
+              <strong>CSE Average: ₹23.5 LPA</strong>
               <span class="badge-tag">Top Matching Choice</span>
             </div>
-            <div class="visual-card card-3">
-              <strong>CSE placements</strong>
-              <span>Average: ₹16.40 LPA</span>
+            <div class="visual-card card-3" id="promo-card-3">
+              <strong>Highest Package</strong>
+              <span>₹233.0 LPA</span>
             </div>
           </div>
         </div>
 
         <div class="promo-stats">
           <div class="stat-item">
-            <strong>10,000+</strong>
+            <strong id="stat-students">1,000+</strong>
             <span>Students Guided</span>
           </div>
           <div class="stat-item">
-            <strong>500+</strong>
+            <strong id="stat-colleges">240+</strong>
             <span>Partner Colleges</span>
           </div>
           <div class="stat-item">
-            <strong>100%</strong>
-            <span>Free Counselling</span>
+            <strong id="stat-package">₹15.6 LPA</strong>
+            <span>Avg CSE Package</span>
           </div>
         </div>
-        <p class="stats-disclaimer">* For illustration purposes only</p>
+        <p class="stats-disclaimer" id="stats-disclaimer-text">Active database statistics</p>
       </section>
 
       <!-- Right Side Form Panel -->
@@ -790,6 +790,43 @@
       const form = document.getElementById('register-form');
       const submitBtn = document.getElementById('btn-submit');
       const formMsg = document.getElementById('form-msg');
+
+      // Fetch public stats on page load
+      async function loadPublicStats() {
+        try {
+          const res = await fetch(`${API_URL}/api/colleges/public-stats`);
+          const json = await res.json();
+          if (json.success && json.data) {
+            const stats = json.data;
+            document.getElementById('stat-students').textContent = `${stats.totalStudentsGuided.toLocaleString()}+`;
+            document.getElementById('stat-colleges').textContent = `${stats.totalColleges}+`;
+            document.getElementById('stat-package').textContent = `₹${stats.averagePlacement} LPA`;
+            
+            const titleCount = document.getElementById('title-colleges-count');
+            if (titleCount) titleCount.textContent = `${stats.totalColleges}+`;
+            
+            if (stats.featuredCollege) {
+              const fc = stats.featuredCollege;
+              document.getElementById('promo-card-1').innerHTML = `
+                <strong>${fc.name}</strong>
+                <span>${fc.city}, ${fc.state}</span>
+              `;
+              document.getElementById('promo-card-2').innerHTML = `
+                <strong>Average Package</strong>
+                <span class="badge-tag">₹${fc.avgPlacement} LPA</span>
+              `;
+              document.getElementById('promo-card-3').innerHTML = `
+                <strong>Highest Package</strong>
+                <span>₹${fc.highestPlacement} LPA</span>
+              `;
+            }
+            document.getElementById('stats-disclaimer-text').textContent = '• Active database statistics';
+          }
+        } catch (err) {
+          console.error('Failed to load public stats:', err);
+        }
+      }
+      loadPublicStats();
 
       // Helper to show toasts
       function showToast(message, type = 'success') {

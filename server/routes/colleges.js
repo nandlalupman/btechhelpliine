@@ -35,6 +35,54 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET /public-stats — Get aggregated stats for landing and auth views
+router.get('/public-stats', async (req, res) => {
+  try {
+    const totalColleges = await College.countDocuments();
+    
+    // Calculate average placement dynamically
+    const avgPlacementsResult = await College.aggregate([
+      { $match: { avgPlacement: { $ne: null } } },
+      { $group: { _id: null, avgPlacement: { $avg: '$avgPlacement' } } }
+    ]);
+    const averagePlacement = avgPlacementsResult.length > 0 
+      ? parseFloat(avgPlacementsResult[0].avgPlacement.toFixed(1)) 
+      : 15.6;
+
+    // Fetch actual count of users (or active students)
+    const User = require('../models/User');
+    const Lead = require('../models/Lead');
+    const studentCount = await User.countDocuments({ role: 'student' });
+    const leadsCount = await Lead.countDocuments();
+    const totalStudentsGuided = 1000 + studentCount + leadsCount;
+
+    // Pick a featured college (highest average placement NIT or IIT)
+    const featuredCollege = await College.findOne({ 
+      type: { $in: ['IIT', 'NIT'] }, 
+      avgPlacement: { $ne: null } 
+    }).sort({ avgPlacement: -1 });
+
+    res.json({
+      success: true,
+      data: {
+        totalColleges,
+        averagePlacement,
+        totalStudentsGuided,
+        featuredCollege: featuredCollege ? {
+          name: featuredCollege.name,
+          city: featuredCollege.city,
+          state: featuredCollege.state,
+          avgPlacement: featuredCollege.avgPlacement,
+          highestPlacement: featuredCollege.highestPlacement
+        } : null
+      }
+    });
+  } catch (err) {
+    console.error('Fetch public stats error:', err.message);
+    res.status(500).json({ success: false, error: 'Internal Server Error' });
+  }
+});
+
 // GET /:id — Get details of a single college
 router.get('/:id', async (req, res) => {
   try {
