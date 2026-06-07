@@ -156,6 +156,26 @@
         transform: translateY(-1px);
       }
 
+      .btn-delete {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, #ef4444, #b91c1c);
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-top: 10px;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+      }
+
+      .btn-delete:hover {
+        opacity: 0.95;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3);
+      }
+
       /* Leads List */
       .leads-header {
         display: flex;
@@ -534,6 +554,19 @@
             </label>
             <button type="submit" class="btn-save" id="btn-save-profile">Save Changes</button>
           </form>
+
+          <div class="danger-zone" style="margin-top: 35px; border-top: 1px dashed rgba(220, 38, 38, 0.2); padding-top: 25px;">
+            <h3 style="color: #ef4444; margin-top: 0; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;">
+              <svg style="width: 18px; height: 18px; fill: currentColor;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+              Danger Zone
+            </h3>
+            <p style="color: var(--muted); font-size: 0.85rem; margin: 8px 0 16px 0; line-height: 1.45;">
+              Once you delete your account, all your consultation requests, JEE Rank profile details, and personal data will be permanently deleted.
+            </p>
+            <button id="btn-delete-account" class="btn-delete">
+              Delete My Account
+            </button>
+          </div>
         </section>
 
         <!-- Requests Column -->
@@ -857,6 +890,41 @@
           msg.className = 'form-msg error';
         }
       });
+
+      // Delete Account
+      const btnDelete = document.getElementById('btn-delete-account');
+      if (btnDelete) {
+        btnDelete.addEventListener('click', async () => {
+          const confirmation = confirm('Are you absolutely sure you want to delete your account? This action is permanent, and all your consultation requests will be deleted.');
+          if (!confirmation) return;
+
+          btnDelete.disabled = true;
+          btnDelete.textContent = 'Deleting Account...';
+
+          try {
+            const res = await fetch(`${API_URL}/api/user/me`, {
+              method: 'DELETE',
+              headers: {
+                'Authorization': `Bearer ${token}`
+              }
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+              alert('Your account has been deleted successfully.');
+              localStorage.clear();
+              window.location.href = 'login.html';
+            } else {
+              alert(data.error || 'Failed to delete account. Please try again.');
+              btnDelete.disabled = false;
+              btnDelete.textContent = 'Delete My Account';
+            }
+          } catch (err) {
+            alert('Server error while deleting account.');
+            btnDelete.disabled = false;
+            btnDelete.textContent = 'Delete My Account';
+          }
+        });
+      }
 
       // Submit new lead request
       document.getElementById('request-form').addEventListener('submit', async (e) => {

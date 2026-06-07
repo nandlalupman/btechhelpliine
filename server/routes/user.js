@@ -166,5 +166,23 @@ router.put(
   }
 );
 
+// DELETE /me — Delete own account
+router.delete('/me', async (req, res) => {
+  try {
+    const deletedUser = await User.findByIdAndDelete(req.user.userId);
+    if (!deletedUser) {
+      return res.status(404).json({ success: false, error: 'User not found' });
+    }
+
+    // Delete associated leads to keep the database clean
+    await Lead.deleteMany({ userId: req.user.userId });
+
+    res.json({ success: true, message: 'Account deleted successfully' });
+  } catch (err) {
+    console.error('Delete account error:', err.message);
+    res.status(500).json({ success: false, error: 'Internal Server Error' });
+  }
+});
+
 module.exports = router;
 
