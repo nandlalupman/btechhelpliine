@@ -428,18 +428,76 @@
         color: var(--muted);
       }
 
+      /* Premium Toast Notification */
       .toast {
         position: fixed;
         bottom: 24px; right: 24px;
-        background: var(--white);
-        border: 1px solid var(--line);
-        border-left: 4px solid var(--green);
-        color: var(--ink);
-        padding: 12px 24px;
-        border-radius: 8px;
-        box-shadow: var(--shadow);
-        z-index: 1100;
-        display: none;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(226, 232, 240, 0.8);
+        border-radius: 12px;
+        padding: 14px 20px;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+        z-index: 2000;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transform: translateY(30px);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        font-family: inherit;
+        font-size: 0.9rem;
+        font-weight: 600;
+        max-width: 380px;
+      }
+      .toast.show {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+      }
+      .toast-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        font-size: 1rem;
+        flex-shrink: 0;
+      }
+      .toast-success {
+        border-left: 4px solid #10b981;
+      }
+      .toast-success .toast-icon {
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+      }
+      .toast-error {
+        border-left: 4px solid #f43f5e;
+      }
+      .toast-error .toast-icon {
+        background: rgba(244, 63, 94, 0.1);
+        color: #f43f5e;
+      }
+      .toast-warning {
+        border-left: 4px solid #fbbf24;
+      }
+      .toast-warning .toast-icon {
+        background: rgba(251, 191, 36, 0.1);
+        color: #d97706;
+      }
+      .toast-info {
+        border-left: 4px solid #3b82f6;
+      }
+      .toast-info .toast-icon {
+        background: rgba(59, 130, 246, 0.1);
+        color: #3b82f6;
+      }
+      .toast-content {
+        color: #1e293b;
+        line-height: 1.4;
       }
 
       @media (max-width: 900px) {
@@ -965,11 +1023,33 @@
       let counsellorsList = [];
 
       // Toast notification helper
-      function showToast(message) {
+      function showToast(message, type = 'success') {
         const toast = document.getElementById('toast');
-        toast.textContent = message;
-        toast.style.display = 'block';
-        setTimeout(() => { toast.style.display = 'none'; }, 3000);
+        if (!toast) return;
+        
+        // Clear previous classes
+        toast.className = 'toast';
+        toast.classList.add(`toast-${type}`);
+        
+        // Define icons
+        let iconHtml = 'ℹ️';
+        if (type === 'success') iconHtml = '✔️';
+        else if (type === 'error') iconHtml = '❌';
+        else if (type === 'warning') iconHtml = '⚠️';
+        
+        toast.innerHTML = `
+          <div class="toast-icon">${iconHtml}</div>
+          <div class="toast-content">${message}</div>
+        `;
+        
+        // Trigger show
+        toast.classList.add('show');
+        
+        // Hide after 3.5 seconds
+        if (window.toastTimeout) clearTimeout(window.toastTimeout);
+        window.toastTimeout = setTimeout(() => {
+          toast.classList.remove('show');
+        }, 3500);
       }
 
       // Tab Switcher
@@ -1110,7 +1190,7 @@
             fetchLeads();
           }
         } catch (err) {
-          showToast('Connection error');
+          showToast('Connection error', 'error');
         }
       }
 
@@ -1130,7 +1210,7 @@
             fetchLeads();
           }
         } catch (err) {
-          showToast('Connection error');
+          showToast('Connection error', 'error');
         }
       }
 
@@ -1149,7 +1229,7 @@
             showToast('Priority updated');
           }
         } catch (err) {
-          showToast('Connection error');
+          showToast('Connection error', 'error');
         }
       }
 
@@ -1165,7 +1245,7 @@
             fetchLeads();
           }
         } catch (err) {
-          showToast('Connection error');
+          showToast('Connection error', 'error');
         }
       }
 
@@ -1247,7 +1327,7 @@
             document.getElementById('details-modal').classList.add('open');
           }
         } catch (err) {
-          showToast('Failed to load lead details');
+          showToast('Failed to load lead details', 'error');
         }
       }
 
@@ -1358,11 +1438,11 @@
 
             userDetailsModal.classList.add('open');
           } else {
-            showToast(data.error || 'Failed to load user details');
+            showToast(data.error || 'Failed to load user details', 'error');
           }
         } catch (err) {
           console.error(err);
-          showToast('Connection error loading user details');
+          showToast('Connection error loading user details', 'error');
         }
       };
 
@@ -1468,10 +1548,10 @@
             showToast(isActive ? 'User account activated' : 'User account deactivated');
             fetchUsers();
           } else {
-            showToast(data.error || 'Failed to update account status');
+            showToast(data.error || 'Failed to update account status', 'error');
           }
         } catch (err) {
-          showToast('Connection error');
+          showToast('Connection error', 'error');
         }
       }
 
@@ -1491,10 +1571,10 @@
             fetchCounsellors(); // Refresh counsellors list for assignment dropdown
             fetchUsers();
           } else {
-            showToast(data.error || 'Failed to update role');
+            showToast(data.error || 'Failed to update role', 'error');
           }
         } catch (err) {
-          showToast('Connection error');
+          showToast('Connection error', 'error');
         }
       }
 
@@ -1753,11 +1833,11 @@
             document.getElementById('crud-college-branches').value = col.branches ? col.branches.join(', ') : '';
             document.getElementById('crud-college-description').value = col.description;
           } else {
-            showToast(data.error || 'Failed to load details');
+            showToast(data.error || 'Failed to load details', 'error');
             closeCollegeFormModal();
           }
         } catch (err) {
-          showToast('Connection error');
+          showToast('Connection error', 'error');
           closeCollegeFormModal();
         }
       }
@@ -1811,10 +1891,10 @@
             closeCollegeFormModal();
             fetchAdminColleges();
           } else {
-            alert(data.error || 'Failed to save college details');
+            showToast(data.error || 'Failed to save college details', 'error');
           }
         } catch (err) {
-          showToast('Connection error');
+          showToast('Connection error', 'error');
         }
       });
 
@@ -1832,10 +1912,10 @@
             showToast('College deleted successfully');
             fetchAdminColleges();
           } else {
-            showToast(data.error || 'Failed to delete');
+            showToast(data.error || 'Failed to delete', 'error');
           }
         } catch (err) {
-          showToast('Connection error');
+          showToast('Connection error', 'error');
         }
       }
 

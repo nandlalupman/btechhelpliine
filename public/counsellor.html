@@ -344,17 +344,76 @@
         color: #64748b;
       }
 
+      /* Premium Toast Notification */
       .toast {
         position: fixed;
         bottom: 24px; right: 24px;
-        background: #1e293b;
+        background: rgba(30, 41, 59, 0.95);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 14px 20px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        z-index: 2000;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transform: translateY(30px);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        font-family: inherit;
+        font-size: 0.9rem;
+        font-weight: 600;
+        max-width: 380px;
+      }
+      .toast.show {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+      }
+      .toast-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        font-size: 1rem;
+        flex-shrink: 0;
+      }
+      .toast-success {
         border-left: 4px solid #10b981;
-        color: white;
-        padding: 12px 24px;
-        border-radius: 8px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        z-index: 1100;
-        display: none;
+      }
+      .toast-success .toast-icon {
+        background: rgba(16, 185, 129, 0.15);
+        color: #34d399;
+      }
+      .toast-error {
+        border-left: 4px solid #f43f5e;
+      }
+      .toast-error .toast-icon {
+        background: rgba(244, 63, 94, 0.15);
+        color: #f87171;
+      }
+      .toast-warning {
+        border-left: 4px solid #fbbf24;
+      }
+      .toast-warning .toast-icon {
+        background: rgba(251, 191, 36, 0.15);
+        color: #fbbf24;
+      }
+      .toast-info {
+        border-left: 4px solid #3b82f6;
+      }
+      .toast-info .toast-icon {
+        background: rgba(59, 130, 246, 0.15);
+        color: #60a5fa;
+      }
+      .toast-content {
+        color: #f1f5f9;
+        line-height: 1.4;
       }
 
       @media (max-width: 900px) {
@@ -475,11 +534,33 @@
 
       document.getElementById('counsellor-name').textContent = localStorage.getItem('userName') || 'Counsellor Portal';
 
-      function showToast(message) {
+      function showToast(message, type = 'success') {
         const toast = document.getElementById('toast');
-        toast.textContent = message;
-        toast.style.display = 'block';
-        setTimeout(() => { toast.style.display = 'none'; }, 3000);
+        if (!toast) return;
+        
+        // Clear previous classes
+        toast.className = 'toast';
+        toast.classList.add(`toast-${type}`);
+        
+        // Define icons
+        let iconHtml = 'ℹ️';
+        if (type === 'success') iconHtml = '✔️';
+        else if (type === 'error') iconHtml = '❌';
+        else if (type === 'warning') iconHtml = '⚠️';
+        
+        toast.innerHTML = `
+          <div class="toast-icon">${iconHtml}</div>
+          <div class="toast-content">${message}</div>
+        `;
+        
+        // Trigger show
+        toast.classList.add('show');
+        
+        // Hide after 3.5 seconds
+        if (window.toastTimeout) clearTimeout(window.toastTimeout);
+        window.toastTimeout = setTimeout(() => {
+          toast.classList.remove('show');
+        }, 3500);
       }
 
       async function fetchStats() {
@@ -634,10 +715,10 @@
             fetchStats();
             fetchLeads();
           } else {
-            showToast(data.error || 'Failed to update status');
+            showToast(data.error || 'Failed to update status', 'error');
           }
         } catch (err) {
-          showToast('Server connection error');
+          showToast('Server connection error', 'error');
         }
       }
 
@@ -663,10 +744,10 @@
             const timeline = document.getElementById(`notes-timeline-${id}`);
             timeline.innerHTML = renderNotes(data.data);
           } else {
-            showToast(data.error || 'Failed to add note');
+            showToast(data.error || 'Failed to add note', 'error');
           }
         } catch (err) {
-          showToast('Server connection error');
+          showToast('Server connection error', 'error');
         }
       }
 
