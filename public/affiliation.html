@@ -1,0 +1,1263 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>College Affiliation & Listing Form | BtechHelpline</title>
+    <meta name="description" content="Affiliate your engineering institution with BtechHelpline. Submit your institutional profile, cutoff ranks, placement metrics, and fee breakdown." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://www.btechhelpline.com/affiliation.html" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="styles.css" />
+
+    <style>
+      :root {
+        --step-active: var(--blue);
+        --step-pending: var(--line);
+        --step-done: var(--green);
+      }
+
+      body {
+        background-color: var(--soft);
+      }
+
+      .wizard-header {
+        text-align: center;
+        padding: 40px 0 20px 0;
+      }
+
+      .wizard-header h1 {
+        font-size: 2.2rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        margin-bottom: 8px;
+        color: var(--ink);
+      }
+
+      .wizard-header p {
+        color: var(--muted);
+        font-size: 1rem;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      /* ── Stepper Indicator ── */
+      .stepper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 800px;
+        margin: 20px auto 40px auto;
+        position: relative;
+        padding: 0 10px;
+      }
+
+      .stepper::before {
+        content: '';
+        position: absolute;
+        top: 20px;
+        left: 30px;
+        right: 30px;
+        height: 3px;
+        background: var(--line);
+        z-index: 1;
+      }
+
+      .stepper-progress {
+        position: absolute;
+        top: 20px;
+        left: 30px;
+        height: 3px;
+        background: var(--blue);
+        z-index: 2;
+        width: 0%;
+        transition: width var(--transition);
+      }
+
+      .step-node {
+        position: relative;
+        z-index: 3;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      .step-circle {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: var(--white);
+        border: 3px solid var(--line);
+        display: grid;
+        place-items: center;
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: var(--muted);
+        transition: all var(--transition);
+      }
+
+      .step-node.active .step-circle {
+        border-color: var(--blue);
+        color: var(--blue);
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+      }
+
+      .step-node.done .step-circle {
+        border-color: var(--green);
+        background: var(--green);
+        color: var(--white);
+      }
+
+      .step-label {
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: var(--muted);
+        margin-top: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        text-align: center;
+        max-width: 90px;
+      }
+
+      .step-node.active .step-label {
+        color: var(--blue);
+        font-weight: 700;
+      }
+
+      .step-node.done .step-label {
+        color: var(--green);
+      }
+
+      /* ── Wizard Form Card ── */
+      .wizard-card {
+        background: var(--white);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow);
+        max-width: 900px;
+        margin: 0 auto 80px auto;
+        padding: 40px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .form-step {
+        display: none;
+        animation: fadeInStep 0.4s ease-out forwards;
+      }
+
+      .form-step.active {
+        display: block;
+      }
+
+      @keyframes fadeInStep {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .step-title {
+        font-size: 1.4rem;
+        font-weight: 800;
+        margin-bottom: 24px;
+        color: var(--ink);
+        border-bottom: 2px solid var(--soft);
+        padding-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .step-title span {
+        color: var(--blue);
+      }
+
+      /* ── Layout Utilities ── */
+      .form-grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .form-grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+
+      @media (max-width: 768px) {
+        .form-grid-2, .form-grid-3 {
+          grid-template-columns: 1fr;
+        }
+        .wizard-card {
+          padding: 24px 16px;
+        }
+      }
+
+      label {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--ink);
+        margin-bottom: 20px;
+      }
+
+      .label-desc {
+        font-size: 0.76rem;
+        color: var(--muted);
+        font-weight: 400;
+        margin-top: -2px;
+      }
+
+      input[type="text"],
+      input[type="number"],
+      input[type="email"],
+      input[type="tel"],
+      select {
+        width: 100%;
+        padding: 11px 16px;
+        background: var(--soft);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        color: var(--ink);
+        outline: none;
+        font-size: 0.92rem;
+        transition: all var(--transition);
+      }
+
+      input[type="text"]:focus,
+      input[type="number"]:focus,
+      input[type="email"]:focus,
+      input[type="tel"]:focus,
+      select:focus {
+        border-color: var(--blue);
+        background: var(--white);
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+      }
+
+      .checkbox-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+
+      .checkbox-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+      }
+
+      .checkbox-item input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+      }
+
+      /* ── Table Grids for matrix data ── */
+      .matrix-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 24px;
+        font-size: 0.88rem;
+      }
+
+      .matrix-table th {
+        background: var(--soft);
+        color: var(--ink);
+        font-weight: 700;
+        text-align: left;
+        padding: 12px 10px;
+        border-bottom: 2px solid var(--line);
+      }
+
+      .matrix-table td {
+        padding: 12px 10px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .matrix-table input[type="number"],
+      .matrix-table input[type="text"] {
+        padding: 8px 10px;
+        font-size: 0.85rem;
+      }
+
+      /* ── Buttons ── */
+      .wizard-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 30px;
+        border-top: 2px solid var(--soft);
+        padding-top: 24px;
+      }
+
+      .btn-back {
+        padding: 12px 24px;
+        background: var(--soft);
+        border: 1px solid var(--line);
+        color: var(--muted);
+        border-radius: var(--radius);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all var(--transition);
+      }
+
+      .btn-back:hover {
+        background: var(--line);
+        color: var(--ink);
+      }
+
+      .btn-next {
+        padding: 12px 28px;
+        background: var(--blue);
+        border: none;
+        color: var(--white);
+        border-radius: var(--radius);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .btn-next:hover {
+        background: var(--blue-dark);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-blue);
+      }
+
+      .btn-submit {
+        padding: 12px 28px;
+        background: var(--green);
+        border: none;
+        color: var(--white);
+        border-radius: var(--radius);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all var(--transition);
+      }
+
+      .btn-submit:hover {
+        background: var(--green-dark);
+        transform: translateY(-1px);
+        box-shadow: 0 8px 20px rgba(16, 185, 129, 0.25);
+      }
+
+      .btn-submit:disabled, .btn-next:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none !important;
+        box-shadow: none !important;
+      }
+
+      /* ── attestation consent block ── */
+      .attestation-block {
+        background: rgba(37, 99, 235, 0.03);
+        border: 1px dashed rgba(37, 99, 235, 0.3);
+        padding: 20px;
+        border-radius: var(--radius);
+        margin-bottom: 24px;
+      }
+
+      /* Premium Toast */
+      .toast {
+        position: fixed;
+        bottom: 24px; right: 24px;
+        background: rgba(15, 23, 42, 0.95);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 14px 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        z-index: 2000;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transform: translateY(30px);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        font-family: inherit;
+        font-size: 0.9rem;
+        font-weight: 600;
+        max-width: 380px;
+      }
+      .toast.show {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+      }
+      .toast-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+      }
+      .toast-success { border-left: 4px solid #10b981; }
+      .toast-success .toast-icon { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+      .toast-error { border-left: 4px solid #f43f5e; }
+      .toast-error .toast-icon { background: rgba(244, 63, 94, 0.15); color: #f43f5e; }
+      .toast-content { color: #cbd5e1; line-height: 1.4; }
+
+      /* Success Screen Overlay */
+      .success-overlay {
+        position: fixed;
+        top: 0; left: 0; width: 100vw; height: 100vh;
+        background: rgba(15, 22, 42, 0.4);
+        backdrop-filter: blur(8px);
+        z-index: 3000;
+        display: none;
+        place-items: center;
+      }
+      .success-card {
+        background: var(--white);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-xl);
+        padding: 48px;
+        max-width: 500px;
+        width: calc(100% - 32px);
+        text-align: center;
+        box-shadow: var(--shadow-lg);
+        animation: cardEntrance 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+      @keyframes cardEntrance {
+        from { opacity: 0; transform: scale(0.95) translateY(20px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
+      }
+      .success-icon {
+        width: 72px; height: 72px;
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--green);
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        margin: 0 auto 24px auto;
+        font-size: 2rem;
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- Frosted Sticky Header -->
+    <header class="site-header">
+      <div class="container nav">
+        <a class="brand" href="index.html">
+          <span class="brand-mark">
+            <svg viewBox="0 0 24 24">
+              <path d="M2.5 7.2 12 2.8l9.5 4.4-9.5 4.4-9.5-4.4Z" />
+              <path d="M6.4 10.1v4.5c0 1.8 2.5 3.2 5.6 3.2s5.6-1.4 5.6-3.2v-4.5L12 12.7l-5.6-2.6Z" />
+            </svg>
+          </span>
+          <span>Btechhelpline<span>.com</span></span>
+        </a>
+        <div class="nav-menu">
+          <a href="index.html#colleges-explorer">Explore Colleges</a>
+          <a href="index.html#contact">Support</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <div class="wizard-header">
+        <h1>College Affiliation Request</h1>
+        <p>Complete this standard verification framework to list your institution. All submissions undergo analytical review prior to integration.</p>
+      </div>
+
+      <!-- Stepper Progress Tracker -->
+      <nav class="stepper" aria-label="Progress Tracker">
+        <div class="stepper-progress" id="stepper-progress"></div>
+        <div class="step-node active" id="step-node-1" onclick="jumpToStep(1)">
+          <div class="step-circle">1</div>
+          <div class="step-label">Profile</div>
+        </div>
+        <div class="step-node" id="step-node-2" onclick="jumpToStep(2)">
+          <div class="step-circle">2</div>
+          <div class="step-label">Seats</div>
+        </div>
+        <div class="step-node" id="step-node-3" onclick="jumpToStep(3)">
+          <div class="step-circle">3</div>
+          <div class="step-label">Cutoffs</div>
+        </div>
+        <div class="step-node" id="step-node-4" onclick="jumpToStep(4)">
+          <div class="step-circle">4</div>
+          <div class="step-label">Fees</div>
+        </div>
+        <div class="step-node" id="step-node-5" onclick="jumpToStep(5)">
+          <div class="step-circle">5</div>
+          <div class="step-label">Placements</div>
+        </div>
+        <div class="step-node" id="step-node-6" onclick="jumpToStep(6)">
+          <div class="step-circle">6</div>
+          <div class="step-label">Lifestyle</div>
+        </div>
+        <div class="step-node" id="step-node-7" onclick="jumpToStep(7)">
+          <div class="step-circle">7</div>
+          <div class="step-label">Attest</div>
+        </div>
+      </nav>
+
+      <!-- Form Wizard Card -->
+      <form class="wizard-card" id="affiliation-form" novalidate>
+        
+        <!-- STEP 1: Basic Profile -->
+        <section class="form-step active" id="step-1">
+          <h2 class="step-title"><span>01.</span> Basic Institutional Profile</h2>
+          
+          <label>
+            Official Institution Name
+            <input type="text" id="name" placeholder="e.g. Malaviya National Institute of Technology Jaipur" required />
+          </label>
+
+          <div class="form-grid-3">
+            <label>
+              Establishment Year
+              <input type="number" id="establishmentYear" placeholder="e.g. 1963" required min="1800" max="2026" />
+            </label>
+            <label>
+              City
+              <input type="text" id="city" placeholder="e.g. Jaipur" required />
+            </label>
+            <label>
+              State
+              <select id="state" required>
+                <option value="">Select State</option>
+                <option>Delhi NCR</option>
+                <option>Rajasthan</option>
+                <option>Maharashtra</option>
+                <option>Karnataka</option>
+                <option>Tamil Nadu</option>
+                <option>Uttar Pradesh</option>
+                <option>Gujarat</option>
+                <option>Madhya Pradesh</option>
+                <option>West Bengal</option>
+                <option>Telangana</option>
+                <option>Kerala</option>
+                <option>Haryana</option>
+                <option>Andhra Pradesh</option>
+                <option>Punjab</option>
+                <option>Bihar</option>
+                <option>Uttarakhand</option>
+                <!-- Fallback states naturally whitelisted -->
+              </select>
+            </label>
+          </div>
+
+          <div class="form-grid-2">
+            <label>
+              Institutional Governance
+              <select id="governance" required>
+                <option value="">Select Governance</option>
+                <option value="Government / Public">Government / Public</option>
+                <option value="Private University">Private University</option>
+                <option value="Govt-Aided / Semi-Govt">Govt-Aided / Semi-Govt</option>
+              </select>
+            </label>
+            <label>
+              Academic Autonomy Status
+              <select id="autonomyStatus" required>
+                <option value="">Select Autonomy Status</option>
+                <option value="Autonomous">Autonomous (Self-governing syllabus)</option>
+                <option value="Non-Autonomous / Affiliated">Non-Autonomous / Affiliated (Follows external syllabus)</option>
+              </select>
+            </label>
+          </div>
+
+          <label>
+            Affiliated University Name
+            <span class="label-desc">(Leave blank if standalone Private or Deemed University)</span>
+            <input type="text" id="affiliatedUniversity" placeholder="e.g. Rajasthan Technical University" />
+          </label>
+
+          <label>Accreditations & Ratings</label>
+          <div class="checkbox-group">
+            <label class="checkbox-item">
+              <input type="checkbox" id="aicteApproved" checked />
+              AICTE Approved
+            </label>
+          </div>
+
+          <div class="form-grid-2">
+            <label>
+              NAAC Rated Grade
+              <input type="text" id="naacRating" placeholder="e.g. A++ (Leave blank if not rated)" />
+            </label>
+            <label>
+              NIRF Engineering Rank
+              <input type="number" id="nirfRank" placeholder="e.g. 68 (Leave blank if not in top 200)" min="1" max="500" />
+            </label>
+          </div>
+
+          <label>
+            Official Website
+            <input type="text" id="website" placeholder="e.g. https://www.mnit.ac.in" />
+          </label>
+        </section>
+
+        <!-- STEP 2: Seat Matrix -->
+        <section class="form-step" id="step-2">
+          <h2 class="step-title"><span>02.</span> Branch Seat Matrix & Allocations</h2>
+          <p style="color:var(--muted); font-size:0.85rem; margin-bottom: 20px;">Specify intake and allocation percentages. The counseling and management quota percentages must sum to 100 for each row.</p>
+          
+          <table class="matrix-table">
+            <thead>
+              <tr>
+                <th>B.Tech Engineering Branch</th>
+                <th style="width:120px;">Total Intake</th>
+                <th style="width:140px;">Counselling Quota %</th>
+                <th style="width:140px;">Management Quota %</th>
+                <th style="width:140px; text-align: center;">NBA Accredited?</th>
+                <th style="width:150px;">Industry Collab</th>
+              </tr>
+            </thead>
+            <tbody id="branch-rows">
+              <!-- Dynamically populated via JS -->
+            </tbody>
+          </table>
+        </section>
+
+        <!-- STEP 3: Exams & Cutoffs -->
+        <section class="form-step" id="step-3">
+          <h2 class="step-title"><span>03.</span> Entrance Exams & Cutoffs</h2>
+
+          <label>Primary Accepted Exams</label>
+          <div class="checkbox-group">
+            <label class="checkbox-item"><input type="checkbox" name="acceptedExams" value="JEE Main" checked /> JEE Main</label>
+            <label class="checkbox-item"><input type="checkbox" name="acceptedExams" value="State Exam" id="chk-state-exam" /> State Entrance Exam</label>
+            <label class="checkbox-item"><input type="checkbox" name="acceptedExams" value="Institutional Test" /> Institutional Test</label>
+          </div>
+
+          <div class="form-grid-2">
+            <label>
+              State Exam Name
+              <span class="label-desc">(Required if State Entrance checked above)</span>
+              <input type="text" id="stateExamName" placeholder="e.g. MHT-CET, REAP, TNEA" />
+            </label>
+            <label>
+              Minimum Class 12% Criteria
+              <span class="label-desc">PCM Aggregate Percentage</span>
+              <input type="number" id="minClass12Percent" placeholder="e.g. 75" required min="45" max="100" />
+            </label>
+          </div>
+
+          <h3 style="font-size:1rem; font-weight:700; margin: 24px 0 12px 0;">Previous Year Closing Ranks (General Pool)</h3>
+          <table class="matrix-table">
+            <thead>
+              <tr>
+                <th>B.Tech Stream</th>
+                <th style="width:150px;">JEE Opening Rank</th>
+                <th style="width:150px;">JEE Closing Rank</th>
+                <th style="width:150px;">State Opening Rank</th>
+                <th style="width:150px;">State Closing Rank</th>
+              </tr>
+            </thead>
+            <tbody id="cutoff-rows">
+              <!-- Dynamically populated via JS -->
+            </tbody>
+          </table>
+        </section>
+
+        <!-- STEP 4: Fee Breakdown -->
+        <section class="form-step" id="step-4">
+          <h2 class="step-title"><span>04.</span> Complete Financial Matrix (True Cost)</h2>
+          
+          <div class="form-grid-2">
+            <label>
+              Annual Tuition Fee (General Seat)
+              <input type="number" id="fees-tuitionGeneral" placeholder="Amount in INR per year" required />
+            </label>
+            <label>
+              Annual Tuition Fee (Management Quota)
+              <input type="number" id="fees-tuitionManagement" placeholder="Amount in INR per year (optional)" />
+            </label>
+          </div>
+
+          <div class="form-grid-3">
+            <label>
+              One-Time Caution Deposit
+              <input type="number" id="fees-admissionDeposit" placeholder="INR" />
+            </label>
+            <label>
+              Deposit Refundable?
+              <select id="fees-admissionDepositRefundable">
+                <option value="true">Yes, Refundable</option>
+                <option value="false">No, Non-Refundable</option>
+              </select>
+            </label>
+            <label>
+              Annual Exam & Dev Charges
+              <input type="number" id="fees-examDevCharges" placeholder="INR per year" />
+            </label>
+          </div>
+
+          <div class="form-grid-2">
+            <label>
+              Hostel Accommodation + Mess (Non-AC Standard)
+              <input type="number" id="fees-hostelNonAC" placeholder="INR per year" />
+            </label>
+            <label>
+              Non-AC Occupancy Tier
+              <input type="text" id="fees-hostelNonACOccupancy" placeholder="e.g. 2-seater / 3-seater" />
+            </label>
+          </div>
+
+          <div class="form-grid-2">
+            <label>
+              Hostel Accommodation + Mess (AC Premium)
+              <input type="number" id="fees-hostelAC" placeholder="INR per year" />
+            </label>
+            <label>
+              AC Occupancy Tier
+              <input type="text" id="fees-hostelACOccupancy" placeholder="e.g. Single room / 2-seater AC" />
+            </label>
+          </div>
+
+          <label>
+            Mandatory Miscellaneous Academic Fees
+            <span class="label-desc">Examination, library, lab, and development bundles</span>
+            <input type="number" id="fees-miscAcademicFees" placeholder="INR per year" />
+          </label>
+        </section>
+
+        <!-- STEP 5: Placements & Eligibility -->
+        <section class="form-step" id="step-5">
+          <h2 class="step-title"><span>05.</span> Placement Analytics & Policies</h2>
+          <p style="color:var(--muted); font-size:0.85rem; margin-bottom: 20px;">Provide verified placement metrics of the most recent graduating batch.</p>
+
+          <table class="matrix-table">
+            <thead>
+              <tr>
+                <th>Branch Pool Category</th>
+                <th>Placed %</th>
+                <th>Median (LPA)</th>
+                <th>Average (LPA)</th>
+                <th>Highest (LPA)</th>
+                <th>Mass Offers</th>
+              </tr>
+            </thead>
+            <tbody id="placement-rows">
+              <!-- Dynamically populated via JS -->
+            </tbody>
+          </table>
+
+          <div class="form-grid-2">
+            <label>
+              Minimum CGPA Required for Placements
+              <input type="number" id="policy-minCGPA" placeholder="e.g. 6.5 (out of 10)" step="0.1" min="4" max="10" />
+            </label>
+            <label>
+              Maximum Allowed Active Backlogs
+              <input type="number" id="policy-maxBacklogs" placeholder="e.g. 1 (Set 0 for strict no-backlog policy)" min="0" max="10" />
+            </label>
+          </div>
+        </section>
+
+        <!-- STEP 6: Lifestyle & Rigor -->
+        <section class="form-step" id="step-6">
+          <h2 class="step-title"><span>06.</span> Lifestyle, Rigor & Logistics</h2>
+          
+          <div class="form-grid-3">
+            <label>
+              Choice-Based Credit System (CBCS)
+              <select id="cbcsAllowsMinors">
+                <option value="true">Yes — Allows minors/electives in other branches</option>
+                <option value="false">No — Rigid branch-wise curriculum</option>
+              </select>
+            </label>
+            <label>
+              Faculty-to-Student Ratio
+              <input type="number" id="facultyToStudentRatio" placeholder="e.g. 15 (for 1:15 ratio)" min="5" max="40" />
+            </label>
+            <label>
+              Percentage of PhD Faculty
+              <input type="number" id="phdFacultyPercent" placeholder="e.g. 85 (%)" min="0" max="100" />
+            </label>
+          </div>
+
+          <label>
+            Hostel In-Time / Curfew Policy
+            <select id="lifestyle-curfewPolicy" required>
+              <option value="">Select Curfew strictness</option>
+              <option value="Strict early curfew (Before 7:30 PM)">Strict early curfew (Before 7:30 PM)</option>
+              <option value="Moderate curfew (8:30 PM - 10:00 PM)">Moderate curfew (8:30 PM - 10:00 PM)</option>
+              <option value="High flexibility / 24x7 unrestricted campus accessibility">High flexibility / 24x7 unrestricted campus accessibility</option>
+            </select>
+          </label>
+
+          <label>
+            Dress Code Enforcement
+            <select id="lifestyle-dressCode" required>
+              <option value="">Select Dress Code enforcement</option>
+              <option value="Complete Mandatory Institutional Uniform / Everyday Formals">Complete Mandatory Institutional Uniform / Everyday Formals</option>
+              <option value="Casual Wear Allowed (With minimal restrictions)">Casual Wear Allowed (With minimal restrictions)</option>
+            </select>
+          </label>
+
+          <label>
+            Attendance Enforcement Level
+            <select id="lifestyle-attendanceEnforcement" required>
+              <option value="">Select Attendance strictness</option>
+              <option value="Highly Strict: Strict detention / debarment if below 75%">Highly Strict: Strict detention / debarment if below 75%</option>
+              <option value="Moderate: Medical/Extracurricular leaves easily compensated">Moderate: Medical/Extracurricular leaves easily compensated</option>
+              <option value="Flexible: Active project/coding time counted towards attendance">Flexible: Active project/coding time counted towards attendance</option>
+            </select>
+          </label>
+
+          <div class="form-grid-2">
+            <label>
+              Distance to Nearest Metro/Major Bus Hub (KM)
+              <input type="number" id="lifestyle-distanceToMetroBusKM" placeholder="e.g. 2.5" step="0.1" />
+            </label>
+            <label>
+              Distance to Nearest Major Railway Junction (KM)
+              <input type="number" id="lifestyle-distanceToRailwayKM" placeholder="e.g. 8" step="0.1" />
+            </label>
+          </div>
+
+          <div class="form-grid-2">
+            <label>
+              Active Govt-funded Incubation Center?
+              <select id="lifestyle-activeIncubationCenter">
+                <option value="true">Yes, Active incubation center</option>
+                <option value="false">No incubation center</option>
+              </select>
+            </label>
+            <label>
+              Total Active Tech/Coding Clubs
+              <input type="number" id="lifestyle-totalCodingClubs" placeholder="e.g. 6" min="0" />
+            </label>
+          </div>
+        </section>
+
+        <!-- STEP 7: Attestation & Submit -->
+        <section class="form-step" id="step-7">
+          <h2 class="step-title"><span>07.</span> Verification & Data Attestation</h2>
+
+          <div class="form-grid-2">
+            <label>
+              Prepared By (Full Name)
+              <span class="label-desc">Dean / Head of T&P / Admissions Registrar</span>
+              <input type="text" id="submittedBy" placeholder="Enter full name" required />
+            </label>
+            <label>
+              Official Designation
+              <input type="text" id="designation" placeholder="e.g. Head of Placement cell" required />
+            </label>
+          </div>
+
+          <div class="form-grid-2">
+            <label>
+              Official Contact Number
+              <input type="tel" id="phone" placeholder="10-digit phone number" required />
+            </label>
+            <label>
+              Official Email Address
+              <input type="email" id="email" placeholder="official@college.edu.in" required />
+            </label>
+          </div>
+
+          <div class="attestation-block">
+            <label class="checkbox-item" style="margin-bottom:0;">
+              <input type="checkbox" id="attestationConsent" required />
+              <span>I hereby certify that the metrics submitted herein have been validated by the competitive analytics and admissions boards. Btechhelpline.com is explicitly authorized to compile, normalize, and configure these properties onto its live interactive filter architecture.</span>
+            </label>
+          </div>
+        </section>
+
+        <!-- Form Navigation Actions -->
+        <footer class="wizard-actions">
+          <button class="btn-back" type="button" id="btn-prev" onclick="prevStep()">Previous</button>
+          <button class="btn-next" type="button" id="btn-next" onclick="nextStep()">
+            Next Step
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+          <button class="btn-submit" type="submit" id="btn-submit" style="display:none;">Submit Affiliation Request</button>
+        </footer>
+
+      </form>
+    </main>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Success Screen Overlay -->
+    <div class="success-overlay" id="success-overlay">
+      <div class="success-card">
+        <div class="success-icon">✔️</div>
+        <h2 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 12px; color: var(--ink);">Submission Received!</h2>
+        <p style="color:var(--muted); line-height: 1.6; margin-bottom: 30px;">Thank you. Your college affiliation request has been submitted and is pending verification. An administrator will contact you shortly.</p>
+        <button class="btn-next" style="margin:0 auto;" onclick="window.location.href='index.html'">Back to Home</button>
+      </div>
+    </div>
+
+    <!-- Configuration and Logic -->
+    <script src="config.js"></script>
+    <script>
+      let currentStep = 1;
+      const totalSteps = 7;
+
+      // Seed core engineering branches & placement pools
+      const branchNames = [
+        "Computer Science & Engineering (CSE)",
+        "CSE - Artificial Intelligence & Machine Learning",
+        "CSE - Data Science / Cyber Security",
+        "Electronics & Communication Engineering (ECE)",
+        "Information Technology (IT)",
+        "Mechanical Engineering",
+        "Electrical / Civil Engineering"
+      ];
+
+      const cutoffStreams = [
+        "Computer Science (CSE)",
+        "CSE Specializations (AI/ML/Data)",
+        "Electronics & Communication (ECE)",
+        "Other Core Branches (Mech/Civil/Elec)"
+      ];
+
+      const placementPools = [
+        "Tech & Circuit (CSE/IT/AI)",
+        "Core & Infrastructure (ECE/EEE/Mech/Civil)"
+      ];
+
+      // Helper to render matrix rows
+      function initializeTables() {
+        const branchTbody = document.getElementById('branch-rows');
+        branchTbody.innerHTML = branchNames.map((branch, i) => `
+          <tr>
+            <td style="font-weight: 600;">${branch}</td>
+            <td><input type="number" id="branch-seats-${i}" class="branch-total" placeholder="0" min="0" required value="0" /></td>
+            <td><input type="number" id="branch-counseling-${i}" class="branch-counseling" placeholder="%" min="0" max="100" required value="85" /></td>
+            <td><input type="number" id="branch-management-${i}" class="branch-management" placeholder="%" min="0" max="100" required value="15" /></td>
+            <td style="text-align: center;"><input type="checkbox" id="branch-nba-${i}" style="width: 18px; height: 18px; cursor: pointer;" /></td>
+            <td><input type="text" id="branch-collab-${i}" placeholder="e.g. Cisco, IBM" /></td>
+          </tr>
+        `).join('');
+
+        const cutoffTbody = document.getElementById('cutoff-rows');
+        cutoffTbody.innerHTML = cutoffStreams.map((stream, i) => `
+          <tr>
+            <td style="font-weight: 600;">${stream}</td>
+            <td><input type="number" id="cutoff-jee-op-${i}" placeholder="Opening" min="1" /></td>
+            <td><input type="number" id="cutoff-jee-cl-${i}" placeholder="Closing" min="1" /></td>
+            <td><input type="number" id="cutoff-state-op-${i}" placeholder="Opening" min="1" /></td>
+            <td><input type="number" id="cutoff-state-cl-${i}" placeholder="Closing" min="1" /></td>
+          </tr>
+        `).join('');
+
+        const placementTbody = document.getElementById('placement-rows');
+        placementTbody.innerHTML = placementPools.map((pool, i) => `
+          <tr>
+            <td style="font-weight: 600;">${pool}</td>
+            <td><input type="number" id="placement-percent-${i}" placeholder="Placed %" min="0" max="100" required value="0" /></td>
+            <td><input type="number" id="placement-median-${i}" placeholder="LPA" step="0.1" required value="0" /></td>
+            <td><input type="number" id="placement-avg-${i}" placeholder="LPA" step="0.1" required value="0" /></td>
+            <td><input type="number" id="placement-highest-${i}" placeholder="LPA" step="0.1" required value="0" /></td>
+            <td><input type="number" id="placement-mass-${i}" placeholder="Offers" min="0" value="0" /></td>
+          </tr>
+        `).join('');
+      }
+
+      initializeTables();
+
+      // Show specific step
+      function showStep(stepNum) {
+        document.querySelectorAll('.form-step').forEach(step => {
+          step.classList.remove('active');
+        });
+        document.getElementById(`step-${stepNum}`).classList.add('active');
+
+        // Update stepper nodes
+        for (let i = 1; i <= totalSteps; i++) {
+          const node = document.getElementById(`step-node-${i}`);
+          node.classList.remove('active', 'done');
+          if (i === stepNum) {
+            node.classList.add('active');
+          } else if (i < stepNum) {
+            node.classList.add('done');
+          }
+        }
+
+        // Update progress bar
+        const progressPercentage = ((stepNum - 1) / (totalSteps - 1)) * 100;
+        document.getElementById('stepper-progress').style.width = `${progressPercentage}%`;
+
+        // Update actions
+        document.getElementById('btn-prev').style.visibility = stepNum === 1 ? 'hidden' : 'visible';
+        if (stepNum === totalSteps) {
+          document.getElementById('btn-next').style.display = 'none';
+          document.getElementById('btn-submit').style.display = 'block';
+        } else {
+          document.getElementById('btn-next').style.display = 'flex';
+          document.getElementById('btn-submit').style.display = 'none';
+        }
+
+        currentStep = stepNum;
+        window.scrollTo({ top: 180, behavior: 'smooth' });
+      }
+
+      // Input Validation per step
+      function validateStep(stepNum) {
+        const stepSection = document.getElementById(`step-${stepNum}`);
+        const requiredFields = stepSection.querySelectorAll('[required]');
+        let isValid = true;
+
+        requiredFields.forEach(field => {
+          if (field.type === 'checkbox') {
+            if (!field.checked) {
+              field.style.outline = '2px solid var(--rose)';
+              isValid = false;
+            } else {
+              field.style.outline = 'none';
+            }
+          } else {
+            if (!field.value.trim()) {
+              field.style.borderColor = 'var(--rose)';
+              isValid = false;
+            } else {
+              field.style.borderColor = 'var(--line)';
+            }
+          }
+        });
+
+        // Custom validation logic
+        if (stepNum === 2) {
+          // Check counseling + management adds up to 100 for branches
+          for (let i = 0; i < branchNames.length; i++) {
+            const counseling = parseInt(document.getElementById(`branch-counseling-${i}`).value) || 0;
+            const management = parseInt(document.getElementById(`branch-management-${i}`).value) || 0;
+            const total = parseInt(document.getElementById(`branch-seats-${i}`).value) || 0;
+            if (total > 0 && (counseling + management) !== 100) {
+              showToast(`Quota percentages for ${branchNames[i]} must sum to 100%`, 'error');
+              isValid = false;
+              break;
+            }
+          }
+        }
+
+        if (stepNum === 3) {
+          // Check state exam requirements
+          const chkState = document.getElementById('chk-state-exam');
+          const stateExamInput = document.getElementById('stateExamName');
+          if (chkState.checked && !stateExamInput.value.trim()) {
+            stateExamInput.style.borderColor = 'var(--rose)';
+            showToast('Please specify the State Exam name', 'error');
+            isValid = false;
+          } else {
+            stateExamInput.style.borderColor = 'var(--line)';
+          }
+        }
+
+        if (!isValid) {
+          showToast('Please check all mandatory fields before continuing.', 'error');
+        }
+
+        return isValid;
+      }
+
+      function nextStep() {
+        if (validateStep(currentStep)) {
+          showStep(currentStep + 1);
+        }
+      }
+
+      function prevStep() {
+        if (currentStep > 1) {
+          showStep(currentStep - 1);
+        }
+      }
+
+      function jumpToStep(stepNum) {
+        // Can only jump backwards or to next validated step
+        if (stepNum < currentStep) {
+          showStep(stepNum);
+        } else if (stepNum === currentStep + 1) {
+          nextStep();
+        }
+      }
+
+      // Helper to show toasts
+      function showToast(message, type = 'success') {
+        const toast = document.getElementById('toast');
+        if (!toast) return;
+        
+        toast.className = 'toast';
+        toast.classList.add(`toast-${type}`);
+        
+        let iconHtml = `
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+        `;
+        if (type === 'success') {
+          iconHtml = `
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          `;
+        } else if (type === 'error') {
+          iconHtml = `
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="15" y1="9" x2="9" y2="15"></line>
+              <line x1="9" y1="9" x2="15" y2="15"></line>
+            </svg>
+          `;
+        }
+        
+        toast.innerHTML = `
+          <div class="toast-icon">${iconHtml}</div>
+          <div class="toast-content">${message}</div>
+        `;
+        
+        toast.classList.add('show');
+        
+        if (window.toastTimeout) clearTimeout(window.toastTimeout);
+        window.toastTimeout = setTimeout(() => {
+          toast.classList.remove('show');
+        }, 3500);
+      }
+
+      // Form Submit handler
+      const form = document.getElementById('affiliation-form');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        if (!validateStep(currentStep)) return;
+
+        const submitBtn = document.getElementById('btn-submit');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting Request...';
+
+        // Gather all step inputs and package into database schema JSON format
+        const branches = branchNames.map((name, i) => ({
+          branchName: name,
+          totalSeats: parseInt(document.getElementById(`branch-seats-${i}`).value) || 0,
+          counselingQuotaPercent: parseInt(document.getElementById(`branch-counseling-${i}`).value) || 0,
+          managementQuotaPercent: parseInt(document.getElementById(`branch-management-${i}`).value) || 0,
+          nbaAccredited: document.getElementById(`branch-counseling-${i}`).closest('tr').querySelector('input[type="checkbox"]')?.checked || false,
+          industryCollaborations: document.getElementById(`branch-collab-${i}`).value.trim()
+        }));
+
+        const acceptedExams = Array.from(document.querySelectorAll('input[name="acceptedExams"]:checked')).map(el => el.value);
+
+        const cutoffs = cutoffStreams.map((stream, i) => ({
+          streamName: stream,
+          jeeOpeningRank: parseInt(document.getElementById(`cutoff-jee-op-${i}`).value) || null,
+          jeeClosingRank: parseInt(document.getElementById(`cutoff-jee-cl-${i}`).value) || null,
+          stateOpeningRank: parseInt(document.getElementById(`cutoff-state-op-${i}`).value) || null,
+          stateClosingRank: parseInt(document.getElementById(`cutoff-state-cl-${i}`).value) || null
+        }));
+
+        const placements = placementPools.map((pool, i) => ({
+          poolName: pool,
+          overallPlacedPercent: parseFloat(document.getElementById(`placement-percent-${i}`).value) || 0,
+          medianCTC: parseFloat(document.getElementById(`placement-median-${i}`).value) || 0,
+          averageCTC: parseFloat(document.getElementById(`placement-avg-${i}`).value) || 0,
+          highestCTC: parseFloat(document.getElementById(`placement-highest-${i}`).value) || 0,
+          massRecruiterOffers: parseInt(document.getElementById(`placement-mass-${i}`).value) || 0
+        }));
+
+        const formData = {
+          name: document.getElementById('name').value.trim(),
+          establishmentYear: parseInt(document.getElementById('establishmentYear').value),
+          city: document.getElementById('city').value.trim(),
+          state: document.getElementById('state').value,
+          governance: document.getElementById('governance').value,
+          autonomyStatus: document.getElementById('autonomyStatus').value,
+          affiliatedUniversity: document.getElementById('affiliatedUniversity').value.trim(),
+          aicteApproved: document.getElementById('aicteApproved').checked,
+          naacRating: document.getElementById('naacRating').value.trim(),
+          nirfRank: parseInt(document.getElementById('nirfRank').value) || null,
+          website: document.getElementById('website').value.trim(),
+          branches,
+          acceptedExams,
+          stateExamName: document.getElementById('stateExamName').value.trim(),
+          minClass12Percent: parseFloat(document.getElementById('minClass12Percent').value),
+          cutoffs,
+          fees: {
+            tuitionGeneral: parseInt(document.getElementById('fees-tuitionGeneral').value),
+            tuitionManagement: parseInt(document.getElementById('fees-tuitionManagement').value) || null,
+            admissionDeposit: parseInt(document.getElementById('fees-admissionDeposit').value) || 0,
+            admissionDepositRefundable: document.getElementById('fees-admissionDepositRefundable').value === 'true',
+            examDevCharges: parseInt(document.getElementById('fees-examDevCharges').value) || 0,
+            hostelNonAC: parseInt(document.getElementById('fees-hostelNonAC').value) || null,
+            hostelNonACOccupancy: document.getElementById('fees-hostelNonACOccupancy').value.trim(),
+            hostelAC: parseInt(document.getElementById('fees-hostelAC').value) || null,
+            hostelACOccupancy: document.getElementById('fees-hostelACOccupancy').value.trim(),
+            miscAcademicFees: parseInt(document.getElementById('fees-miscAcademicFees').value) || 0
+          },
+          placements,
+          placementPolicy: {
+            minCGPA: parseFloat(document.getElementById('policy-minCGPA').value) || null,
+            maxBacklogs: parseInt(document.getElementById('policy-maxBacklogs').value) || null
+          },
+          cbcsAllowsMinors: document.getElementById('cbcsAllowsMinors').value === 'true',
+          facultyToStudentRatio: parseInt(document.getElementById('facultyToStudentRatio').value) || null,
+          phdFacultyPercent: parseInt(document.getElementById('phdFacultyPercent').value) || null,
+          lifestyle: {
+            curfewPolicy: document.getElementById('lifestyle-curfewPolicy').value,
+            dressCode: document.getElementById('lifestyle-dressCode').value,
+            attendanceEnforcement: document.getElementById('lifestyle-attendanceEnforcement').value,
+            distanceToMetroBusKM: parseFloat(document.getElementById('lifestyle-distanceToMetroBusKM').value) || null,
+            distanceToRailwayKM: parseFloat(document.getElementById('lifestyle-distanceToRailwayKM').value) || null,
+            activeIncubationCenter: document.getElementById('lifestyle-activeIncubationCenter').value === 'true',
+            totalCodingClubs: parseInt(document.getElementById('lifestyle-totalCodingClubs').value) || 0
+          },
+          submittedBy: document.getElementById('submittedBy').value.trim(),
+          designation: document.getElementById('designation').value.trim(),
+          phone: document.getElementById('phone').value.trim(),
+          email: document.getElementById('email').value.trim(),
+          attestationConsent: document.getElementById('attestationConsent').checked
+        };
+
+        try {
+          const res = await fetch(`${API_URL}/api/colleges/affiliation`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            document.getElementById('success-overlay').style.display = 'grid';
+          } else {
+            showToast(data.error || 'Failed to submit request.', 'error');
+          }
+        } catch (err) {
+          console.error(err);
+          showToast('Server connection error. Please check backend is running.', 'error');
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Submit Affiliation Request';
+        }
+      });
+    </script>
+  </body>
+</html>

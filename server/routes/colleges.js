@@ -100,4 +100,38 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// POST /affiliation — Submit a new college affiliation request
+router.post('/affiliation', async (req, res) => {
+  try {
+    const AffiliationRequest = require('../models/AffiliationRequest');
+    
+    // Check if name is already taken in live colleges or pending requests
+    const existingLive = await College.findOne({ name: req.body.name });
+    if (existingLive) {
+      return res.status(400).json({ success: false, error: 'This college name is already registered in our active database' });
+    }
+    
+    const existingRequest = await AffiliationRequest.findOne({ name: req.body.name, status: 'pending' });
+    if (existingRequest) {
+      return res.status(400).json({ success: false, error: 'An affiliation request for this college is already pending review' });
+    }
+
+    const newRequest = new AffiliationRequest(req.body);
+    await newRequest.save();
+
+    res.status(201).json({
+      success: true,
+      message: 'Your affiliation request has been submitted successfully and is under review.',
+      data: newRequest
+    });
+  } catch (err) {
+    console.error('Submit affiliation request error:', err.message);
+    if (err.name === 'ValidationError') {
+      const messages = Object.values(err.errors).map(val => val.message);
+      return res.status(400).json({ success: false, error: messages[0] || 'Validation Error' });
+    }
+    res.status(500).json({ success: false, error: 'Internal Server Error' });
+  }
+});
+
 module.exports = router;

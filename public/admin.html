@@ -625,6 +625,7 @@
         <button class="tab-btn active" onclick="switchTab('leads-tab')">Leads Management</button>
         <button class="tab-btn" onclick="switchTab('users-tab')">User Operations</button>
         <button class="tab-btn" onclick="switchTab('colleges-tab')">College Database</button>
+        <button class="tab-btn" onclick="switchTab('affiliation-tab')">Affiliation Requests</button>
         <button class="tab-btn" onclick="switchTab('analytics-tab')">Analytics Hub</button>
       </nav>
 
@@ -763,6 +764,41 @@
         </div>
       </section>
 
+      <!-- ═══════════ AFFILIATION TAB ═══════════ -->
+      <section class="tab-content" id="affiliation-tab">
+        <div class="controls-panel">
+          <div class="filters">
+            <input type="text" id="affiliation-search" placeholder="Search by college name..." oninput="fetchAffiliationRequests()" />
+            <select id="affiliation-filter-status" onchange="fetchAffiliationRequests()">
+              <option value="">All Statuses</option>
+              <option value="pending">Pending Review</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+            </select>
+            <button class="btn-action btn-reset" onclick="resetAffiliationFilters()">Reset</button>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>College Details</th>
+                <th>Location</th>
+                <th>Submitted By</th>
+                <th>Contact</th>
+                <th>Date Submitted</th>
+                <th>Status</th>
+                <th style="text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="affiliation-table-body">
+              <tr><td colspan="7" class="no-data">Loading affiliation requests...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
       <!-- ═══════════ ANALYTICS TAB ═══════════ -->
 
       <section class="tab-content" id="analytics-tab">
@@ -856,6 +892,22 @@
           <div style="max-height: 200px; overflow-y:auto; margin-bottom: 20px; display:flex; flex-direction:column; gap:10px;" id="modal-notes-timeline">
             <!-- Loaded dynamically -->
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Affiliation Details Modal -->
+    <div class="modal" id="affiliation-details-modal">
+      <div class="modal-card" style="max-width: 800px; width: 100%;">
+        <button class="modal-close" onclick="closeAffiliationModal()">&times;</button>
+        <h2 id="affiliation-modal-title" style="margin-bottom: 20px; font-weight:800; border-left:4px solid #3b82f6; padding-left:10px;">College Affiliation Request Detail</h2>
+        
+        <div id="affiliation-modal-content" style="font-size:0.92rem; display:flex; flex-direction:column; gap:24px;">
+          <!-- Loaded dynamically -->
+        </div>
+
+        <div style="border-top: 1px solid var(--line); padding-top:20px; margin-top: 20px; display:flex; justify-content: flex-end; gap:12px;" id="affiliation-modal-actions">
+          <!-- Loaded dynamically -->
         </div>
       </div>
     </div>
@@ -1091,6 +1143,7 @@
         if (tabId === 'leads-tab') fetchLeads();
         else if (tabId === 'users-tab') fetchUsers();
         else if (tabId === 'colleges-tab') fetchAdminColleges();
+        else if (tabId === 'affiliation-tab') fetchAffiliationRequests();
         else if (tabId === 'analytics-tab') fetchAnalytics();
       }
 
@@ -1948,6 +2001,312 @@
 
       // Init Load
 
+      // Affiliation Requests Logic
+      async function fetchAffiliationRequests() {
+        const search = document.getElementById('affiliation-search').value.trim();
+        const status = document.getElementById('affiliation-filter-status').value;
+        const tbody = document.getElementById('affiliation-table-body');
+        
+        tbody.innerHTML = '<tr><td colspan="7" class="no-data">Loading affiliation requests...</td></tr>';
+        
+        const params = new URLSearchParams();
+        if (status) params.append('status', status);
+        
+        try {
+          const res = await fetch(`${API_URL}/api/admin/affiliation-requests?${params.toString()}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const data = await res.json();
+          
+          if (res.ok && data.success) {
+            let requests = data.data;
+            
+            // Client-side search filtering by name
+            if (search) {
+              const regex = new RegExp(search, 'i');
+              requests = requests.filter(r => regex.test(r.name));
+            }
+            
+            if (requests.length === 0) {
+              tbody.innerHTML = '<tr><td colspan="7" class="no-data">No affiliation requests found.</td></tr>';
+              return;
+            }
+            
+            tbody.innerHTML = requests.map(req => {
+              const dateStr = new Date(req.createdAt).toLocaleDateString('en-IN', {
+                day: '2-digit', month: 'short', year: 'numeric'
+              });
+              
+              let statusBadge = '';
+              if (req.status === 'pending') {
+                statusBadge = '<span class="badge" style="background:#fef3c7; color:#d97706;">Pending</span>';
+              } else if (req.status === 'approved') {
+                statusBadge = '<span class="badge" style="background:#d1fae5; color:#059669;">Approved</span>';
+              } else {
+                statusBadge = '<span class="badge" style="background:#fee2e2; color:#dc2626;">Rejected</span>';
+              }
+              
+              return `
+                <tr>
+                  <td>
+                    <div style="font-weight: 700; color: var(--ink);">${req.name}</div>
+                    <div style="font-size: 0.8rem; color: var(--muted);">${req.governance} | Estd: ${req.establishmentYear}</div>
+                  </td>
+                  <td>${req.city}, ${req.state}</td>
+                  <td>
+                    <div style="font-weight: 600;">${req.submittedBy}</div>
+                    <div style="font-size: 0.8rem; color: var(--muted);">${req.designation}</div>
+                  </td>
+                  <td>
+                    <div style="font-size: 0.85rem;">${req.email}</div>
+                    <div style="font-size: 0.85rem; color: var(--muted);">${req.phone}</div>
+                  </td>
+                  <td>${dateStr}</td>
+                  <td>${statusBadge}</td>
+                  <td style="text-align: right;">
+                    <button class="btn-toggle btn-toggle-activate" style="font-size:0.8rem;" onclick="openAffiliationDetailsModal('${req._id}')">View Details</button>
+                  </td>
+                </tr>
+              `;
+            }).join('');
+          } else {
+            tbody.innerHTML = `<tr><td colspan="7" class="no-data error">${data.error || 'Failed to load requests'}</td></tr>`;
+          }
+        } catch (err) {
+          console.error(err);
+          tbody.innerHTML = '<tr><td colspan="7" class="no-data error">Connection error while fetching requests</td></tr>';
+        }
+      }
+
+      function resetAffiliationFilters() {
+        document.getElementById('affiliation-search').value = '';
+        document.getElementById('affiliation-filter-status').value = '';
+        fetchAffiliationRequests();
+      }
+
+      async function openAffiliationDetailsModal(id) {
+        const modal = document.getElementById('affiliation-details-modal');
+        const content = document.getElementById('affiliation-modal-content');
+        const actions = document.getElementById('affiliation-modal-actions');
+        
+        content.innerHTML = '<div style="text-align:center; padding: 40px; color:var(--muted);">Loading details...</div>';
+        actions.innerHTML = '';
+        
+        modal.classList.add('open');
+        
+        try {
+          const res = await fetch(`${API_URL}/api/admin/affiliation-requests/${id}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const data = await res.json();
+          
+          if (res.ok && data.success) {
+            const req = data.data;
+            
+            // Format dynamic blocks
+            const branchRowsHtml = req.branches.map(b => `
+              <tr>
+                <td style="font-weight:600;">${b.branchName}</td>
+                <td>${b.totalSeats}</td>
+                <td>${b.counselingQuotaPercent}%</td>
+                <td>${b.managementQuotaPercent}%</td>
+                <td>${b.nbaAccredited ? '✅ Yes' : '❌ No'}</td>
+                <td>${b.industryCollaborations || 'None'}</td>
+              </tr>
+            `).join('');
+            
+            const cutoffRowsHtml = req.cutoffs.map(c => `
+              <tr>
+                <td style="font-weight:600;">${c.streamName}</td>
+                <td>${c.jeeOpeningRank || 'N/A'}</td>
+                <td>${c.jeeClosingRank || 'N/A'}</td>
+                <td>${c.stateOpeningRank || 'N/A'}</td>
+                <td>${c.stateClosingRank || 'N/A'}</td>
+              </tr>
+            `).join('');
+            
+            const placementRowsHtml = req.placements.map(p => `
+              <tr>
+                <td style="font-weight:600;">${p.poolName}</td>
+                <td>${p.overallPlacedPercent}%</td>
+                <td>${p.medianCTC} LPA</td>
+                <td>${p.averageCTC} LPA</td>
+                <td>${p.highestCTC} LPA</td>
+                <td>${p.massRecruiterOffers}</td>
+              </tr>
+            `).join('');
+            
+            content.innerHTML = `
+              <!-- Section 1: Basic Profile -->
+              <div style="background:var(--soft); padding:16px; border-radius:12px; border:1px solid var(--line);">
+                <h3 style="margin:0 0 12px 0; font-weight:800; color:var(--blue); font-size:1rem;">1. Basic Institutional Profile</h3>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px 20px;">
+                  <div><strong>Establishment Year:</strong> ${req.establishmentYear}</div>
+                  <div><strong>Affiliated University:</strong> ${req.affiliatedUniversity || 'Standalone/Deemed'}</div>
+                  <div><strong>Governance Type:</strong> ${req.governance}</div>
+                  <div><strong>Autonomy Status:</strong> ${req.autonomyStatus}</div>
+                  <div><strong>AICTE Approved:</strong> ${req.aicteApproved ? 'Yes' : 'No'}</div>
+                  <div><strong>NAAC Rating:</strong> ${req.naacRating || 'Not Rated'}</div>
+                  <div><strong>NIRF Engineering Rank:</strong> ${req.nirfRank || 'N/A'}</div>
+                  <div><strong>Website:</strong> <a href="${req.website}" target="_blank" style="color:var(--blue); word-break:break-all;">${req.website || 'N/A'}</a></div>
+                </div>
+              </div>
+              
+              <!-- Section 2: Seat Matrix -->
+              <div>
+                <h3 style="margin:0 0 8px 0; font-weight:800; color:var(--blue); font-size:1rem;">2. Branch Seat Matrix</h3>
+                <table class="admin-table" style="font-size:0.85rem; border:1px solid var(--line); border-radius:8px; overflow:hidden;">
+                  <thead>
+                    <tr style="background:var(--soft);">
+                      <th style="padding:10px;">Branch</th>
+                      <th style="padding:10px;">Intake</th>
+                      <th style="padding:10px;">Counselling</th>
+                      <th style="padding:10px;">Management</th>
+                      <th style="padding:10px;">NBA</th>
+                      <th style="padding:10px;">Collaborations</th>
+                    </tr>
+                  </thead>
+                  <tbody>${branchRowsHtml}</tbody>
+                </table>
+              </div>
+
+              <!-- Section 3: Exams & Cutoffs -->
+              <div style="background:var(--soft); padding:16px; border-radius:12px; border:1px solid var(--line);">
+                <h3 style="margin:0 0 12px 0; font-weight:800; color:var(--blue); font-size:1rem;">3. Exams & Eligibility</h3>
+                <div style="margin-bottom:12px;"><strong>Accepted Exams:</strong> ${req.acceptedExams.join(', ')} ${req.stateExamName ? `(${req.stateExamName})` : ''}</div>
+                <div style="margin-bottom:16px;"><strong>Minimum Class 12% (PCM) Requirement:</strong> ${req.minClass12Percent}%</div>
+                <h4 style="margin:0 0 8px 0; font-size:0.9rem; font-weight:700;">Previous Year Closing Ranks (General Pool)</h4>
+                <table class="admin-table" style="font-size:0.85rem; border:1px solid var(--line); border-radius:8px; overflow:hidden; background:var(--white);">
+                  <thead>
+                    <tr style="background:var(--soft);">
+                      <th style="padding:10px;">Stream</th>
+                      <th style="padding:10px;">JEE Opening</th>
+                      <th style="padding:10px;">JEE Closing</th>
+                      <th style="padding:10px;">State Opening</th>
+                      <th style="padding:10px;">State Closing</th>
+                    </tr>
+                  </thead>
+                  <tbody>${cutoffRowsHtml}</tbody>
+                </table>
+              </div>
+
+              <!-- Section 4: Fees -->
+              <div style="background:var(--soft); padding:16px; border-radius:12px; border:1px solid var(--line);">
+                <h3 style="margin:0 0 12px 0; font-weight:800; color:var(--blue); font-size:1rem;">4. Fee Breakdown & Financials</h3>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px 20px;">
+                  <div><strong>General Tuition Fee:</strong> ₹${req.fees.tuitionGeneral.toLocaleString('en-IN')}/year</div>
+                  <div><strong>Management Tuition Fee:</strong> ${req.fees.tuitionManagement ? `₹${req.fees.tuitionManagement.toLocaleString('en-IN')}/year` : 'N/A'}</div>
+                  <div><strong>Admission Caution Deposit:</strong> ₹${req.fees.admissionDeposit.toLocaleString('en-IN')} (${req.fees.admissionDepositRefundable ? 'Refundable' : 'Non-Refundable'})</div>
+                  <div><strong>Exam & Dev Charges:</strong> ₹${req.fees.examDevCharges.toLocaleString('en-IN')}/year</div>
+                  <div><strong>Hostel Standard (Non-AC):</strong> ${req.fees.hostelNonAC ? `₹${req.fees.hostelNonAC.toLocaleString('en-IN')}/year (${req.fees.hostelNonACOccupancy})` : 'N/A'}</div>
+                  <div><strong>Hostel Premium (AC):</strong> ${req.fees.hostelAC ? `₹${req.fees.hostelAC.toLocaleString('en-IN')}/year (${req.fees.hostelACOccupancy})` : 'N/A'}</div>
+                  <div style="grid-column: 1/-1;"><strong>Mandatory Misc Academic Fees:</strong> ₹${req.fees.miscAcademicFees.toLocaleString('en-IN')}/year</div>
+                </div>
+              </div>
+
+              <!-- Section 5: Placements -->
+              <div>
+                <h3 style="margin:0 0 8px 0; font-weight:800; color:var(--blue); font-size:1rem;">5. Placement Analytics & Policy</h3>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; font-weight:600;">
+                  <div>Min CGPA Required: ${req.placementPolicy.minCGPA || 'N/A'}</div>
+                  <div>Max Allowed Backlogs: ${req.placementPolicy.maxBacklogs === null ? 'N/A' : req.placementPolicy.maxBacklogs}</div>
+                </div>
+                <table class="admin-table" style="font-size:0.85rem; border:1px solid var(--line); border-radius:8px; overflow:hidden;">
+                  <thead>
+                    <tr style="background:var(--soft);">
+                      <th style="padding:10px;">Branch Pool</th>
+                      <th style="padding:10px;">Placed %</th>
+                      <th style="padding:10px;">Median</th>
+                      <th style="padding:10px;">Average</th>
+                      <th style="padding:10px;">Highest</th>
+                      <th style="padding:10px;">Mass Offers</th>
+                    </tr>
+                  </thead>
+                  <tbody>${placementRowsHtml}</tbody>
+                </table>
+              </div>
+
+              <!-- Section 6: Lifestyle & Rigor -->
+              <div style="background:var(--soft); padding:16px; border-radius:12px; border:1px solid var(--line);">
+                <h3 style="margin:0 0 12px 0; font-weight:800; color:var(--blue); font-size:1rem;">6. Lifestyle, Rigor & Logistics</h3>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px 20px;">
+                  <div><strong>CBCS Syllabus Flex:</strong> ${req.cbcsAllowsMinors ? 'Yes (Allows minors/electives)' : 'No (Rigid curriculum)'}</div>
+                  <div><strong>Faculty-Student Ratio:</strong> 1:${req.facultyToStudentRatio || 'N/A'}</div>
+                  <div><strong>PhD Faculty %:</strong> ${req.phdFacultyPercent || 0}%</div>
+                  <div><strong>Hostel Curfew Policy:</strong> ${req.lifestyle.curfewPolicy}</div>
+                  <div><strong>Dress Code:</strong> ${req.lifestyle.dressCode}</div>
+                  <div><strong>Attendance Enforcement:</strong> ${req.lifestyle.attendanceEnforcement}</div>
+                  <div><strong>Distance to Metro/Bus:</strong> ${req.lifestyle.distanceToMetroBusKM ? `${req.lifestyle.distanceToMetroBusKM} KM` : 'N/A'}</div>
+                  <div><strong>Distance to Railway:</strong> ${req.lifestyle.distanceToRailwayKM ? `${req.lifestyle.distanceToRailwayKM} KM` : 'N/A'}</div>
+                  <div><strong>Govt Incubation Center:</strong> ${req.lifestyle.activeIncubationCenter ? '✅ Yes, Active' : '❌ No'}</div>
+                  <div><strong>Coding/Tech Clubs:</strong> ${req.lifestyle.totalCodingClubs} active clubs</div>
+                </div>
+              </div>
+
+              <!-- Attestation Verification Info -->
+              <div style="background:#eff6ff; padding:16px; border-radius:12px; border:1px solid rgba(37,99,235,0.15);">
+                <h3 style="margin:0 0 8px 0; font-weight:800; color:var(--blue); font-size:1rem;">Attestation & Submission Details</h3>
+                <div><strong>Submitted By:</strong> ${req.submittedBy} (${req.designation})</div>
+                <div><strong>Phone / Email:</strong> ${req.phone} / ${req.email}</div>
+                <div style="margin-top:8px; font-style:italic; font-size:0.85rem; color:#1e40af;">
+                  "Attestation Consent: Verified and checked by submitter."
+                </div>
+              </div>
+            `;
+            
+            // Render action buttons
+            if (req.status === 'pending') {
+              actions.innerHTML = `
+                <button class="btn-toggle btn-toggle-deactivate" style="padding:10px 20px; font-size:0.9rem; font-weight:700;" onclick="updateAffiliationStatus('${req._id}', 'rejected')">Reject Application ❌</button>
+                <button class="btn-action btn-export" style="margin:0; background:linear-gradient(135deg, #10b981, #059669); padding:10px 20px; font-size:0.9rem; font-weight:700;" onclick="updateAffiliationStatus('${req._id}', 'approved')">Approve & Auto-Import College ✔️</button>
+              `;
+            } else {
+              actions.innerHTML = `
+                <span style="font-weight:700; color:var(--muted); text-transform:uppercase;">Status: ${req.status}</span>
+                <button class="btn-action btn-reset" onclick="closeAffiliationModal()">Close</button>
+              `;
+            }
+          } else {
+            content.innerHTML = `<div style="text-align:center; padding: 40px; color:var(--rose);">${data.error || 'Failed to load details'}</div>`;
+          }
+        } catch (err) {
+          console.error(err);
+          content.innerHTML = '<div style="text-align:center; padding: 40px; color:var(--rose);">Connection error while fetching details.</div>';
+        }
+      }
+
+      function closeAffiliationModal() {
+        document.getElementById('affiliation-details-modal').classList.remove('open');
+      }
+
+      async function updateAffiliationStatus(id, newStatus) {
+        if (!confirm(`Are you sure you want to change the request status to "${newStatus}"?`)) return;
+        
+        try {
+          const res = await fetch(`${API_URL}/api/admin/affiliation-requests/${id}/status`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ status: newStatus })
+          });
+          const data = await res.json();
+          
+          if (res.ok && data.success) {
+            showToast(`Request has been successfully ${newStatus}!`);
+            closeAffiliationModal();
+            fetchAffiliationRequests();
+          } else {
+            showToast(data.error || 'Failed to update status', 'error');
+          }
+        } catch (err) {
+          console.error(err);
+          showToast('Connection error', 'error');
+        }
+      }
+
+      // Init Load
       async function init() {
         await fetchCounsellors();
         fetchLeads();
@@ -1961,6 +2320,11 @@
         const collegeFormModal = document.getElementById('college-form-modal');
         collegeFormModal.addEventListener('click', (e) => {
           if (e.target === collegeFormModal) closeCollegeFormModal();
+        });
+
+        const affModal = document.getElementById('affiliation-details-modal');
+        affModal.addEventListener('click', (e) => {
+          if (e.target === affModal) closeAffiliationModal();
         });
       }
 

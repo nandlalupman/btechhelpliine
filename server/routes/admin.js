@@ -615,5 +615,125 @@ router.delete(
   }
 );
 
+// GET /affiliation-requests — Fetch all affiliation requests (Admin only)
+router.get('/affiliation-requests', async (req, res) => {
+  try {
+    const AffiliationRequest = require('../models/AffiliationRequest');
+    const { status } = req.query;
+    const filter = {};
+    if (status) {
+      filter.status = status;
+    }
+    const requests = await AffiliationRequest.find(filter).sort({ createdAt: -1 });
+    res.json({ success: true, data: requests });
+  } catch (err) {
+    console.error('Admin fetch affiliation requests error:', err.message);
+    res.status(500).json({ success: false, error: 'Internal Server Error' });
+  }
+});
+
+// GET /affiliation-requests/:id — Fetch single request details (Admin only)
+router.get('/affiliation-requests/:id', async (req, res) => {
+  try {
+    const AffiliationRequest = require('../models/AffiliationRequest');
+    const request = await AffiliationRequest.findById(req.params.id);
+    if (!request) {
+      return res.status(404).json({ success: false, error: 'Request not found' });
+    }
+    res.json({ success: true, data: request });
+  } catch (err) {
+    console.error('Admin fetch affiliation request detail error:', err.message);
+    res.status(500).json({ success: false, error: 'Internal Server Error' });
+  }
+});
+
+// PUT /affiliation-requests/:id/status — Update status & auto-import college if approved (Admin only)
+router.put('/affiliation-requests/:id/status', async (req, res) => {
+  try {
+    const AffiliationRequest = require('../models/AffiliationRequest');
+    const { status } = req.body;
+
+    if (!['approved', 'rejected', 'pending'].includes(status)) {
+      return res.status(400).json({ success: false, error: 'Invalid status value' });
+    }
+
+    const request = await AffiliationRequest.findById(req.params.id);
+    if (!request) {
+      return res.status(404).json({ success: false, error: 'Request not found' });
+    }
+
+    // If status is being updated to approved
+    if (status === 'approved' && request.status !== 'approved') {
+      const College = require('../models/College');
+      
+      // Check if college name already exists
+      const existing = await College.findOne({ name: request.name });
+      if (existing) {
+        return res.status(400).json({ success: false, error: 'A college with this name is already registered in the database' });
+      }
+
+      // Map governance to college type
+      let collegeType = 'Other';
+      if (request.governance === 'Government / Public') collegeType = 'State';
+      else if (request.governance === 'Private University') collegeType = 'Private';
+      else if (request.governance === 'Govt-Aided / Semi-Govt') collegeType = 'State';
+
+      // Determine CSE cutoff rank
+      let cseCutoff = 'N/A';
+      const cseCutoffObj = request.cutoffs.find(c => c.streamName.includes('Computer Science'));
+      if (cseCutoffObj) {
+        cseCutoff = cseCutoffObj.jeeClosingRank ? `~${cseCutoffObj.jeeClosingRank} (JEE)` : (cseCutoffObj.stateClosingRank ? `~${cseCutoffObj.stateClosingRank} (State)` : 'N/A');
+      }
+
+      // Determine avg and highest placement
+      let avgPlacement = 5.0;
+      let highestPlacement = 10.0;
+      const techPlacement = request.placements.find(p => p.poolName.includes('Tech'));
+      if (techPlacement) {
+        avgPlacement = techPlacement.averageCTC || techPlacement.medianCTC || 5.0;
+        highestPlacement = techPlacement.highestCTC || 10.0;
+      }
+
+      // Synthesize a descriptive narrative
+      const description = `Established in ${request.establishmentYear}, ${request.name} is a premier ${request.autonomyStatus.toLowerCase()} college situated in ${request.city}, ${request.state}. Affiliated with ${request.affiliatedUniversity || 'autonomous university boards'} and approved by AICTE, it offers excellent B.Tech degrees with a strong faculty-to-student ratio of 1:${request.facultyToStudentRatio || 15} and ${request.phdFacultyPercent || 30}% PhD faculty. The campus lifestyle maintains a ${request.lifestyle.curfewPolicy ? request.lifestyle.curfewPolicy.toLowerCase() : 'moderate curfew'} curfew structure and features ${request.lifestyle.totalCodingClubs || 3} active tech and coding clubs.`;
+
+      // Branches list
+      const branchesList = request.branches.map(b => b.branchName);
+
+      // Create live college entry
+      const college = new College({
+        name: request.name,
+        type: collegeType,
+        nirfRank: request.nirfRank || null,
+        city: request.city,
+        state: request.state,
+        admissionMode: request.acceptedExams.join(', ') || 'JEE Main',
+        feesPerYear: request.fees.tuitionGeneral,
+        cutoffRankCSE: cseCutoff,
+        avgPlacement: avgPlacement,
+        highestPlacement: highestPlacement,
+        description: description,
+        branches: branchesList.length > 0 ? branchesList : undefined,
+        website: request.website || undefined,
+        imageUrl: null
+      });
+
+      await college.save();
+    }
+
+    request.status = status;
+    await request.save();
+
+    res.json({ 
+      success: true, 
+      message: `Request successfully ${status}.`,
+      data: request 
+    });
+  } catch (err) {
+    console.error('Admin update affiliation status error:', err.message);
+    res.status(500).json({ success: false, error: err.message || 'Internal Server Error' });
+  }
+});
+
 module.exports = router;
 
