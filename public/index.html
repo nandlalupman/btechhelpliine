@@ -317,13 +317,37 @@
         </button>
 
         <div class="nav-menu" id="nav-menu">
-          <a href="#colleges-explorer">Explore Colleges</a>
-          <a href="#colleges">NIRF Rankings</a>
-          <a href="#branches">Courses</a>
-          <a href="#cutoffs">JEE Cutoffs</a>
-          <a href="#guide">Admission Guide</a>
-          <a href="#counselling">Counselling</a>
-          <a href="affiliation.html" style="color: var(--blue); font-weight: 700;">College Affiliation</a>
+          <!-- Dropdown 1: For Students -->
+          <div class="dropdown">
+            <button class="dropdown-trigger" type="button" aria-haspopup="true" aria-expanded="false">
+              For Students
+              <svg viewBox="0 0 24 24" class="dropdown-icon" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="dropdown-menu">
+              <a href="#colleges-explorer">Explore Colleges</a>
+              <a href="#colleges">NIRF Rankings</a>
+              <a href="#branches">Courses</a>
+              <a href="#cutoffs">JEE Cutoffs</a>
+              <a href="#guide">Admission Guide</a>
+              <a href="#counselling">Counselling</a>
+            </div>
+          </div>
+
+          <!-- Dropdown 2: For Colleges -->
+          <div class="dropdown">
+            <button class="dropdown-trigger" type="button" aria-haspopup="true" aria-expanded="false">
+              For Colleges
+              <svg viewBox="0 0 24 24" class="dropdown-icon" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="dropdown-menu">
+              <a href="affiliation.html" style="color: var(--blue); font-weight: 700;">Affiliate Your College</a>
+            </div>
+          </div>
+
           <a href="#contact">Contact</a>
           <a class="nav-cta" href="https://wa.me/917300012345?text=Hi%20I%20need%20help%20with%20B.Tech%20admission" target="_blank" rel="noopener">
             Talk on WhatsApp

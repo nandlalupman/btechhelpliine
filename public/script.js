@@ -451,4 +451,17 @@ async function prefillLeadForm() {
 document.addEventListener('DOMContentLoaded', () => {
   updateAuthUI();
   prefillLeadForm();
+
+  // Mobile dropdown toggles
+  document.querySelectorAll('.dropdown-trigger').forEach(trigger => {
+    trigger.addEventListener('click', (e) => {
+      if (window.innerWidth <= 768) {
+        e.preventDefault();
+        const dropdown = trigger.closest('.dropdown');
+        dropdown.classList.toggle('open');
+        const isExpanded = dropdown.classList.contains('open');
+        trigger.setAttribute('aria-expanded', String(isExpanded));
+      }
+    });
+  });
 });
