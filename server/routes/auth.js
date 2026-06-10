@@ -293,14 +293,46 @@ router.post(
       user.otpExpires = Date.now() + 5 * 60 * 1000; // valid for 5 mins
       await user.save();
 
-      // Simulate sending SMS via console log
-      console.log(`\n================ SMS GATEWAY SIMULATION ================`);
-      console.log(`SENDING OTP TO: +91 ${phone}`);
-      console.log(`MESSAGE: Your BtechHelpline login OTP is ${otp}. Valid for 5 minutes.`);
-      console.log(`========================================================\n`);
+      // Send OTP via 2Factor API or simulation fallback
+      const apiKey = process.env.TWO_FACTOR_API_KEY;
+      let sentSuccess = true;
+      let gatewayMessage = 'OTP sent successfully via SMS simulation.';
+
+      if (apiKey && apiKey !== 'your-actual-2factor-api-key-here') {
+        try {
+          // 2Factor.in standard API URL format: https://2factor.in/API/V1/{api_key}/SMS/{phone_number}/{otp_val}/AUTOGEN
+          // This triggers the default 2Factor authentication template.
+          const url = `https://2factor.in/API/V1/${apiKey}/SMS/${phone}/${otp}/AUTOGEN`;
+          const apiRes = await fetch(url);
+          const apiJson = await apiRes.json();
+          
+          if (apiJson.Status === 'Success') {
+            gatewayMessage = 'OTP sent successfully via SMS.';
+            console.log(`[2Factor] SMS sent to +91 ${phone}. Details: ${apiJson.Details}`);
+          } else {
+            console.error('[2Factor] Error response:', apiJson.Details);
+            sentSuccess = false;
+            gatewayMessage = `SMS provider error: ${apiJson.Details}`;
+          }
+        } catch (smsErr) {
+          console.error('[2Factor] Connection error:', smsErr.message);
+          sentSuccess = false;
+          gatewayMessage = 'Failed to connect to the SMS gateway.';
+        }
+      } else {
+        // Simulate sending SMS via console log
+        console.log(`\n================ SMS GATEWAY SIMULATION ================`);
+        console.log(`SENDING OTP TO: +91 ${phone}`);
+        console.log(`MESSAGE: Your BtechHelpline login OTP is ${otp}. Valid for 5 minutes.`);
+        console.log(`========================================================\n`);
+      }
+
+      if (!sentSuccess) {
+        return res.status(500).json({ success: false, error: gatewayMessage });
+      }
 
       // In non-production, return it directly in response for easier testing
-      const responseData = { success: true, message: 'OTP sent successfully via SMS simulation.' };
+      const responseData = { success: true, message: gatewayMessage };
       if (process.env.NODE_ENV !== 'production') {
         responseData.otp = otp; // Expose to frontend during dev
       }
