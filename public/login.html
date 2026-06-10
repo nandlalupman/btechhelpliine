@@ -505,6 +505,92 @@
         line-height: 1.4;
       }
 
+      /* Login Tabs */
+      .login-tabs {
+        display: flex;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        padding: 4px;
+        border-radius: 12px;
+        margin-bottom: 24px;
+        position: relative;
+        z-index: 10;
+      }
+
+      .login-tab-btn {
+        flex: 1;
+        background: none;
+        border: none;
+        color: var(--slate-400);
+        padding: 10px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: all 0.3s;
+        text-align: center;
+      }
+
+      .login-tab-btn:hover {
+        color: var(--white);
+      }
+
+      .login-tab-btn.active {
+        background: var(--blue);
+        color: var(--white);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+      }
+
+      /* Form Sections */
+      .login-section {
+        display: none;
+      }
+
+      .login-section.active {
+        display: block;
+      }
+
+      .otp-input-group {
+        display: flex;
+        gap: 12px;
+        align-items: flex-end;
+        margin-bottom: 20px;
+      }
+
+      .otp-input-group label {
+        flex: 1;
+        margin-bottom: 0;
+      }
+
+      .btn-send-otp {
+        padding: 12px 20px;
+        background: rgba(37, 99, 235, 0.1);
+        border: 1px solid rgba(37, 99, 235, 0.2);
+        color: #60a5fa;
+        border-radius: var(--radius-input);
+        font-weight: 700;
+        font-size: 0.88rem;
+        cursor: pointer;
+        transition: all var(--transition);
+        white-space: nowrap;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0px;
+      }
+
+      .btn-send-otp:hover:not(:disabled) {
+        background: var(--blue);
+        color: var(--white);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+      }
+
+      .btn-send-otp:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
       /* ── Responsive breakpoint ── */
       @media (max-width: 1024px) {
         .auth-wrapper {
@@ -637,22 +723,50 @@
 
           <div class="form-msg" id="form-msg"></div>
 
+          <div class="login-tabs">
+            <button class="login-tab-btn active" type="button" onclick="switchLoginTab('password')">Password Login</button>
+            <button class="login-tab-btn" type="button" onclick="switchLoginTab('otp')">SMS OTP Login</button>
+          </div>
+
           <form class="auth-form" id="login-form">
-            <label>
-              Email Address
-              <input type="email" id="email" placeholder="student@example.com" required autofocus />
-            </label>
+            <input type="hidden" id="login-mode" value="password" />
 
-            <label>
-              Password
-              <input type="password" id="password" placeholder="••••••••" required />
-            </label>
+            <!-- Password Login Section -->
+            <div id="section-password" class="login-section active">
+              <label>
+                Email Address
+                <input type="email" id="email" placeholder="student@example.com" required autofocus />
+              </label>
 
-            <div class="form-forgot">
-              <a href="forgot-password.html">Forgot Password?</a>
+              <label style="margin-bottom: 8px;">
+                Password
+                <input type="password" id="password" placeholder="••••••••" required />
+              </label>
+
+              <div class="form-forgot">
+                <a href="forgot-password.html">Forgot Password?</a>
+              </div>
             </div>
 
-            <button type="submit" id="btn-submit">Login</button>
+            <!-- OTP/SMS Login Section -->
+            <div id="section-otp" class="login-section">
+              <div class="otp-input-group">
+                <label>
+                  Mobile Number
+                  <span style="font-size: 0.72rem; color: var(--slate-400); font-weight: 400; margin-top: 2px;">Registered 10-digit number</span>
+                  <input type="tel" id="phone" placeholder="9876543210" minlength="10" maxlength="10" />
+                </label>
+                <button type="button" class="btn-send-otp" id="btn-send-otp" onclick="sendOTPCode(event)">Send OTP</button>
+              </div>
+
+              <label style="margin-top: 16px;">
+                Enter 6-Digit OTP
+                <span id="otp-hint" style="font-size: 0.72rem; color: #34d399; font-weight: 400; margin-top: 2px; display: none;">* Dev Mode: OTP code is auto-filled below!</span>
+                <input type="text" id="otp" placeholder="123456" minlength="6" maxlength="6" />
+              </label>
+            </div>
+
+            <button type="submit" id="btn-submit" style="margin-top: 15px;">Login</button>
           </form>
 
           <div class="auth-footer">
@@ -797,21 +911,122 @@
         }, 3500);
       }
 
+      function switchLoginTab(mode) {
+        document.getElementById('login-mode').value = mode;
+        
+        // Toggle tab active styling
+        document.querySelectorAll('.login-tab-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.textContent.toLowerCase().includes(mode));
+        });
+
+        // Toggle sections
+        document.getElementById('section-password').classList.toggle('active', mode === 'password');
+        document.getElementById('section-otp').classList.toggle('active', mode === 'otp');
+
+        // Toggle validation requirements
+        const email = document.getElementById('email');
+        const password = document.getElementById('password');
+        const phone = document.getElementById('phone');
+        const otp = document.getElementById('otp');
+
+        if (mode === 'password') {
+          email.required = true;
+          password.required = true;
+          phone.required = false;
+          otp.required = false;
+        } else {
+          email.required = false;
+          password.required = false;
+          phone.required = true;
+          otp.required = true;
+        }
+      }
+
+      async function sendOTPCode(e) {
+        e.preventDefault();
+        const phoneInput = document.getElementById('phone');
+        const phone = phoneInput.value.trim();
+        const sendBtn = document.getElementById('btn-send-otp');
+
+        if (!phone || !/^[6-9]\d{9}$/.test(phone)) {
+          showToast('Enter a valid 10-digit Indian mobile number', 'error');
+          phoneInput.style.borderColor = 'var(--rose)';
+          return;
+        }
+        phoneInput.style.borderColor = '';
+
+        sendBtn.disabled = true;
+        sendBtn.textContent = 'Sending...';
+
+        try {
+          const res = await fetch(`${API_URL}/api/auth/send-otp`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone })
+          });
+          const data = await res.json();
+
+          if (res.ok && data.success) {
+            showToast('OTP sent successfully!', 'success');
+            
+            // Auto-fill in dev mode if OTP is returned
+            if (data.otp) {
+              document.getElementById('otp').value = data.otp;
+              document.getElementById('otp-hint').style.display = 'block';
+            }
+
+            // Start countdown timer
+            let timeLeft = 60;
+            sendBtn.textContent = `Resend (${timeLeft}s)`;
+            const timer = setInterval(() => {
+              timeLeft--;
+              if (timeLeft <= 0) {
+                clearInterval(timer);
+                sendBtn.disabled = false;
+                sendBtn.textContent = 'Send OTP';
+              } else {
+                sendBtn.textContent = `Resend (${timeLeft}s)`;
+              }
+            }, 1000);
+
+          } else {
+            showToast(data.error || 'Failed to send OTP.', 'error');
+            sendBtn.disabled = false;
+            sendBtn.textContent = 'Send OTP';
+          }
+        } catch (err) {
+          console.error(err);
+          showToast('Connection error. Is the server running?', 'error');
+          sendBtn.disabled = false;
+          sendBtn.textContent = 'Send OTP';
+        }
+      }
+
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
         formMsg.style.display = 'none';
 
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value;
-
+        const mode = document.getElementById('login-mode').value;
         submitBtn.disabled = true;
         submitBtn.textContent = 'Logging in...';
 
+        let url = `${API_URL}/api/auth/login`;
+        let payload = {};
+
+        if (mode === 'password') {
+          payload.email = document.getElementById('email').value.trim();
+          payload.password = document.getElementById('password').value;
+        } else {
+          url = `${API_URL}/api/auth/verify-otp`;
+          payload.phone = document.getElementById('phone').value.trim();
+          payload.otp = document.getElementById('otp').value.trim();
+        }
+
         try {
-          const res = await fetch(`${API_URL}/api/auth/login`, {
+          const res = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify(payload)
           });
 
           const data = await res.json();

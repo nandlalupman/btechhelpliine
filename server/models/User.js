@@ -42,6 +42,8 @@ const UserSchema = new mongoose.Schema(
     verificationToken: String,
     resetPasswordToken: String,
     resetPasswordExpires: Date,
+    otpCode: String,
+    otpExpires: Date,
     jeeRank: {
       type: String,
       default: '',

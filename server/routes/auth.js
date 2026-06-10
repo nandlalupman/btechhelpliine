@@ -259,4 +259,124 @@ router.post(
   }
 );
 
+// POST /send-otp
+router.post(
+  '/send-otp',
+  [
+    body('phone')
+      .isLength({ min: 10, max: 10 })
+      .withMessage('Phone number must be exactly 10 digits')
+      .matches(/^[6-9]\d{9}$/)
+      .withMessage('Enter a valid Indian mobile number'),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success: false, error: errors.array()[0].msg });
+    }
+
+    const { phone } = req.body;
+
+    try {
+      const user = await User.findOne({ phone });
+      if (!user) {
+        return res.status(404).json({ success: false, error: 'Phone number is not registered.' });
+      }
+
+      if (!user.isActive) {
+        return res.status(403).json({ success: false, error: 'Account deactivated. Please contact support.' });
+      }
+
+      // Generate a 6-digit OTP code
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+      user.otpCode = otp;
+      user.otpExpires = Date.now() + 5 * 60 * 1000; // valid for 5 mins
+      await user.save();
+
+      // Simulate sending SMS via console log
+      console.log(`\n================ SMS GATEWAY SIMULATION ================`);
+      console.log(`SENDING OTP TO: +91 ${phone}`);
+      console.log(`MESSAGE: Your BtechHelpline login OTP is ${otp}. Valid for 5 minutes.`);
+      console.log(`========================================================\n`);
+
+      // In non-production, return it directly in response for easier testing
+      const responseData = { success: true, message: 'OTP sent successfully via SMS simulation.' };
+      if (process.env.NODE_ENV !== 'production') {
+        responseData.otp = otp; // Expose to frontend during dev
+      }
+
+      res.json(responseData);
+    } catch (err) {
+      console.error('Send OTP error:', err.message);
+      res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+  }
+);
+
+// POST /verify-otp
+router.post(
+  '/verify-otp',
+  [
+    body('phone')
+      .isLength({ min: 10, max: 10 })
+      .withMessage('Phone number must be exactly 10 digits')
+      .matches(/^[6-9]\d{9}$/)
+      .withMessage('Enter a valid Indian mobile number'),
+    body('otp')
+      .isLength({ min: 6, max: 6 })
+      .withMessage('OTP must be exactly 6 digits'),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success: false, error: errors.array()[0].msg });
+    }
+
+    const { phone, otp } = req.body;
+
+    try {
+      const user = await User.findOne({
+        phone,
+        otpCode: otp,
+        otpExpires: { $gt: Date.now() },
+      });
+
+      if (!user) {
+        return res.status(400).json({ success: false, error: 'Invalid or expired OTP code.' });
+      }
+
+      if (!user.isActive) {
+        return res.status(403).json({ success: false, error: 'Account deactivated. Please contact support.' });
+      }
+
+      // Clear OTP details
+      user.otpCode = undefined;
+      user.otpExpires = undefined;
+      user.lastLogin = new Date();
+      await user.save();
+
+      // Sign JWT
+      const token = jwt.sign(
+        { userId: user._id, role: user.role, email: user.email },
+        JWT_SECRET
+      );
+
+      res.json({
+        success: true,
+        message: 'Login successful via OTP!',
+        token,
+        user: {
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+          role: user.role,
+        },
+      });
+    } catch (err) {
+      console.error('Verify OTP error:', err.message);
+      res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+  }
+);
+
 module.exports = router;
