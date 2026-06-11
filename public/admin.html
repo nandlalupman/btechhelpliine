@@ -2662,7 +2662,8 @@
               `;
             } else {
               actions.innerHTML = `
-                <span style="font-weight:700; color:var(--muted); text-transform:uppercase;">Status: ${req.status}</span>
+                <button class="btn-toggle btn-toggle-deactivate" style="padding:10px 20px; font-size:0.9rem; font-weight:700; background:var(--rose) !important;" onclick="deleteAffiliationRequest('${req._id}')">Delete Request 🗑️</button>
+                <span style="font-weight:700; color:var(--muted); text-transform:uppercase; margin-left: 12px; margin-right: auto;">Status: ${req.status}</span>
                 <button class="btn-action btn-reset" onclick="closeAffiliationModal()">Close</button>
               `;
             }
@@ -2699,6 +2700,31 @@
             fetchAffiliationRequests();
           } else {
             showToast(data.error || 'Failed to update status', 'error');
+          }
+        } catch (err) {
+          console.error(err);
+          showToast('Connection error', 'error');
+        }
+      }
+
+      async function deleteAffiliationRequest(id) {
+        if (!confirm('Are you absolutely sure you want to permanently delete this onboarding request? This action cannot be undone.')) return;
+        
+        try {
+          const res = await fetch(`${API_URL}/api/admin/onboard-requests/${id}`, {
+            method: 'DELETE',
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          const data = await res.json();
+          
+          if (res.ok && data.success) {
+            showToast('Onboarding request deleted successfully');
+            closeAffiliationModal();
+            fetchAffiliationRequests();
+          } else {
+            showToast(data.error || 'Failed to delete request', 'error');
           }
         } catch (err) {
           console.error(err);

@@ -787,5 +787,27 @@ router.put('/onboard-requests/:id/status', async (req, res) => {
   }
 });
 
+// DELETE /onboard-requests/:id — Delete onboarding request (Admin only)
+router.delete('/onboard-requests/:id', async (req, res) => {
+  try {
+    const AffiliationRequest = require('../models/AffiliationRequest');
+    const request = await AffiliationRequest.findById(req.params.id);
+    if (!request) {
+      return res.status(404).json({ success: false, error: 'Request not found' });
+    }
+
+    // Only allow deletion of approved or rejected requests (following user requirements)
+    if (request.status === 'pending') {
+      return res.status(400).json({ success: false, error: 'Cannot delete a pending request. Please approve or reject it first.' });
+    }
+
+    await AffiliationRequest.findByIdAndDelete(req.params.id);
+    res.json({ success: true, message: 'Onboarding request deleted successfully' });
+  } catch (err) {
+    console.error('Admin delete onboarding request error:', err.message);
+    res.status(500).json({ success: false, error: 'Internal Server Error' });
+  }
+});
+
 module.exports = router;
 
