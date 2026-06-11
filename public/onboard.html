@@ -603,10 +603,18 @@
           <!-- Accreditations & Ratings Section -->
           <div style="margin-top: 30px; border-top: 1px solid var(--line); padding-top: 25px;">
             <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--blue); margin: 0 0 16px 0; text-align: left;">Accreditations & Ratings</h3>
-            <div class="checkbox-group" style="margin-bottom: 20px;">
+            <div class="checkbox-group" style="margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 20px;">
               <label class="checkbox-item">
                 <input type="checkbox" id="aicteApproved" checked />
                 AICTE Approved
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" id="ugcRecognized" checked />
+                UGC Recognized
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" id="nbaAccredited" />
+                NBA Accredited (Institutional)
               </label>
             </div>
 
@@ -1622,7 +1630,9 @@
           autonomyStatus: document.getElementById('autonomyStatus').value,
           affiliatedUniversity: document.getElementById('affiliatedUniversity').value,
           aicteApproved: document.getElementById('aicteApproved').checked,
+          ugcRecognized: document.getElementById('ugcRecognized').checked,
           naacRating: document.getElementById('naacRating').value,
+          nbaAccredited: document.getElementById('nbaAccredited').checked,
           nirfRank: document.getElementById('nirfRank').value,
           website: document.getElementById('website').value,
           
@@ -1722,7 +1732,9 @@
           document.getElementById('autonomyStatus').value = data.autonomyStatus || '';
           document.getElementById('affiliatedUniversity').value = data.affiliatedUniversity || '';
           document.getElementById('aicteApproved').checked = data.aicteApproved !== false;
+          document.getElementById('ugcRecognized').checked = data.ugcRecognized !== false;
           document.getElementById('naacRating').value = data.naacRating || '';
+          document.getElementById('nbaAccredited').checked = !!data.nbaAccredited;
           document.getElementById('nirfRank').value = data.nirfRank || '';
           document.getElementById('website').value = data.website || '';
           
@@ -1912,7 +1924,9 @@
           autonomyStatus: document.getElementById('autonomyStatus').value,
           affiliatedUniversity: document.getElementById('affiliatedUniversity').value.trim(),
           aicteApproved: document.getElementById('aicteApproved').checked,
+          ugcRecognized: document.getElementById('ugcRecognized').checked,
           naacRating: document.getElementById('naacRating').value.trim(),
+          nbaAccredited: document.getElementById('nbaAccredited').checked,
           nirfRank: parseInt(document.getElementById('nirfRank').value) || null,
           website: document.getElementById('website').value.trim(),
           branches,

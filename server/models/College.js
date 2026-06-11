@@ -74,6 +74,23 @@ const CollegeSchema = new mongoose.Schema(
       default: false,
       index: true,
     },
+    aicteApproved: {
+      type: Boolean,
+      default: false,
+    },
+    ugcRecognized: {
+      type: Boolean,
+      default: true,
+    },
+    naacRating: {
+      type: String,
+      default: null,
+      trim: true,
+    },
+    nbaAccredited: {
+      type: Boolean,
+      default: false,
+    },
     bannerUrl: {
       type: String,
       default: null,

@@ -56,6 +56,10 @@ router.get('/public-stats', async (req, res) => {
     const leadsCount = await Lead.countDocuments();
     const totalStudentsGuided = 1000 + studentCount + leadsCount;
 
+    // Calculate unique cities covered
+    const citiesResult = await College.distinct('city');
+    const totalCities = citiesResult.length > 0 ? citiesResult.length : 15;
+
     // Pick a featured college (highest average placement NIT or IIT)
     const featuredCollege = await College.findOne({ 
       type: { $in: ['IIT', 'NIT'] }, 
@@ -68,6 +72,7 @@ router.get('/public-stats', async (req, res) => {
         totalColleges,
         averagePlacement,
         totalStudentsGuided,
+        totalCities,
         featuredCollege: featuredCollege ? {
           name: featuredCollege.name,
           city: featuredCollege.city,
@@ -132,6 +137,12 @@ router.post('/onboard', async (req, res) => {
     }
     if (requestData.naacRating === '') {
       delete requestData.naacRating;
+    }
+    if (requestData.ugcRecognized !== undefined) {
+      requestData.ugcRecognized = requestData.ugcRecognized === true || requestData.ugcRecognized === 'true';
+    }
+    if (requestData.nbaAccredited !== undefined) {
+      requestData.nbaAccredited = requestData.nbaAccredited === true || requestData.nbaAccredited === 'true';
     }
     if (requestData.nirfRank === '' || requestData.nirfRank === null || isNaN(requestData.nirfRank)) {
       delete requestData.nirfRank;

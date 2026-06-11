@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Terms & Conditions | BtechHelpline — User Agreement & Disclaimers</title>
+    <meta name="description" content="Review the Terms and Conditions of BtechHelpline. Read about platform guidelines, rankings disclaimers, user obligations, and jurisdiction terms." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://www.btechhelpline.com/terms.html" />
+
+    <!-- Preconnect Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+    <style>
+      :root {
+        --blue: #2563eb;
+        --blue-dark: #1e40af;
+        --blue-deeper: #1e3a8a;
+        --violet: #7c3aed;
+        --emerald: #10b981;
+        --ink: #0f172a;
+        --white: #ffffff;
+        --slate-100: #f1f5f9;
+        --slate-300: #cbd5e1;
+        --slate-400: #94a3b8;
+        --slate-800: #1e293b;
+        --radius-card: 24px;
+        --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body.legal-body {
+        margin: 0;
+        padding: 0;
+        background: #070a13;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        color: var(--slate-100);
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+        padding: 40px 16px 80px 16px;
+        line-height: 1.65;
+      }
+
+      /* ── Aurora Backdrop Blobs ── */
+      .aurora-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        overflow: hidden;
+        pointer-events: none;
+      }
+
+      .blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(140px);
+        opacity: 0.25;
+        mix-blend-mode: screen;
+        animation: floatBlob 25s infinite ease-in-out alternate;
+      }
+
+      .blob-1 {
+        top: -10%;
+        left: -10%;
+        width: 50vw;
+        height: 50vw;
+        background: radial-gradient(circle, rgba(37, 99, 235, 0.35) 0%, transparent 70%);
+        animation-duration: 22s;
+      }
+
+      .blob-2 {
+        bottom: -10%;
+        right: -10%;
+        width: 55vw;
+        height: 55vw;
+        background: radial-gradient(circle, rgba(124, 58, 237, 0.3) 0%, transparent 70%);
+        animation-duration: 28s;
+        animation-delay: -5s;
+      }
+
+      @keyframes floatBlob {
+        0% { transform: translate(0, 0) scale(1); }
+        50% { transform: translate(8%, 6%) scale(1.06); }
+        100% { transform: translate(-6%, -8%) scale(0.94); }
+      }
+
+      /* ── Header Branding ── */
+      .legal-header {
+        max-width: 900px;
+        margin: 0 auto 30px auto;
+        text-align: center;
+        position: relative;
+        z-index: 2;
+      }
+
+      .brand-logo {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1.4rem;
+        font-weight: 900;
+        color: var(--blue);
+        margin-bottom: 20px;
+      }
+
+      .brand-logo span span {
+        color: #f59e0b;
+      }
+
+      .brand-mark {
+        width: 36px;
+        height: 36px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, var(--blue), var(--violet));
+        border-radius: 10px;
+        color: var(--white);
+        box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
+      }
+
+      .brand-mark svg {
+        width: 20px;
+        fill: currentColor;
+      }
+
+      /* ── Glassmorphic Container ── */
+      .legal-container {
+        position: relative;
+        z-index: 2;
+        max-width: 900px;
+        margin: 0 auto;
+        background: rgba(15, 22, 42, 0.5);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: var(--radius-card);
+        padding: 50px 40px;
+        box-shadow: 
+          0 4px 30px rgba(0, 0, 0, 0.2),
+          0 24px 60px rgba(0, 0, 0, 0.4),
+          inset 0 1px 1px rgba(255, 255, 255, 0.08);
+      }
+
+      @media (max-width: 600px) {
+        .legal-container {
+          padding: 30px 20px;
+        }
+      }
+
+      .legal-container h1 {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: var(--white);
+        margin: 0 0 10px 0;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+      }
+
+      .last-updated {
+        color: var(--slate-400);
+        font-size: 0.9rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 25px;
+        margin-bottom: 30px;
+      }
+
+      .legal-content h2 {
+        font-size: 1.35rem;
+        font-weight: 700;
+        color: var(--white);
+        margin: 35px 0 15px 0;
+        border-left: 4px solid var(--blue);
+        padding-left: 12px;
+      }
+
+      .legal-content p, .legal-content li {
+        color: var(--slate-300);
+        font-size: 0.96rem;
+      }
+
+      .legal-content ul {
+        padding-left: 20px;
+        margin-bottom: 20px;
+      }
+
+      .legal-content li {
+        margin-bottom: 8px;
+      }
+
+      .legal-content strong {
+        color: var(--white);
+      }
+
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--slate-400);
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-decoration: none;
+        margin-top: 30px;
+        transition: color var(--transition);
+      }
+
+      .back-link:hover {
+        color: var(--blue);
+      }
+
+      .alert-box {
+        background: rgba(239, 68, 68, 0.08);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        padding: 16px 20px;
+        border-radius: 12px;
+        margin: 25px 0;
+      }
+
+      .alert-box p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #fca5a5;
+      }
+    </style>
+  </head>
+  <body class="legal-body">
+    <!-- Animated background -->
+    <div class="aurora-bg">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+    </div>
+
+    <header class="legal-header">
+      <a class="brand-logo" href="index.html" id="logo-home-link" aria-label="Btechhelpline.com home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M2.5 7.2 12 2.8l9.5 4.4-9.5 4.4-9.5-4.4Z" />
+            <path d="M6.4 10.1v4.5c0 1.8 2.5 3.2 5.6 3.2s5.6-1.4 5.6-3.2v-4.5L12 12.7l-5.6-2.6Z" />
+          </svg>
+        </span>
+        <span>Btechhelpline<span>.com</span></span>
+      </a>
+    </header>
+
+    <main class="legal-container">
+      <h1>Terms & Conditions</h1>
+      <div class="last-updated">Last Updated: June 11, 2026</div>
+
+      <div class="legal-content">
+        <p>
+          Welcome to BtechHelpline. By accessing our website ([www.btechhelpline.com](https://www.btechhelpline.com)) and utilizing our counselling, comparison, and college routing systems, you agree to comply with and be bound by the following Terms & Conditions. Please read them carefully.
+        </p>
+
+        <div class="alert-box">
+          <p>
+            <strong>Disclaimer:</strong> BtechHelpline.com is an independent informational directory and counselling helpline. We are <strong>not</strong> associated with, authorized by, or affiliated with the Joint Seat Allocation Authority (JoSAA), Central Seat Allocation Board (CSAB), Joint Entrance Examination (JEE), National Testing Agency (NTA), or any government department or university authority. All registrations, cutoffs, and ranks listed are for reference only.
+          </p>
+        </div>
+
+        <h2>1. Acceptance of Terms</h2>
+        <p>
+          By creating an account, registering as a student, or submitting onboarding applications, you represent that you have read, understood, and agreed to be legally bound by these terms. If you do not agree, you must immediately cease using the platform.
+        </p>
+
+        <h2>2. Platform Eligibility & Student Accounts</h2>
+        <ul>
+          <li><strong>Eligibility:</strong> Students must be at least 13 years of age or be school passouts preparing for engineering entrance examinations.</li>
+          <li><strong>Accuracy of Profiles:</strong> You agree to provide true, accurate, and up-to-date details during registration (including your actual JEE Main rank, state, branch preferences, email, and phone number). Providing fake ranks or deliberate misinformation to secure guidance is a breach of these terms.</li>
+          <li><strong>OTP Verification:</strong> Account registration and login workflows require valid email/mobile OTP verification. Users are responsible for keeping their login credentials secure.</li>
+        </ul>
+
+        <h2>3. Institutional Onboarding (For Colleges)</h2>
+        <p>
+          Representative users submitting requests through the "Onboard Your Institution" wizard represent that:
+        </p>
+        <ul>
+          <li>All uploaded documentation, branch seat matrices, fees breakdown, and placement statistics are accurate and verifiable.</li>
+          <li>They possess the authorization to bind the college/institution.</li>
+          <li>They will not provide misleading accreditation claims or exaggerations. Misrepresenting rankings or approvals (e.g. NAAC, NBA, NIRF) will lead to immediate rejection or removal of the profile.</li>
+        </ul>
+
+        <h2>4. Permitted Use & Conduct</h2>
+        <p>You agree not to engage in any of the following restricted activities:</p>
+        <ul>
+          <li>Scraping, copying, or duplicating our curated college database or cutoffs directory.</li>
+          <li>Submitting spam, duplicate leads, or fake admission queries to counsellors or partner colleges.</li>
+          <li>Attempting to bypass authentication systems or inject malicious code into base64 image uploads.</li>
+        </ul>
+
+        <h2>5. Disclaimers of Information</h2>
+        <p>
+          <strong>Information Accuracy:</strong> While we perform extensive research to maintain the database, all admission cutoffs, fee structures, and placement packages are subject to change by respective universities without notice. Students are strongly advised to cross-verify cutoff rankings with official counseling authorities (like JoSAA/CSAB) and respective college websites.
+        </p>
+        <p>
+          <strong>No Guarantees:</strong> BtechHelpline does not guarantee admission into any specific engineering college or guarantee post-admission job placements. Our matching outputs are purely advisory and based on historical cutoff and placement data.
+        </p>
+
+        <h2>6. Intellectual Property</h2>
+        <p>
+          All proprietary text, layouts, search indexing scripts, base64 image compression tools, visual designs, and brand marks belong to BtechHelpline. College logos, banners, and names listed are property of their respective owners and used strictly for informational reference.
+        </p>
+
+        <h2>7. Limitation of Liability</h2>
+        <p>
+          To the maximum extent permitted under law, BtechHelpline, its developers, and founders shall not be liable for any direct, indirect, incidental, or consequential damages resulting from your reliance on data displayed on our website, or your admission outcomes.
+        </p>
+
+        <h2>8. Dispute Resolution & Jurisdiction</h2>
+        <p>
+          These Terms & Conditions shall be governed by and construed in accordance with the laws of India. Any legal actions or disputes arising out of your use of the website must be filed exclusively in the courts located in <strong>Jaipur, Rajasthan, India</strong>.
+        </p>
+      </div>
+
+      <a href="index.html" class="back-link" id="btn-back-home">
+        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Back to Home Page
+      </a>
+    </main>
+  </body>
+</html>

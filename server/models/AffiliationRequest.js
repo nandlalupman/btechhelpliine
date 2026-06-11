@@ -41,10 +41,18 @@ const AffiliationRequestSchema = new mongoose.Schema(
       type: Boolean,
       default: false
     },
+    ugcRecognized: {
+      type: Boolean,
+      default: true
+    },
     naacRating: {
       type: String,
       trim: true,
       default: ''
+    },
+    nbaAccredited: {
+      type: Boolean,
+      default: false
     },
     nirfRank: {
       type: Number,

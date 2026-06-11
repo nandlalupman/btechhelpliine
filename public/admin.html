@@ -1064,6 +1064,26 @@
             Image URL
             <input type="url" id="crud-college-image" placeholder="e.g. https://domain.com/image.jpg" style="width: 100%; padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none;" />
           </label>
+
+          <div style="grid-column: 1/-1; display: flex; flex-wrap: wrap; gap: 20px; margin: 10px 0; background: rgba(255,255,255,0.02); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); align-items: center;">
+            <div style="font-weight: 700; width: 100%; font-size: 0.85rem; color: #60a5fa; margin-bottom: 5px;">Accreditations & Regulatory Approvals</div>
+            <label style="display: flex; flex-direction: row; gap: 8px; align-items: center; margin-bottom: 0; cursor: pointer; color: white;">
+              <input type="checkbox" id="crud-college-aicte" style="width: 16px; height: 16px; margin: 0; cursor: pointer;" />
+              AICTE Approved
+            </label>
+            <label style="display: flex; flex-direction: row; gap: 8px; align-items: center; margin-bottom: 0; cursor: pointer; color: white;">
+              <input type="checkbox" id="crud-college-ugc" checked style="width: 16px; height: 16px; margin: 0; cursor: pointer;" />
+              UGC Recognized
+            </label>
+            <label style="display: flex; flex-direction: row; gap: 8px; align-items: center; margin-bottom: 0; cursor: pointer; color: white;">
+              <input type="checkbox" id="crud-college-nba" style="width: 16px; height: 16px; margin: 0; cursor: pointer;" />
+              NBA Accredited
+            </label>
+            <label style="display: flex; flex-direction: row; gap: 8px; align-items: center; margin-bottom: 0; cursor: pointer; flex-grow: 1; color: white;">
+              NAAC Rating:
+              <input type="text" id="crud-college-naac" placeholder="e.g. A++" style="width: 80px; padding: 6px 10px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 6px; color: white; outline: none; margin-left: 5px;" />
+            </label>
+          </div>
           
           <label style="grid-column: 1/-1; margin-bottom: 0;">
             Branches Offered (comma separated)
@@ -2176,6 +2196,12 @@
         crudFacilitiesData = [];
         renderCrudFacilities();
 
+        // Reset accreditations
+        document.getElementById('crud-college-aicte').checked = false;
+        document.getElementById('crud-college-ugc').checked = true;
+        document.getElementById('crud-college-nba').checked = false;
+        document.getElementById('crud-college-naac').value = '';
+
         collegeFormModal.classList.add('open');
       }
 
@@ -2204,6 +2230,12 @@
             document.getElementById('crud-college-image').value = col.imageUrl || '';
             document.getElementById('crud-college-branches').value = col.branches ? col.branches.join(', ') : '';
             document.getElementById('crud-college-description').value = col.description;
+
+            // Load accreditations
+            document.getElementById('crud-college-aicte').checked = !!col.aicteApproved;
+            document.getElementById('crud-college-ugc').checked = col.ugcRecognized !== false;
+            document.getElementById('crud-college-nba').checked = !!col.nbaAccredited;
+            document.getElementById('crud-college-naac').value = col.naacRating || '';
 
             // Load bannerUrl
             const bannerInput = document.getElementById('crud-bannerUrl');
@@ -2268,6 +2300,10 @@
         const website = document.getElementById('crud-college-website').value.trim();
         const imageUrl = document.getElementById('crud-college-image').value.trim() || null;
         const description = document.getElementById('crud-college-description').value.trim();
+        const aicteApproved = document.getElementById('crud-college-aicte').checked;
+        const ugcRecognized = document.getElementById('crud-college-ugc').checked;
+        const nbaAccredited = document.getElementById('crud-college-nba').checked;
+        const naacRating = document.getElementById('crud-college-naac').value.trim() || null;
         
         const branchesVal = document.getElementById('crud-college-branches').value;
         const branches = branchesVal ? branchesVal.split(',').map(b => b.trim()).filter(Boolean) : [];
@@ -2280,7 +2316,7 @@
         })).filter(f => f.imageUrl);
 
         const payload = {
-          name, type, nirfRank, city, state, admissionMode, cutoffRankCSE, feesPerYear, avgPlacement, highestPlacement, website, imageUrl, description, branches, bannerUrl, facilities
+          name, type, nirfRank, city, state, admissionMode, cutoffRankCSE, feesPerYear, avgPlacement, highestPlacement, website, imageUrl, description, branches, bannerUrl, facilities, aicteApproved, ugcRecognized, nbaAccredited, naacRating
         };
 
         const url = id ? `${API_URL}/api/admin/colleges/${id}` : `${API_URL}/api/admin/colleges`;

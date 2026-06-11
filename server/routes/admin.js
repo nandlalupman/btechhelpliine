@@ -543,7 +543,11 @@ router.post(
       website,
       imageUrl,
       bannerUrl,
-      facilities
+      facilities,
+      aicteApproved,
+      ugcRecognized,
+      naacRating,
+      nbaAccredited
     } = req.body;
 
     try {
@@ -580,7 +584,11 @@ router.post(
         website,
         imageUrl,
         bannerUrl: bannerUrl || null,
-        facilities: facilities || []
+        facilities: facilities || [],
+        aicteApproved: aicteApproved === true,
+        ugcRecognized: ugcRecognized !== false,
+        naacRating: naacRating || null,
+        nbaAccredited: nbaAccredited === true
       });
 
       await college.save();
@@ -754,6 +762,10 @@ router.put('/onboard-requests/:id/status', async (req, res) => {
         website: request.website || undefined,
         imageUrl: null,
         isOnboarded: true,
+        aicteApproved: request.aicteApproved !== false,
+        ugcRecognized: request.ugcRecognized !== false,
+        naacRating: request.naacRating || null,
+        nbaAccredited: !!(request.nbaAccredited || (request.branches && request.branches.some(b => b.nbaAccredited))),
         bannerUrl: request.bannerUrl || null,
         facilities: request.facilities || []
       });

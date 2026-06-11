@@ -105,17 +105,40 @@ function animateCounter(el) {
   requestAnimationFrame(update);
 }
 
-const counterElements = document.querySelectorAll('[data-target]');
-const counterObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      animateCounter(entry.target);
-      counterObserver.unobserve(entry.target);
+/* ── Dynamic Stats Loading ──────────────── */
+async function loadDynamicStats() {
+  try {
+    const res = await fetch(`${BASE_API}/api/colleges/public-stats`);
+    const data = await res.json();
+    if (res.ok && data.success) {
+      const stats = data.data;
+      const studentsEl = document.getElementById('stat-students');
+      const collegesEl = document.getElementById('stat-colleges');
+      const citiesEl = document.getElementById('stat-cities');
+      
+      if (studentsEl) studentsEl.dataset.target = stats.totalStudentsGuided;
+      if (collegesEl) collegesEl.dataset.target = stats.totalColleges;
+      if (citiesEl) citiesEl.dataset.target = stats.totalCities;
     }
-  });
-}, { threshold: 0.3 });
+  } catch (err) {
+    console.error('Failed to load dynamic stats:', err);
+  } finally {
+    const counterElements = document.querySelectorAll('[data-target]');
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCounter(entry.target);
+          counterObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
 
-counterElements.forEach(el => counterObserver.observe(el));
+    counterElements.forEach(el => counterObserver.observe(el));
+  }
+}
+
+// Initialize dynamic stats load
+loadDynamicStats();
 
 /* ── Form Validation ────────────────────── */
 function setError(field, message) {
