@@ -187,10 +187,16 @@ button, input, select { font: inherit; }
   }
 }
 
-.dropdown:hover .dropdown-menu {
+.dropdown:hover .dropdown-menu,
+.dropdown.open .dropdown-menu {
   display: flex;
   flex-direction: column;
   gap: 2px;
+}
+
+.dropdown:hover .dropdown-icon,
+.dropdown.open .dropdown-icon {
+  transform: rotate(180deg);
 }
 
 .dropdown-menu a {

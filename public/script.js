@@ -477,16 +477,33 @@ document.addEventListener('DOMContentLoaded', () => {
   updateAuthUI();
   prefillLeadForm();
 
-  // Mobile dropdown toggles
+  // Dropdown toggles (click/tap to open/close on all devices)
   document.querySelectorAll('.dropdown-trigger').forEach(trigger => {
     trigger.addEventListener('click', (e) => {
-      if (window.innerWidth <= 768) {
-        e.preventDefault();
-        const dropdown = trigger.closest('.dropdown');
-        dropdown.classList.toggle('open');
-        const isExpanded = dropdown.classList.contains('open');
-        trigger.setAttribute('aria-expanded', String(isExpanded));
-      }
+      e.preventDefault();
+      e.stopPropagation();
+      const dropdown = trigger.closest('.dropdown');
+      const isOpen = dropdown.classList.contains('open');
+
+      // Close all other dropdowns
+      document.querySelectorAll('.dropdown').forEach(d => {
+        if (d !== dropdown) {
+          d.classList.remove('open');
+          d.querySelector('.dropdown-trigger')?.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      // Toggle current dropdown
+      dropdown.classList.toggle('open', !isOpen);
+      trigger.setAttribute('aria-expanded', String(!isOpen));
+    });
+  });
+
+  // Close dropdowns when clicking outside
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.dropdown').forEach(d => {
+      d.classList.remove('open');
+      d.querySelector('.dropdown-trigger')?.setAttribute('aria-expanded', 'false');
     });
   });
 });
