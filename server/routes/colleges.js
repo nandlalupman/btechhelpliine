@@ -3,10 +3,10 @@ const College = require('../models/College');
 
 const router = express.Router();
 
-// GET / — Get all colleges with optional search, type, and state filters
+// GET / — Get all colleges with optional search, type, state, and affiliation filters
 router.get('/', async (req, res) => {
   try {
-    const { search, type, state } = req.query;
+    const { search, type, state, affiliation } = req.query;
     const filter = {};
 
     if (search) {
@@ -19,6 +19,15 @@ router.get('/', async (req, res) => {
 
     if (state) {
       filter.state = state.trim();
+    }
+
+    if (affiliation) {
+      const aff = affiliation.trim().toLowerCase();
+      if (aff === 'partner') {
+        filter.isOnboarded = true;
+      } else if (aff === 'listed') {
+        filter.isOnboarded = { $ne: true };
+      }
     }
 
     // Sort by NIRF Rank (ascending, nulls at bottom) and then by name

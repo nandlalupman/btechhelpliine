@@ -1207,3 +1207,253 @@ input::placeholder { color: #94a3b8; }
 .nirf-carousel .nirf-grid { display: flex; grid-template-columns: none; }
 .nirf-carousel .scroll-btn { display: none; }
 @media (min-width: 480px) { .nirf-carousel .scroll-btn { display: grid; } }
+
+/* ── Immersive Fullscreen College Details Modal ── */
+.college-details-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #f8fafc;
+  display: none;
+  z-index: 2500;
+  overflow-y: auto;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.college-details-modal.open {
+  display: block;
+  opacity: 1;
+  animation: slideInFull 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideInFull {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.college-details-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 24px 80px 24px;
+}
+
+.college-details-back-bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(248, 250, 252, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 20px rgba(15,23,42,0.02);
+}
+
+.btn-back-explorer {
+  background: var(--white);
+  border: 1px solid var(--line);
+  color: var(--blue);
+  font-weight: 700;
+  font-size: 0.88rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 10px;
+  transition: all 0.2s;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-back-explorer:hover {
+  background: var(--sky);
+  border-color: rgba(37,99,235,0.2);
+  transform: translateX(-2px);
+}
+
+.college-details-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  margin-top: 24px;
+}
+
+@media (min-width: 992px) {
+  .college-details-layout {
+    grid-template-columns: 7fr 5fr;
+  }
+}
+
+.college-details-hero {
+  width: 100%;
+  height: 240px;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  box-shadow: var(--shadow);
+}
+
+@media (min-width: 768px) {
+  .college-details-hero {
+    height: 340px;
+  }
+}
+
+.college-details-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(15,23,42,0.15) 0%, rgba(15,23,42,0.7) 100%);
+  z-index: 1;
+}
+
+.college-details-hero-text {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  right: 24px;
+  z-index: 2;
+  text-align: left;
+}
+
+.college-details-hero-title {
+  font-size: clamp(1.4rem, 4.5vw, 2.2rem);
+  font-weight: 900;
+  margin: 8px 0 0 0;
+  color: var(--white);
+  text-shadow: 0 2px 4px rgba(15,23,42,0.4);
+  line-height: 1.25;
+}
+
+.details-sidebar-card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.details-sticky-wrapper {
+  position: relative;
+}
+
+@media (min-width: 992px) {
+  .details-sticky-wrapper {
+    position: sticky;
+    top: 90px;
+  }
+}
+
+.details-highlight-widget {
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+}
+
+.details-highlight-label {
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.details-highlight-value {
+  font-size: 1.15rem;
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.details-section-title {
+  color: var(--ink);
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin: 0 0 16px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--line);
+  position: relative;
+  text-align: left;
+}
+
+.details-section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 48px;
+  height: 2px;
+  background: var(--blue);
+}
+
+.branch-pill {
+  background: var(--soft);
+  border: 1px solid var(--line);
+  color: #334155;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  display: inline-block;
+  margin: 0 6px 8px 0;
+}
+
+.branch-pill:hover {
+  background: var(--sky);
+  border-color: rgba(37,99,235,0.25);
+  color: var(--blue);
+}
+
+/* Onboarded vs Listed badges */
+.affiliation-badge {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+}
+
+.affiliation-badge.partner {
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  color: var(--green-dark);
+}
+
+.affiliation-badge.listed {
+  background: rgba(100, 116, 139, 0.08);
+  border: 1px solid rgba(100, 116, 139, 0.2);
+  color: var(--muted);
+}
+
+.explorer-card-affiliation-tag {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
