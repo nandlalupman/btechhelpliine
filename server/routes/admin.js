@@ -12,6 +12,17 @@ const router = express.Router();
 router.use(verifyToken);
 router.use(requireRole('admin'));
 
+// Helper to validate base64 image strings
+function isValidBase64Image(str) {
+  if (!str) return true;
+  const regex = /^data:image\/(jpeg|png|webp|gif);base64,/;
+  if (!regex.test(str)) return false;
+  const base64Part = str.split(',')[1];
+  if (!base64Part) return false;
+  const base64Regex = /^[A-Za-z0-9+/]+={0,2}$/;
+  return base64Regex.test(base64Part);
+}
+
 // GET /leads — Fetch all leads with filters & search
 router.get('/leads', async (req, res) => {
   const { status, priority, assignedTo, search, limit = 50, skip = 0 } = req.query;
@@ -530,7 +541,9 @@ router.post(
       description,
       branches,
       website,
-      imageUrl
+      imageUrl,
+      bannerUrl,
+      facilities
     } = req.body;
 
     try {
@@ -538,6 +551,17 @@ router.post(
       const existing = await College.findOne({ name });
       if (existing) {
         return res.status(400).json({ success: false, error: 'A college with this name is already registered' });
+      }
+
+      if (bannerUrl && !isValidBase64Image(bannerUrl)) {
+        return res.status(400).json({ success: false, error: 'Invalid banner image format' });
+      }
+      if (facilities && Array.isArray(facilities)) {
+        for (const fac of facilities) {
+          if (fac.imageUrl && !isValidBase64Image(fac.imageUrl)) {
+            return res.status(400).json({ success: false, error: 'Invalid facility image format' });
+          }
+        }
       }
 
       const college = new College({
@@ -554,7 +578,9 @@ router.post(
         description,
         branches: branches || [],
         website,
-        imageUrl
+        imageUrl,
+        bannerUrl: bannerUrl || null,
+        facilities: facilities || []
       });
 
       await college.save();
@@ -581,6 +607,17 @@ router.put(
         const existing = await College.findOne({ name: req.body.name });
         if (existing) {
           return res.status(400).json({ success: false, error: 'A college with this name is already registered' });
+        }
+      }
+
+      if (req.body.bannerUrl && !isValidBase64Image(req.body.bannerUrl)) {
+        return res.status(400).json({ success: false, error: 'Invalid banner image format' });
+      }
+      if (req.body.facilities && Array.isArray(req.body.facilities)) {
+        for (const fac of req.body.facilities) {
+          if (fac.imageUrl && !isValidBase64Image(fac.imageUrl)) {
+            return res.status(400).json({ success: false, error: 'Invalid facility image format' });
+          }
         }
       }
 
@@ -615,8 +652,8 @@ router.delete(
   }
 );
 
-// GET /affiliation-requests — Fetch all affiliation requests (Admin only)
-router.get('/affiliation-requests', async (req, res) => {
+// GET /onboard-requests — Fetch all onboarding requests (Admin only)
+router.get('/onboard-requests', async (req, res) => {
   try {
     const AffiliationRequest = require('../models/AffiliationRequest');
     const { status } = req.query;
@@ -627,13 +664,13 @@ router.get('/affiliation-requests', async (req, res) => {
     const requests = await AffiliationRequest.find(filter).sort({ createdAt: -1 });
     res.json({ success: true, data: requests });
   } catch (err) {
-    console.error('Admin fetch affiliation requests error:', err.message);
+    console.error('Admin fetch onboarding requests error:', err.message);
     res.status(500).json({ success: false, error: 'Internal Server Error' });
   }
 });
 
-// GET /affiliation-requests/:id — Fetch single request details (Admin only)
-router.get('/affiliation-requests/:id', async (req, res) => {
+// GET /onboard-requests/:id — Fetch single request details (Admin only)
+router.get('/onboard-requests/:id', async (req, res) => {
   try {
     const AffiliationRequest = require('../models/AffiliationRequest');
     const request = await AffiliationRequest.findById(req.params.id);
@@ -642,13 +679,13 @@ router.get('/affiliation-requests/:id', async (req, res) => {
     }
     res.json({ success: true, data: request });
   } catch (err) {
-    console.error('Admin fetch affiliation request detail error:', err.message);
+    console.error('Admin fetch onboarding request detail error:', err.message);
     res.status(500).json({ success: false, error: 'Internal Server Error' });
   }
 });
 
-// PUT /affiliation-requests/:id/status — Update status & auto-import college if approved (Admin only)
-router.put('/affiliation-requests/:id/status', async (req, res) => {
+// PUT /onboard-requests/:id/status — Update status & auto-import college if approved (Admin only)
+router.put('/onboard-requests/:id/status', async (req, res) => {
   try {
     const AffiliationRequest = require('../models/AffiliationRequest');
     const { status } = req.body;
@@ -695,7 +732,7 @@ router.put('/affiliation-requests/:id/status', async (req, res) => {
       }
 
       // Synthesize a descriptive narrative
-      const description = `Established in ${request.establishmentYear}, ${request.name} is a premier ${request.autonomyStatus.toLowerCase()} college situated in ${request.city}, ${request.state}. Affiliated with ${request.affiliatedUniversity || 'autonomous university boards'} and approved by AICTE, it offers excellent B.Tech degrees with a strong faculty-to-student ratio of 1:${request.facultyToStudentRatio || 15} and ${request.phdFacultyPercent || 30}% PhD faculty. The campus lifestyle maintains a ${request.lifestyle.curfewPolicy ? request.lifestyle.curfewPolicy.toLowerCase() : 'moderate curfew'} curfew structure and features ${request.lifestyle.totalCodingClubs || 3} active tech and coding clubs.`;
+      const description = `Established in ${request.establishmentYear}, ${request.name} is a premier ${request.autonomyStatus.toLowerCase()} college situated in ${request.city}, ${request.state}. Onboarded with BtechHelpline and approved by AICTE, it offers excellent B.Tech degrees with a strong faculty-to-student ratio of 1:${request.facultyToStudentRatio || 15} and ${request.phdFacultyPercent || 30}% PhD faculty. The campus lifestyle maintains a ${request.lifestyle.curfewPolicy ? request.lifestyle.curfewPolicy.toLowerCase() : 'moderate curfew'} curfew structure and features ${request.lifestyle.totalCodingClubs || 3} active tech and coding clubs.`;
 
       // Branches list
       const branchesList = request.branches.map(b => b.branchName);
@@ -715,7 +752,10 @@ router.put('/affiliation-requests/:id/status', async (req, res) => {
         description: description,
         branches: branchesList.length > 0 ? branchesList : undefined,
         website: request.website || undefined,
-        imageUrl: null
+        imageUrl: null,
+        isOnboarded: true,
+        bannerUrl: request.bannerUrl || null,
+        facilities: request.facilities || []
       });
 
       await college.save();
@@ -730,7 +770,7 @@ router.put('/affiliation-requests/:id/status', async (req, res) => {
       data: request 
     });
   } catch (err) {
-    console.error('Admin update affiliation status error:', err.message);
+    console.error('Admin update onboarding status error:', err.message);
     res.status(500).json({ success: false, error: err.message || 'Internal Server Error' });
   }
 });

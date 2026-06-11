@@ -7,7 +7,7 @@
 
     <!-- Primary SEO -->
     <title>BtechHelpline | JEE Counselling, NIRF Rankings & Engineering College Guide 2025</title>
-    <meta name="description" content="Get expert B.Tech counselling for JEE Mains & Advanced 2025. Compare 500+ NIRF-ranked colleges, branch cutoffs, placement stats, and get free admission guidance from experts." />
+    <meta name="description" content="Get expert B.Tech counselling for JEE Mains & Advanced 2025. Compare 200+ top engineering colleges, branch cutoffs, placement stats, and get free admission guidance from experts." />
     <meta name="keywords" content="JEE counselling 2025, engineering college admission, NIRF ranking 2025, JEE Mains cutoff, B.Tech admission guide, best engineering colleges India, JEE rank college predictor, NIT IIIT admission, engineering branch comparison" />
     <meta name="author" content="BtechHelpline" />
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
@@ -31,7 +31,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@btechhelpline" />
     <meta name="twitter:title" content="BtechHelpline | Free JEE Counselling 2025" />
-    <meta name="twitter:description" content="Compare 500+ NIRF-ranked engineering colleges, JEE cutoffs, and placement data. Free expert counselling for B.Tech admission 2025." />
+    <meta name="twitter:description" content="Compare 200+ top engineering colleges, JEE cutoffs, and placement data. Free expert counselling for B.Tech admission 2025." />
     <meta name="twitter:image" content="https://www.btechhelpline.com/assets/hero-student.webp" />
 
     <!-- Geo targeting (India) -->
@@ -290,6 +290,54 @@
       .explorer-modal-close:hover { background: #fee2e2; border-color: #fecaca; color: #dc2626; }
       .explorer-modal-card h2 { font-size: 1.4rem; font-weight: 800; margin-bottom: 6px; color: #0f172a; }
 
+      /* Partner styles */
+      .partner-card {
+        border: 2px solid #10b981 !important;
+        box-shadow: 0 8px 24px rgba(16, 185, 129, 0.08) !important;
+        position: relative;
+      }
+      .partner-card::after {
+        content: 'Onboarded Partner';
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-size: 0.65rem;
+        font-weight: 700;
+        box-shadow: 0 2px 8px rgba(16,185,129,0.3);
+        border: 1px solid rgba(255,255,255,0.2);
+        z-index: 10;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+      }
+      .partner-details-banner {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05));
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .partner-details-banner svg {
+        color: #10b981;
+        flex-shrink: 0;
+      }
+      .partner-details-banner div {
+        color: #065f46;
+        font-size: 0.82rem;
+        line-height: 1.5;
+        text-align: left;
+      }
+      .partner-details-banner strong {
+        font-weight: 700;
+        color: #047857;
+      }
+
       @media (max-width: 640px) {
         .explorer-search-bar input { font-size: 0.92rem; padding: 12px 14px; }
         .explorer-filters { gap: 8px; }
@@ -344,7 +392,7 @@
               </svg>
             </button>
             <div class="dropdown-menu">
-              <a href="affiliation.html" style="color: var(--blue); font-weight: 700;">Affiliate Your College</a>
+              <a href="onboard.html" style="color: var(--blue); font-weight: 700;">Onboard Your Institution</a>
             </div>
           </div>
 
@@ -363,14 +411,14 @@
           <div class="hero-copy fade-up">
             <div class="mini-badges" aria-label="Counselling highlights">
               <span>100% Free Counselling</span>
-              <span>Trusted by 10,000+ Students</span>
+              <span>Trusted by 1,000+ Students</span>
               <span>Pan India Coverage</span>
               <span>Expert Guidance</span>
             </div>
             <h1>Confused About B.Tech Admission?</h1>
             <p class="highlight-line">Get Free Expert Counselling</p>
             <p class="hero-text">
-              Compare India's top engineering colleges by NIRF rankings, JEE cutoffs, placement packages, fees &amp; branches. Our counsellors have guided 10,000+ students to the right college.
+              Compare India's top engineering colleges by NIRF rankings, JEE cutoffs, placement packages, fees &amp; branches. Our counsellors have guided 1,000+ students to the right college.
             </p>
             <div class="hero-actions">
               <a class="btn btn-primary" href="#counselling">Get Free Counselling</a>
@@ -575,7 +623,7 @@
                 <small>Our experts will call you back shortly.</small>
               </a>
             </div>
-            <p class="privacy-note">Your details are 100% safe with us. We never share your information.</p>
+            <p class="privacy-note">Your information may be shared with our trusted partners and service providers where necessary to provide services and improve your experience. Please refer to our Privacy Policy for complete details.</p>
             <p class="form-success" role="status" aria-live="polite"></p>
           </form>
         </div>
@@ -742,11 +790,11 @@
         <div class="container">
           <div class="section-title reveal">
             <span class="section-badge blue">💡 Why Us</span>
-            <h2 id="why-heading">Why 10,000+ Students Choose Btechhelpline.com</h2>
+            <h2 id="why-heading">Why 1,000+ Students Choose Btechhelpline.com</h2>
           </div>
           <div class="feature-grid choose-grid reveal">
             <article class="feature-card"><span class="icon-chip blue">01</span><h3>100% Free Counselling</h3><p>Talk to admission experts at no cost. No hidden charges, no strings attached.</p></article>
-            <article class="feature-card"><span class="icon-chip green">02</span><h3>Compare 500+ Colleges</h3><p>Real data on fees, placements, reviews, cutoffs &amp; admission options side-by-side.</p></article>
+            <article class="feature-card"><span class="icon-chip green">02</span><h3>Compare 200+ Colleges</h3><p>Real data on fees, placements, reviews, cutoffs &amp; admission options side-by-side.</p></article>
             <article class="feature-card"><span class="icon-chip violet">03</span><h3>Branch Guidance</h3><p>Confused between CSE, AI, ECE or Mechanical? We help you choose based on your goals.</p></article>
             <article class="feature-card"><span class="icon-chip amber">04</span><h3>Fees &amp; Scholarship Info</h3><p>Get detailed fee breakdowns, scholarship opportunities &amp; education loan guidance.</p></article>
             <article class="feature-card"><span class="icon-chip cyan">05</span><h3>End-to-End Support</h3><p>From college shortlisting to document verification to final admission — we're with you.</p></article>
@@ -894,7 +942,7 @@
         <div class="container final-grid">
           <div>
             <h2 id="final-heading">Need Help Choosing the Right B.Tech College?</h2>
-            <p>Talk to our admission experts for free counselling. We've helped 10,000+ students find their perfect college match.</p>
+            <p>Talk to our admission experts for free counselling. We've helped 1,000+ students find their perfect college match.</p>
           </div>
           <div class="final-actions">
             <a class="btn btn-light" href="tel:+917300012345">Call Now: 080-4719-8888</a>
@@ -913,11 +961,11 @@
             </span>
             <span>Btechhelpline<span>.com</span></span>
           </a>
-          <p>Your trusted admission partner for B.Tech colleges across India. Free expert counselling for 10,000+ students since 2020.</p>
+          <p>Your trusted admission partner for B.Tech colleges across India. Free expert counselling for 1,000+ students since 2020.</p>
         </div>
         <div>
           <h3>Quick Links</h3>
-          <a href="#home">Home</a><a href="#colleges">Top Colleges</a><a href="#branches">Courses</a><a href="#cutoffs">JEE Cutoffs</a><a href="#guide">Admission Guide</a><a href="#counselling">Counselling</a><a href="affiliation.html">College Affiliation</a>
+          <a href="#home">Home</a><a href="#colleges">Top Colleges</a><a href="#branches">Courses</a><a href="#cutoffs">JEE Cutoffs</a><a href="#guide">Admission Guide</a><a href="#counselling">Counselling</a><a href="onboard.html">Onboard Your Institution</a>
         </div>
         <div>
           <h3>Popular Searches</h3>
@@ -932,9 +980,14 @@
           <a href="tel:+917300012345">+91 73000 12345</a><a href="mailto:info@btechhelpline.com">info@btechhelpline.com</a><p>Jaipur, Rajasthan, India</p>
         </div>
       </div>
-      <div class="container footer-bottom">
-        <p>&copy; 2025 Btechhelpline.com | All Rights Reserved.</p>
-        <div><a href="#">Privacy Policy</a><a href="#">Terms &amp; Conditions</a></div>
+      <div class="container footer-bottom" style="flex-direction: column; gap: 15px; align-items: center; text-align: center;">
+        <p style="font-size: 0.75rem; opacity: 0.7; line-height: 1.6; max-width: 900px; margin: 0 auto;">
+          <strong>Disclaimer:</strong> BtechHelpline.com is an independent informational portal and counselling helper service. We are not associated with, authorized by, or affiliated with the Joint Seat Allocation Authority (JoSAA), Central Seat Allocation Board (CSAB), Joint Entrance Examination (JEE), National Testing Agency (NTA), or any state/national government department or university authority. All information and logos listed are property of their respective owners and used purely for informational reference.
+        </p>
+        <div style="display: flex; justify-content: space-between; width: 100%; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; margin-top: 5px; flex-wrap: wrap; gap: 10px;">
+          <p style="margin: 0;">&copy; 2025 Btechhelpline.com | All Rights Reserved.</p>
+          <div style="display: flex; gap: 15px;"><a href="#" style="color: rgba(255,255,255,0.6); text-decoration: none;">Privacy Policy</a><a href="#" style="color: rgba(255,255,255,0.6); text-decoration: none;">Terms &amp; Conditions</a></div>
+        </div>
       </div>
     </footer>
 
@@ -1144,7 +1197,7 @@
 
               colleges.forEach(col => {
                 const card = document.createElement('div');
-                card.className = 'explorer-card';
+                card.className = col.isOnboarded ? 'explorer-card partner-card' : 'explorer-card';
                 card.addEventListener('click', () => openExplorerDetails(col._id));
 
                 const rankText = col.nirfRank ? `NIRF Rank: #${col.nirfRank}` : 'NIRF Rank: N/A';
@@ -1215,11 +1268,44 @@
               const feesText = col.feesPerYear ? `₹${(col.feesPerYear / 100000).toFixed(2)} L/yr (approx)` : 'N/A';
               const initials = col.name ? col.name.split(' ').map(w => w[0]).join('').substring(0, 3).toUpperCase() : '';
               
+              const partnerBannerHtml = col.isOnboarded ? `
+                <div class="partner-details-banner" style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: var(--radius); padding: 12px 16px; display: flex; gap: 12px; align-items: center; color: var(--green-dark); margin-bottom: 20px; font-size: 0.88rem;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                  </svg>
+                  <div>
+                    This college is an <strong>Onboarded Partner</strong>. BtechHelpline provides direct query routing, application guidance, and profile integration helper services.
+                  </div>
+                </div>
+              ` : '';
+
+              const bannerImgUrl = col.bannerUrl || getCollegeImageUrl(col);
+
+              const facilitiesHtml = (col.facilities && col.facilities.length > 0) ? `
+                <div style="margin-bottom: 24px;">
+                  <h4 style="color: var(--ink); margin:0 0 10px 0; font-size:1rem; font-weight: 800;">Campus Infrastructure & Facilities</h4>
+                  <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap:10px;">
+                    ${col.facilities.map(f => `
+                      <div style="border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--white); display:flex; flex-direction:column; box-shadow: 0 1px 3px rgba(0,0,0,0.05); cursor: pointer;" onclick="openLightbox('${f.imageUrl}', '${escapeHTML(f.caption) || f.category}')">
+                        <img src="${f.imageUrl}" style="width:100%; height:80px; object-fit:cover;" />
+                        <div style="padding:6px; font-size:0.75rem; text-align:left;">
+                          <span style="font-weight:700; color:var(--blue); font-size:0.65rem; text-transform:uppercase; display:block;">${f.category}</span>
+                          <span style="color:var(--ink); font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block;">${f.caption || ''}</span>
+                        </div>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              ` : '';
+
               explorerModalContent.innerHTML = `
                 <div style="width: 100%; height: 220px; border-radius: 12px; overflow: hidden; margin-bottom: 20px; background: ${getCollegeGradient(col.type)}; position: relative; display: flex; align-items: center; justify-content: center; color: white;">
                   <span style="font-size: 3rem; font-weight: 900; opacity: 0.25; letter-spacing: 0.05em; position: absolute; pointer-events: none;">${initials}</span>
-                  <img src="${getCollegeImageUrl(col)}" alt="${escapeHTML(col.name)}" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;" onerror="this.style.display='none';" />
+                  <img src="${bannerImgUrl}" alt="${escapeHTML(col.name)}" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;" onerror="this.style.display='none';" />
                 </div>
+                
+                ${partnerBannerHtml}
                 
                 <div style="margin-bottom: 20px;">
                   <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 8px; flex-wrap: wrap;">
@@ -1257,6 +1343,8 @@
                   <h4 style="color: var(--ink); margin:0 0 8px 0; font-size:1rem; font-weight: 800;">About Institution</h4>
                   <p style="color: #475569; font-size:0.88rem; line-height:1.6; margin:0;">${escapeHTML(col.description)}</p>
                 </div>
+
+                ${facilitiesHtml}
                 
                 <div style="margin-bottom: 24px;">
                   <h4 style="color: var(--ink); margin:0 0 10px 0; font-size:1rem; font-weight: 800;">Offered B.Tech Branches</h4>
@@ -1281,6 +1369,21 @@
             explorerModalContent.innerHTML = '<div style="text-align:center; padding:40px; color:#f87171;">Server connection error</div>';
           }
         }
+
+        window.openLightbox = function(src, title) {
+          const lightbox = document.createElement('div');
+          lightbox.style = 'position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(15,22,42,0.95); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); z-index:9999; display:grid; place-items:center; cursor:zoom-out;';
+          lightbox.innerHTML = `
+            <div style="text-align:center; max-width:90%; max-height:90%; animation: fadeIn 0.3s ease;">
+              <img src="${src}" style="max-width:100%; max-height:80vh; border-radius:12px; border:1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);" />
+              <div style="color:white; font-weight:700; margin-top:16px; font-size:1.1rem; font-family:sans-serif; text-shadow:0 2px 4px rgba(0,0,0,0.5);">${title}</div>
+            </div>
+          `;
+          lightbox.onclick = function() {
+            lightbox.remove();
+          };
+          document.body.appendChild(lightbox);
+        };
 
         const closeExplorerModal = () => { explorerModal.classList.remove('open'); };
         closeExplorerModalBtn.addEventListener('click', closeExplorerModal);
@@ -1311,7 +1414,37 @@
         initExplorerStates().finally(() => {
           fetchExplorerColleges();
         });
+
+        // Cookie consent banner logic
+        const consent = localStorage.getItem('cookie-consent');
+        const banner = document.getElementById('cookie-consent');
+        if (!consent) {
+          banner.style.display = 'flex';
+        }
+        document.getElementById('accept-cookies').addEventListener('click', () => {
+          localStorage.setItem('cookie-consent', 'accepted');
+          banner.style.display = 'none';
+        });
+        document.getElementById('decline-cookies').addEventListener('click', () => {
+          localStorage.setItem('cookie-consent', 'declined');
+          banner.style.display = 'none';
+        });
       });
     </script>
+
+    <!-- Cookie Consent Banner -->
+    <div id="cookie-consent" style="display: none; position: fixed; bottom: 24px; left: 24px; right: 24px; max-width: 500px; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.35); z-index: 9999; flex-direction: column; gap: 14px; color: #f8fafc; font-family: inherit; margin: 0 auto; animation: slideUp 0.4s ease;">
+      <div style="display: flex; gap: 12px; align-items: flex-start;">
+        <span style="font-size: 1.5rem; line-height: 1;">🍪</span>
+        <div>
+          <h4 style="margin: 0 0 6px 0; font-size: 0.95rem; font-weight: 700; color: #ffffff;">Cookie Consent & Privacy</h4>
+          <p style="margin: 0; font-size: 0.8rem; color: #cbd5e1; line-height: 1.4;">We use cookies to improve your browsing experience, analyze traffic, and show personalized recommendations. By continuing, you agree to our privacy policy and data sharing terms.</p>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button id="decline-cookies" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); color: #e2e8f0; padding: 8px 16px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">Decline</button>
+        <button id="accept-cookies" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; color: white; padding: 8px 16px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(37,99,235,0.25);" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='none'">Accept All</button>
+      </div>
+    </div>
   </body>
 </html>

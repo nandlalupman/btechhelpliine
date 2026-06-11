@@ -284,7 +284,22 @@ const AffiliationRequestSchema = new mongoose.Schema(
       required: true,
       enum: ['pending', 'approved', 'rejected'],
       default: 'pending'
-    }
+    },
+    bannerUrl: {
+      type: String,
+      default: null
+    },
+    facilities: [
+      {
+        category: {
+          type: String,
+          enum: ['Classroom', 'Laboratory', 'Library', 'Hostel', 'Sports', 'Cafeteria', 'Other'],
+          required: true
+        },
+        imageUrl: { type: String, required: true },
+        caption: { type: String, default: '' }
+      }
+    ]
   },
   {
     timestamps: true

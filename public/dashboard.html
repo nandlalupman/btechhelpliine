@@ -429,6 +429,54 @@
         box-shadow: var(--shadow);
       }
 
+      /* Partner styles */
+      .partner-card {
+        border: 2px solid #10b981 !important;
+        box-shadow: 0 8px 24px rgba(16, 185, 129, 0.08) !important;
+        position: relative;
+      }
+      .partner-card::after {
+        content: 'Onboarded Partner';
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-size: 0.65rem;
+        font-weight: 700;
+        box-shadow: 0 2px 8px rgba(16,185,129,0.3);
+        border: 1px solid rgba(255,255,255,0.2);
+        z-index: 10;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+      }
+      .partner-details-banner {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05));
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .partner-details-banner svg {
+        color: #10b981;
+        flex-shrink: 0;
+      }
+      .partner-details-banner div {
+        color: #065f46;
+        font-size: 0.82rem;
+        line-height: 1.5;
+        text-align: left;
+      }
+      .partner-details-banner strong {
+        font-weight: 700;
+        color: #047857;
+      }
+
       .college-badge {
         padding: 3px 8px;
         border-radius: 6px;
@@ -799,6 +847,9 @@
             <textarea id="req-message" style="width:100%;height:80px;background:var(--white);border:1px solid var(--line);border-radius:8px;color:var(--ink);padding:10px;outline:none;transition:all 0.3s;" placeholder="Tell us if you have any questions..."></textarea>
           </label>
           <button type="submit" class="btn-save" id="btn-submit-request" style="background: linear-gradient(135deg, var(--green), var(--green-dark)); box-shadow: 0 4px 12px rgba(16,185,129,0.2);">Submit Request</button>
+          <p class="privacy-disclaimer" style="margin-top: 12px; font-size: 0.75rem; color: var(--muted); text-align: center; line-height: 1.4;">
+            Your information may be shared with our trusted partners and service providers where necessary to provide services and improve your experience. Please refer to our Privacy Policy for complete details.
+          </p>
         </form>
       </div>
     </div>
@@ -1226,7 +1277,7 @@
             
             colleges.forEach(col => {
               const card = document.createElement('div');
-              card.className = 'college-card';
+              card.className = col.isOnboarded ? 'college-card partner-card' : 'college-card';
               card.setAttribute('onclick', `openCollegeDetails('${col._id}')`);
               
               const rankText = col.nirfRank ? `NIRF Rank: #${col.nirfRank}` : 'NIRF Rank: N/A';
@@ -1307,10 +1358,11 @@
             }
             
             const initials = col.name ? col.name.split(' ').map(w => w[0]).join('').substring(0, 3).toUpperCase() : '';
+            const bannerImgUrl = col.bannerUrl || getCollegeImageUrl(col);
             const modalImgHtml = `
               <div style="width: 100%; height: 220px; border-radius: 12px; overflow: hidden; margin-bottom: 20px; background: ${getCollegeGradient(col.type)}; position: relative; display: flex; align-items: center; justify-content: center; color: white;">
                 <span style="font-size: 3rem; font-weight: 900; opacity: 0.25; letter-spacing: 0.05em; position: absolute; pointer-events: none;">${initials}</span>
-                <img src="${getCollegeImageUrl(col)}" alt="${escapeHTML(col.name)}" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;" onerror="this.style.display='none';" />
+                <img src="${bannerImgUrl}" alt="${escapeHTML(col.name)}" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;" onerror="this.style.display='none';" />
               </div>
             `;
 
@@ -1323,8 +1375,38 @@
                    Shortlist College 🤍
                  </button>`;
 
+            const partnerBannerHtml = col.isOnboarded ? `
+              <div class="partner-details-banner" style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 8px; padding: 12px 16px; display: flex; gap: 12px; align-items: center; color: var(--green-dark); margin-bottom: 20px; font-size: 0.88rem;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                <div>
+                  This college is a verified <strong>Onboarded Partner</strong>. BtechHelpline provides direct query routing, application guidance, and profile integration helper services.
+                </div>
+              </div>
+            ` : '';
+
+            const facilitiesHtml = (col.facilities && col.facilities.length > 0) ? `
+              <div style="margin-bottom: 24px;">
+                <h4 style="color: var(--ink); margin: 0 0 10px 0; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 800;">Campus Infrastructure & Facilities</h4>
+                <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap:10px;">
+                  ${col.facilities.map(f => `
+                    <div style="border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--white); display:flex; flex-direction:column; box-shadow: 0 1px 3px rgba(0,0,0,0.05); cursor: pointer;" onclick="openLightbox('${f.imageUrl}', '${escapeHTML(f.caption) || f.category}')">
+                      <img src="${f.imageUrl}" style="width:100%; height:80px; object-fit:cover;" />
+                      <div style="padding:6px; font-size:0.75rem; text-align:left;">
+                        <span style="font-weight:700; color:var(--blue); font-size:0.65rem; text-transform:uppercase; display:block;">${f.category}</span>
+                        <span style="color:var(--ink); font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block;">${f.caption || ''}</span>
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            ` : '';
+
             collegeModalContent.innerHTML = `
               ${modalImgHtml}
+              ${partnerBannerHtml}
 
               <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 16px; flex-wrap: wrap;">
                 <span class="college-badge ${typeClass}" style="font-size: 0.85rem; padding: 4px 10px;">${col.type}</span>
@@ -1365,6 +1447,8 @@
                   </div>
                 </div>
               </div>
+
+              ${facilitiesHtml}
               
               <div style="margin-bottom: 24px;">
                 <h4 style="color: var(--ink); margin: 0 0 10px 0; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 800;">Available Engineering Branches</h4>
@@ -1392,6 +1476,21 @@
           collegeModalContent.innerHTML = '<div style="text-align:center; padding:40px; color:#f87171;">Server connection error</div>';
         }
       }
+
+      window.openLightbox = function(src, title) {
+        const lightbox = document.createElement('div');
+        lightbox.style = 'position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(15,22,42,0.95); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); z-index:9999; display:grid; place-items:center; cursor:zoom-out;';
+        lightbox.innerHTML = `
+          <div style="text-align:center; max-width:90%; max-height:90%; animation: fadeIn 0.3s ease;">
+            <img src="${src}" style="max-width:100%; max-height:80vh; border-radius:12px; border:1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);" />
+            <div style="color:white; font-weight:700; margin-top:16px; font-size:1.1rem; font-family:sans-serif; text-shadow:0 2px 4px rgba(0,0,0,0.5);">${title}</div>
+          </div>
+        `;
+        lightbox.onclick = function() {
+          lightbox.remove();
+        };
+        document.body.appendChild(lightbox);
+      };
       
       const closeCollegeModal = () => { collegeModal.classList.remove('open'); };
       document.getElementById('btn-close-college-modal').addEventListener('click', closeCollegeModal);
@@ -1498,7 +1597,7 @@
             choicesList.innerHTML = '';
             userChoices.forEach(col => {
               const card = document.createElement('div');
-              card.className = 'college-card';
+              card.className = col.isOnboarded ? 'college-card partner-card' : 'college-card';
               card.setAttribute('onclick', `openCollegeDetails('${col._id}')`);
               
               const rankText = col.nirfRank ? `NIRF Rank: #${col.nirfRank}` : 'NIRF Rank: N/A';

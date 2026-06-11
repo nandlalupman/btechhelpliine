@@ -44,6 +44,18 @@ exports.sendVerificationEmail = async (email, name, token, baseUrl) => {
   return transporter.sendMail(mailOptions);
 };
 
+exports.sendVerificationOTPEmail = async (email, name, otp) => {
+  const mailOptions = {
+    from: `"BtechHelpline Support" <${process.env.EMAIL_USER || 'no-reply@btechhelpline.com'}>`,
+    to: email,
+    subject: 'Your BtechHelpline Email Verification OTP',
+    text: `Hello ${name},\n\nYour one-time verification code is ${otp}.\n\nThis OTP is valid for 10 minutes.\n\nBest regards,\nBtechHelpline team`,
+    html: `<p>Hello ${name},</p><p>Your one-time verification code is <strong>${otp}</strong>.</p><p>This OTP is valid for 10 minutes.</p><br><p>Best regards,<br>BtechHelpline team</p>`,
+  };
+
+  return transporter.sendMail(mailOptions);
+};
+
 exports.sendPasswordResetEmail = async (email, name, token, baseUrl) => {
   const base = baseUrl || process.env.FRONTEND_URL || 'http://localhost:3000';
   const url = `${base}/reset-password.html?resetToken=${token}`;

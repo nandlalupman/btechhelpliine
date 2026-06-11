@@ -100,8 +100,8 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// POST /affiliation — Submit a new college affiliation request
-router.post('/affiliation', async (req, res) => {
+// POST /onboard — Onboard a new college/institution request
+router.post('/onboard', async (req, res) => {
   try {
     const AffiliationRequest = require('../models/AffiliationRequest');
     
@@ -113,15 +113,44 @@ router.post('/affiliation', async (req, res) => {
     
     const existingRequest = await AffiliationRequest.findOne({ name: req.body.name, status: 'pending' });
     if (existingRequest) {
-      return res.status(400).json({ success: false, error: 'An affiliation request for this college is already pending review' });
+      return res.status(400).json({ success: false, error: 'An onboarding request for this college is already pending review' });
     }
 
-    const newRequest = new AffiliationRequest(req.body);
+    // Sanitize optional fields to prevent validation issues with Mongoose Enums
+    const requestData = { ...req.body };
+    if (requestData.lifestyle) {
+      requestData.lifestyle = { ...requestData.lifestyle };
+      if (requestData.lifestyle.attendanceEnforcement === '') {
+        delete requestData.lifestyle.attendanceEnforcement;
+      }
+      if (requestData.lifestyle.curfewPolicy === '') {
+        delete requestData.lifestyle.curfewPolicy;
+      }
+      if (requestData.lifestyle.dressCode === '') {
+        delete requestData.lifestyle.dressCode;
+      }
+    }
+    if (requestData.naacRating === '') {
+      delete requestData.naacRating;
+    }
+    if (requestData.nirfRank === '' || requestData.nirfRank === null || isNaN(requestData.nirfRank)) {
+      delete requestData.nirfRank;
+    }
+    if (requestData.bannerUrl === '') {
+      requestData.bannerUrl = null;
+    }
+    if (requestData.facilities && Array.isArray(requestData.facilities)) {
+      requestData.facilities = requestData.facilities.filter(f => f && f.imageUrl && f.imageUrl.trim() !== '' && f.category);
+    } else {
+      requestData.facilities = [];
+    }
+
+    const newRequest = new AffiliationRequest(requestData);
     await newRequest.save();
 
     res.status(201).json({
       success: true,
-      message: 'Your affiliation request has been submitted successfully and is under review.',
+      message: 'Your onboarding request has been submitted successfully and is under review.',
       data: newRequest
     });
   } catch (err) {

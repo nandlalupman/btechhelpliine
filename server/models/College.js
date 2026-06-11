@@ -69,6 +69,26 @@ const CollegeSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    isOnboarded: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
+    bannerUrl: {
+      type: String,
+      default: null,
+    },
+    facilities: [
+      {
+        category: {
+          type: String,
+          enum: ['Classroom', 'Laboratory', 'Library', 'Hostel', 'Sports', 'Cafeteria', 'Other'],
+          required: true,
+        },
+        imageUrl: { type: String, required: true },
+        caption: { type: String, default: '' },
+      }
+    ],
   },
   {
     timestamps: true,

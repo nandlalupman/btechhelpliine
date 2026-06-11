@@ -54,13 +54,17 @@ router.post(
       const salt = await bcrypt.genSalt(12);
       const hashedPassword = await bcrypt.hash(password, salt);
 
-      // Create new user (auto-verified)
+      // Create new user (pending verification)
+      const emailOtp = Math.floor(100000 + Math.random() * 900000).toString();
+
       const user = new User({
         name,
         email,
         phone,
         password: hashedPassword,
-        isVerified: true,
+        isVerified: false,
+        emailOtpCode: emailOtp,
+        emailOtpExpires: Date.now() + 10 * 60 * 1000, // 10 minutes
         jeeRank: jeeRank || '',
         preferredBranch: preferredBranch || '',
         preferredState: preferredState || '',
@@ -68,23 +72,25 @@ router.post(
 
       await user.save();
 
-      // Sign JWT (auto-login on registration)
-      const token = jwt.sign(
-        { userId: user._id, role: user.role, email: user.email },
-        JWT_SECRET
-      );
+      // Send verification email
+      try {
+        await emailUtils.sendVerificationOTPEmail(email, name, emailOtp);
+      } catch (mailErr) {
+        console.error('Failed to send verification email:', mailErr.message);
+      }
 
-      res.status(201).json({
+      const responseData = {
         success: true,
-        message: 'Registration successful!',
-        token,
-        user: {
-          name: user.name,
-          email: user.email,
-          phone: user.phone,
-          role: user.role,
-        },
-      });
+        message: 'Registration successful! A verification OTP has been sent to your email.',
+        email: user.email
+      };
+
+      // Expose OTP in non-production environments for automated testing
+      if (process.env.NODE_ENV !== 'production') {
+        responseData.otp = emailOtp;
+      }
+
+      res.status(201).json(responseData);
     } catch (err) {
       console.error('Registration error:', err.message);
       res.status(500).json({ success: false, error: 'Internal Server Error' });
@@ -121,6 +127,33 @@ router.post(
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
         return res.status(401).json({ success: false, error: 'Invalid email or password' });
+      }
+
+      // Check if user is verified
+      if (!user.isVerified) {
+        const emailOtp = Math.floor(100000 + Math.random() * 900000).toString();
+        user.emailOtpCode = emailOtp;
+        user.emailOtpExpires = Date.now() + 10 * 60 * 1000;
+        await user.save();
+
+        try {
+          await emailUtils.sendVerificationOTPEmail(user.email, user.name, emailOtp);
+        } catch (mailErr) {
+          console.error('Failed to send verification email:', mailErr.message);
+        }
+
+        const responseData = {
+          success: false,
+          unverified: true,
+          error: 'Please verify your email address. A verification OTP has been sent.',
+          email: user.email
+        };
+
+        if (process.env.NODE_ENV !== 'production') {
+          responseData.otp = emailOtp;
+        }
+
+        return res.status(403).json(responseData);
       }
 
       // Update last login
@@ -237,7 +270,7 @@ router.post(
     try {
       const user = await User.findOne({
         resetPasswordToken: token,
-        resetPasswordExpires: { $gt: Date.now() },
+        resetPasswordExpires: { $gt: new Date() },
       });
 
       if (!user) {
@@ -370,7 +403,7 @@ router.post(
       const user = await User.findOne({
         phone,
         otpCode: otp,
-        otpExpires: { $gt: Date.now() },
+        otpExpires: { $gt: new Date() },
       });
 
       if (!user) {
@@ -406,6 +439,123 @@ router.post(
       });
     } catch (err) {
       console.error('Verify OTP error:', err.message);
+      res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+  }
+);
+
+// POST /verify-email-otp
+router.post(
+  '/verify-email-otp',
+  [
+    body('email').isEmail().withMessage('Enter a valid email address'),
+    body('otp')
+      .isLength({ min: 6, max: 6 })
+      .withMessage('OTP must be exactly 6 digits'),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success: false, error: errors.array()[0].msg });
+    }
+
+    const { email, otp } = req.body;
+
+    try {
+      const user = await User.findOne({
+        email: email.toLowerCase(),
+        emailOtpCode: otp,
+        emailOtpExpires: { $gt: new Date() },
+      });
+
+      if (!user) {
+        return res.status(400).json({ success: false, error: 'Invalid or expired email OTP code.' });
+      }
+
+      if (!user.isActive) {
+        return res.status(403).json({ success: false, error: 'Account deactivated. Please contact support.' });
+      }
+
+      // Clear email OTP details and mark verified
+      user.isVerified = true;
+      user.emailOtpCode = undefined;
+      user.emailOtpExpires = undefined;
+      user.lastLogin = new Date();
+      await user.save();
+
+      // Sign JWT
+      const token = jwt.sign(
+        { userId: user._id, role: user.role, email: user.email },
+        JWT_SECRET
+      );
+
+      res.json({
+        success: true,
+        message: 'Email verified successfully!',
+        token,
+        user: {
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+          role: user.role,
+        },
+      });
+    } catch (err) {
+      console.error('Verify email OTP error:', err.message);
+      res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+  }
+);
+
+// POST /resend-email-otp
+router.post(
+  '/resend-email-otp',
+  [
+    body('email').isEmail().withMessage('Enter a valid email address')
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success: false, error: errors.array()[0].msg });
+    }
+
+    const { email } = req.body;
+
+    try {
+      const user = await User.findOne({ email: email.toLowerCase() });
+      if (!user) {
+        return res.status(404).json({ success: false, error: 'Email address not found.' });
+      }
+
+      if (!user.isActive) {
+        return res.status(403).json({ success: false, error: 'Account deactivated. Please contact support.' });
+      }
+
+      // Generate a new 6-digit OTP code
+      const emailOtp = Math.floor(100000 + Math.random() * 900000).toString();
+      user.emailOtpCode = emailOtp;
+      user.emailOtpExpires = Date.now() + 10 * 60 * 1000; // valid for 10 mins
+      await user.save();
+
+      // Send verification email
+      try {
+        await emailUtils.sendVerificationOTPEmail(user.email, user.name, emailOtp);
+      } catch (mailErr) {
+        console.error('Failed to send verification email:', mailErr.message);
+      }
+
+      const responseData = {
+        success: true,
+        message: 'A new verification OTP has been sent to your email.'
+      };
+
+      if (process.env.NODE_ENV !== 'production') {
+        responseData.otp = emailOtp;
+      }
+
+      res.json(responseData);
+    } catch (err) {
+      console.error('Resend email OTP error:', err.message);
       res.status(500).json({ success: false, error: 'Internal Server Error' });
     }
   }

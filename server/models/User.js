@@ -44,6 +44,8 @@ const UserSchema = new mongoose.Schema(
     resetPasswordExpires: Date,
     otpCode: String,
     otpExpires: Date,
+    emailOtpCode: String,
+    emailOtpExpires: Date,
     jeeRank: {
       type: String,
       default: '',
