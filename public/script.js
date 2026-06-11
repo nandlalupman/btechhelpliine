@@ -114,10 +114,12 @@ async function loadDynamicStats() {
       const stats = data.data;
       const studentsEl = document.getElementById('stat-students');
       const collegesEl = document.getElementById('stat-colleges');
+      const partnersEl = document.getElementById('stat-partners');
       const citiesEl = document.getElementById('stat-cities');
       
       if (studentsEl) studentsEl.dataset.target = stats.totalStudentsGuided;
       if (collegesEl) collegesEl.dataset.target = stats.totalColleges;
+      if (partnersEl) partnersEl.dataset.target = stats.partnerColleges;
       if (citiesEl) citiesEl.dataset.target = stats.totalCities;
     }
   } catch (err) {

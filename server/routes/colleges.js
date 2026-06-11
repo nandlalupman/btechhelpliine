@@ -48,6 +48,7 @@ router.get('/', async (req, res) => {
 router.get('/public-stats', async (req, res) => {
   try {
     const totalColleges = await College.countDocuments();
+    const partnerColleges = await College.countDocuments({ isOnboarded: true });
     
     // Calculate average placement dynamically
     const avgPlacementsResult = await College.aggregate([
@@ -79,6 +80,7 @@ router.get('/public-stats', async (req, res) => {
       success: true,
       data: {
         totalColleges,
+        partnerColleges,
         averagePlacement,
         totalStudentsGuided,
         totalCities,

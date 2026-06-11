@@ -1120,6 +1120,12 @@ input::placeholder { color: #94a3b8; }
   .cutoff-table th, .cutoff-table td { padding: 10px 12px; }
 }
 
+@media (max-width: 479px) {
+  .stats-grid .stat-item:last-child {
+    grid-column: span 2;
+  }
+}
+
 @media (max-width: 380px) {
   .mobile-cta { left: 8px; right: 8px; gap: 4px; }
   .mobile-cta a { font-size: 0.72rem; }
@@ -1141,7 +1147,7 @@ input::placeholder { color: #94a3b8; }
   }
 
   .placement-grid { grid-template-columns: repeat(2, 1fr); }
-  .stats-grid { grid-template-columns: repeat(4, 1fr); }
+  .stats-grid { grid-template-columns: repeat(5, 1fr); }
 }
 
 @media (min-width: 768px) {
