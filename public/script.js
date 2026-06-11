@@ -133,7 +133,7 @@ async function loadDynamicStats() {
           counterObserver.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.3 });
+    }, { threshold: 0.1 });
 
     counterElements.forEach(el => counterObserver.observe(el));
   }
