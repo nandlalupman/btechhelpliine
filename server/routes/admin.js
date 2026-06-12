@@ -801,6 +801,12 @@ router.delete('/onboard-requests/:id', async (req, res) => {
       return res.status(400).json({ success: false, error: 'Cannot delete a pending request. Please approve or reject it first.' });
     }
 
+    // If the request was approved, delete the associated college from the directory
+    if (request.status === 'approved') {
+      const College = require('../models/College');
+      await College.findOneAndDelete({ name: request.name });
+    }
+
     await AffiliationRequest.findByIdAndDelete(req.params.id);
     res.json({ success: true, message: 'Onboarding request deleted successfully' });
   } catch (err) {
