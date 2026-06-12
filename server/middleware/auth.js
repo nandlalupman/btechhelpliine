@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-
-const JWT_SECRET = process.env.JWT_SECRET || 'btech-helpline-default-secret-key-999!';
+const { getJwtSecret } = require('../config/jwt');
 
 const verifyToken = async (req, res, next) => {
   try {
@@ -17,7 +16,7 @@ const verifyToken = async (req, res, next) => {
       return res.status(401).json({ success: false, error: 'Unauthorized: No token provided' });
     }
 
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, await getJwtSecret());
 
     // Verify user exists and is active
     const user = await User.findById(decoded.userId).select('-password');

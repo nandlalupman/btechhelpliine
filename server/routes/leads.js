@@ -7,7 +7,7 @@ const emailUtils = require('../utils/email');
 const { verifyToken } = require('../middleware/auth');
 
 const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET || 'btech-helpline-default-secret-key-999!';
+const { getJwtSecret } = require('../config/jwt');
 
 // Optional authentication helper for lead submissions
 const optionalVerifyToken = async (req, res, next) => {
@@ -22,7 +22,7 @@ const optionalVerifyToken = async (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, await getJwtSecret());
     const user = await User.findById(decoded.userId);
     if (user && user.isActive) {
       req.user = user;

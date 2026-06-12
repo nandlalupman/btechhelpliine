@@ -8,7 +8,8 @@ const emailUtils = require('../utils/email');
 const { verifyToken } = require('../middleware/auth');
 
 const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET || 'btech-helpline-default-secret-key-999!';
+const { getJwtSecret } = require('../config/jwt');
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
 
 // ── Endpoints ──
 
@@ -160,10 +161,11 @@ router.post(
       user.lastLogin = new Date();
       await user.save();
 
-      // Sign JWT (no expiration for persistent sessions)
+      // Sign JWT
       const token = jwt.sign(
         { userId: user._id, role: user.role, email: user.email },
-        JWT_SECRET
+        await getJwtSecret(),
+        { expiresIn: JWT_EXPIRES_IN }
       );
 
       res.json({
@@ -423,7 +425,8 @@ router.post(
       // Sign JWT
       const token = jwt.sign(
         { userId: user._id, role: user.role, email: user.email },
-        JWT_SECRET
+        await getJwtSecret(),
+        { expiresIn: JWT_EXPIRES_IN }
       );
 
       res.json({
@@ -486,7 +489,8 @@ router.post(
       // Sign JWT
       const token = jwt.sign(
         { userId: user._id, role: user.role, email: user.email },
-        JWT_SECRET
+        await getJwtSecret(),
+        { expiresIn: JWT_EXPIRES_IN }
       );
 
       res.json({

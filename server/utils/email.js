@@ -4,13 +4,25 @@ let transporter;
 const hasEmailCredentials = process.env.EMAIL_USER && process.env.EMAIL_PASS;
 
 if (hasEmailCredentials) {
-  transporter = nodemailer.createTransport({
-    service: 'gmail',
+  const mailConfig = {
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
     },
-  });
+  };
+
+  if (process.env.EMAIL_SERVICE) {
+    mailConfig.service = process.env.EMAIL_SERVICE;
+  } else {
+    mailConfig.host = process.env.EMAIL_HOST || 'smtp.gmail.com';
+    mailConfig.port = parseInt(process.env.EMAIL_PORT || '587', 10);
+    mailConfig.secure = process.env.EMAIL_SECURE === 'true';
+    mailConfig.tls = {
+      rejectUnauthorized: false
+    };
+  }
+
+  transporter = nodemailer.createTransport(mailConfig);
 } else {
   // Graceful fallback for local development: logs emails to console
   transporter = {

@@ -8,10 +8,10 @@ const morgan = require('morgan');
 const path = require('path');
 const connectDB = require('./config/db');
 
-// Enforce secure JWT_SECRET in production mode
+// Enforce secure JWT_SECRET in production mode if explicitly set
 if (process.env.NODE_ENV === 'production') {
-  if (!process.env.JWT_SECRET || process.env.JWT_SECRET === 'btech-helpline-default-secret-key-999!') {
-    console.error('CRITICAL SECURITY ERROR: JWT_SECRET is not configured or uses a weak default secret in production.');
+  if (process.env.JWT_SECRET && process.env.JWT_SECRET === 'btech-helpline-default-secret-key-999!') {
+    console.error('CRITICAL SECURITY ERROR: JWT_SECRET is configured to use a weak default secret in production.');
     process.exit(1);
   }
 }
@@ -82,7 +82,7 @@ const authLimiter = rateLimit({
 
 // Middleware
 app.use(cookieParser());
-app.use(express.json({ limit: '10kb' })); // Guard against giant JSON bodies
+app.use(express.json({ limit: '5mb' })); // Supports base64 image uploads for college profiles
 app.use(morgan('dev'));
 
 // Static files fallback (allows monolithic local serving for testing/debugging)
