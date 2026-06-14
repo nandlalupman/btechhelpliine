@@ -620,6 +620,11 @@
                 <input type="number" id="nirfRank" placeholder="e.g. 68" min="1" max="500" />
               </label>
             </div>
+
+            <label style="margin-top: 15px; display: block; text-align: left;">
+              NBA Accredited Branches <span style="font-weight:400;color:var(--muted); font-size: 0.8rem;">(Optional - comma separated, e.g. Computer Science Engineering, Information Technology)</span>
+              <input type="text" id="nbaBranches" placeholder="e.g. Computer Science & Engineering, Electronics & Communication Engineering" />
+            </label>
           </div>
 
           <label>
@@ -1624,8 +1629,15 @@
           aicteApproved: document.getElementById('aicteApproved').checked,
           ugcRecognized: document.getElementById('ugcRecognized').checked,
           naacRating: document.getElementById('naacRating').value,
-          nbaAccredited: branchesData.some(b => b.nba),
-          nbaBranches: branchesData.filter(b => b.nba).map(b => b.name),
+          nbaBranchesInputVal: document.getElementById('nbaBranches').value,
+          nbaBranches: Array.from(new Set([
+            ...(document.getElementById('nbaBranches').value ? document.getElementById('nbaBranches').value.split(',').map(b => b.trim()).filter(Boolean) : []),
+            ...branchesData.filter(b => b.nba).map(b => b.name)
+          ])),
+          nbaAccredited: Array.from(new Set([
+            ...(document.getElementById('nbaBranches').value ? document.getElementById('nbaBranches').value.split(',').map(b => b.trim()).filter(Boolean) : []),
+            ...branchesData.filter(b => b.nba).map(b => b.name)
+          ])).length > 0,
           nirfRank: document.getElementById('nirfRank').value,
           website: document.getElementById('website').value,
           
@@ -1728,6 +1740,7 @@
           document.getElementById('ugcRecognized').checked = data.ugcRecognized !== false;
           document.getElementById('naacRating').value = data.naacRating || '';
           document.getElementById('nirfRank').value = data.nirfRank || '';
+          document.getElementById('nbaBranches').value = data.nbaBranchesInputVal || (data.nbaBranches ? data.nbaBranches.join(', ') : '');
           document.getElementById('website').value = data.website || '';
           
           document.getElementById('stateExamName').value = data.stateExamName || '';
@@ -1907,6 +1920,11 @@
           massRecruiterOffers: parseInt(document.getElementById(`placement-mass-${i}`).value) || 0
         }));
 
+        const nbaBranchesInputVal = document.getElementById('nbaBranches').value;
+        const nbaBranchesInputArray = nbaBranchesInputVal ? nbaBranchesInputVal.split(',').map(b => b.trim()).filter(Boolean) : [];
+        const nbaBranchesFromMatrix = branches.filter(b => b.nbaAccredited).map(b => b.branchName);
+        const combinedNbaBranches = Array.from(new Set([...nbaBranchesInputArray, ...nbaBranchesFromMatrix]));
+
         const formData = {
           name: document.getElementById('name').value.trim(),
           establishmentYear: parseInt(document.getElementById('establishmentYear').value),
@@ -1918,8 +1936,8 @@
           aicteApproved: document.getElementById('aicteApproved').checked,
           ugcRecognized: document.getElementById('ugcRecognized').checked,
           naacRating: document.getElementById('naacRating').value.trim(),
-          nbaAccredited: branches.some(b => b.nbaAccredited),
-          nbaBranches: branches.filter(b => b.nbaAccredited).map(b => b.branchName),
+          nbaAccredited: combinedNbaBranches.length > 0,
+          nbaBranches: combinedNbaBranches,
           nirfRank: parseInt(document.getElementById('nirfRank').value) || null,
           website: document.getElementById('website').value.trim(),
           branches,
