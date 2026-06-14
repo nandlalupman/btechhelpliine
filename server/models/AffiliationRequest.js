@@ -54,6 +54,10 @@ const AffiliationRequestSchema = new mongoose.Schema(
       type: Boolean,
       default: false
     },
+    nbaBranches: {
+      type: [String],
+      default: []
+    },
     nirfRank: {
       type: Number,
       default: null
@@ -313,5 +317,26 @@ const AffiliationRequestSchema = new mongoose.Schema(
     timestamps: true
   }
 );
+
+AffiliationRequestSchema.pre('save', function (next) {
+  if (this.branches && this.branches.length > 0) {
+    const accredited = this.branches
+      .filter(b => b.nbaAccredited)
+      .map(b => b.branchName);
+    
+    if (accredited.length > 0) {
+      this.nbaBranches = accredited;
+    } else {
+      this.nbaBranches = [];
+    }
+  }
+  
+  if (this.nbaBranches && this.nbaBranches.length > 0) {
+    this.nbaAccredited = true;
+  } else {
+    this.nbaAccredited = false;
+  }
+  next();
+});
 
 module.exports = mongoose.model('AffiliationRequest', AffiliationRequestSchema);

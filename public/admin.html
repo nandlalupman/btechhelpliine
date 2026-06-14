@@ -1071,10 +1071,6 @@
               <input type="checkbox" id="crud-college-ugc" checked style="width: 16px; height: 16px; margin: 0; cursor: pointer;" />
               UGC Recognized
             </label>
-            <label style="display: flex; flex-direction: row; gap: 8px; align-items: center; margin-bottom: 0; cursor: pointer; color: white;">
-              <input type="checkbox" id="crud-college-nba" style="width: 16px; height: 16px; margin: 0; cursor: pointer;" />
-              NBA Accredited (Branch-level)
-            </label>
             <label style="display: flex; flex-direction: row; gap: 8px; align-items: center; margin-bottom: 0; cursor: pointer; flex-grow: 1; color: white;">
               NAAC Rating:
               <input type="text" id="crud-college-naac" placeholder="e.g. A++" style="width: 80px; padding: 6px 10px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 6px; color: white; outline: none; margin-left: 5px;" />
@@ -1084,6 +1080,11 @@
           <label style="grid-column: 1/-1; margin-bottom: 0;">
             Branches Offered (comma separated)
             <input type="text" id="crud-college-branches" placeholder="e.g. Computer Science Engineering, Electrical Engineering" style="width: 100%; padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none;" />
+          </label>
+
+          <label style="grid-column: 1/-1; margin-bottom: 0;">
+            NBA Accredited Branches (comma separated)
+            <input type="text" id="crud-college-nba-branches" placeholder="e.g. Computer Science Engineering, Information Technology" style="width: 100%; padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none;" />
           </label>
           
           <label style="grid-column: 1/-1;">
@@ -2230,7 +2231,7 @@
             // Load accreditations
             document.getElementById('crud-college-aicte').checked = !!col.aicteApproved;
             document.getElementById('crud-college-ugc').checked = col.ugcRecognized !== false;
-            document.getElementById('crud-college-nba').checked = !!col.nbaAccredited;
+            document.getElementById('crud-college-nba-branches').value = col.nbaBranches ? col.nbaBranches.join(', ') : '';
             document.getElementById('crud-college-naac').value = col.naacRating || '';
 
             // Load bannerUrl
@@ -2298,8 +2299,11 @@
         const description = document.getElementById('crud-college-description').value.trim();
         const aicteApproved = document.getElementById('crud-college-aicte').checked;
         const ugcRecognized = document.getElementById('crud-college-ugc').checked;
-        const nbaAccredited = document.getElementById('crud-college-nba').checked;
         const naacRating = document.getElementById('crud-college-naac').value.trim() || null;
+        
+        const nbaBranchesVal = document.getElementById('crud-college-nba-branches').value;
+        const nbaBranches = nbaBranchesVal ? nbaBranchesVal.split(',').map(b => b.trim()).filter(Boolean) : [];
+        const nbaAccredited = nbaBranches.length > 0;
         
         const branchesVal = document.getElementById('crud-college-branches').value;
         const branches = branchesVal ? branchesVal.split(',').map(b => b.trim()).filter(Boolean) : [];
@@ -2312,7 +2316,7 @@
         })).filter(f => f.imageUrl);
 
         const payload = {
-          name, type, nirfRank, city, state, admissionMode, cutoffRankCSE, feesPerYear, avgPlacement, highestPlacement, website, imageUrl, description, branches, bannerUrl, facilities, aicteApproved, ugcRecognized, nbaAccredited, naacRating
+          name, type, nirfRank, city, state, admissionMode, cutoffRankCSE, feesPerYear, avgPlacement, highestPlacement, website, imageUrl, description, branches, bannerUrl, facilities, aicteApproved, ugcRecognized, nbaAccredited, nbaBranches, naacRating
         };
 
         const url = id ? `${API_URL}/api/admin/colleges/${id}` : `${API_URL}/api/admin/colleges`;

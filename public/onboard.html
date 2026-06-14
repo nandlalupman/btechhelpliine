@@ -608,10 +608,6 @@
                 <input type="checkbox" id="ugcRecognized" checked />
                 UGC Recognized
               </label>
-              <label class="checkbox-item">
-                <input type="checkbox" id="nbaAccredited" />
-                NBA Accredited (Branch-level)
-              </label>
             </div>
 
             <div class="form-grid-2">
@@ -1628,7 +1624,8 @@
           aicteApproved: document.getElementById('aicteApproved').checked,
           ugcRecognized: document.getElementById('ugcRecognized').checked,
           naacRating: document.getElementById('naacRating').value,
-          nbaAccredited: document.getElementById('nbaAccredited').checked,
+          nbaAccredited: branchesData.some(b => b.nba),
+          nbaBranches: branchesData.filter(b => b.nba).map(b => b.name),
           nirfRank: document.getElementById('nirfRank').value,
           website: document.getElementById('website').value,
           
@@ -1730,7 +1727,6 @@
           document.getElementById('aicteApproved').checked = data.aicteApproved !== false;
           document.getElementById('ugcRecognized').checked = data.ugcRecognized !== false;
           document.getElementById('naacRating').value = data.naacRating || '';
-          document.getElementById('nbaAccredited').checked = !!data.nbaAccredited;
           document.getElementById('nirfRank').value = data.nirfRank || '';
           document.getElementById('website').value = data.website || '';
           
@@ -1922,7 +1918,8 @@
           aicteApproved: document.getElementById('aicteApproved').checked,
           ugcRecognized: document.getElementById('ugcRecognized').checked,
           naacRating: document.getElementById('naacRating').value.trim(),
-          nbaAccredited: document.getElementById('nbaAccredited').checked,
+          nbaAccredited: branches.some(b => b.nbaAccredited),
+          nbaBranches: branches.filter(b => b.nbaAccredited).map(b => b.branchName),
           nirfRank: parseInt(document.getElementById('nirfRank').value) || null,
           website: document.getElementById('website').value.trim(),
           branches,

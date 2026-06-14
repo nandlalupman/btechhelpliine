@@ -91,6 +91,10 @@ const CollegeSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    nbaBranches: {
+      type: [String],
+      default: [],
+    },
     bannerUrl: {
       type: String,
       default: null,
@@ -111,5 +115,14 @@ const CollegeSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+CollegeSchema.pre('save', function (next) {
+  if (this.nbaBranches && this.nbaBranches.length > 0) {
+    this.nbaAccredited = true;
+  } else {
+    this.nbaAccredited = false;
+  }
+  next();
+});
 
 module.exports = mongoose.model('College', CollegeSchema);

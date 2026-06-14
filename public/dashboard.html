@@ -1421,7 +1421,7 @@
                 <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;">
                   ${col.aicteApproved ? `<span style="background: rgba(37, 99, 235, 0.06); border: 1px solid rgba(37, 99, 235, 0.12); color: var(--blue); padding: 4px 10px; border-radius: 6px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.03em;">AICTE APPROVED</span>` : ''}
                   ${col.ugcRecognized !== false ? `<span style="background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.12); color: var(--green-dark); padding: 4px 10px; border-radius: 6px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.03em;">UGC RECOGNIZED</span>` : ''}
-                  ${col.nbaAccredited ? `<span style="background: rgba(124, 58, 237, 0.06); border: 1px solid rgba(124, 58, 237, 0.12); color: var(--violet); padding: 4px 10px; border-radius: 6px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.03em;">NBA ACCREDITED</span>` : ''}
+                  ${col.nbaAccredited ? `<span style="background: rgba(124, 58, 237, 0.06); border: 1px solid rgba(124, 58, 237, 0.12); color: var(--violet); padding: 4px 10px; border-radius: 6px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.03em;">NBA ACCREDITED: ${(col.nbaBranches && col.nbaBranches.length > 0) ? col.nbaBranches.join(', ') : 'Yes'}</span>` : ''}
                   ${col.naacRating ? `<span style="background: rgba(245, 158, 11, 0.06); border: 1px solid rgba(245, 158, 11, 0.12); color: var(--orange-dark); padding: 4px 10px; border-radius: 6px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.03em;">NAAC: ${escapeHTML(col.naacRating)}</span>` : ''}
                 </div>
               `;
