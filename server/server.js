@@ -6,7 +6,31 @@ const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
 const path = require('path');
+const fs = require('fs');
 const connectDB = require('./config/db');
+
+// Helper to serve HTML with GA and GSC environment variables injected
+const sendInjectedHtml = (res, filepath) => {
+  try {
+    if (!fs.existsSync(filepath)) {
+      return res.status(404).send('Not Found');
+    }
+    let html = fs.readFileSync(filepath, 'utf8');
+    
+    // Inject Google Search Console key if configured
+    const gscKey = process.env.GOOGLE_SITE_VERIFICATION || '';
+    html = html.replace(/YOUR_GOOGLE_SEARCH_CONSOLE_KEY/g, gscKey);
+    
+    // Inject Google Analytics ID if configured
+    const gaId = process.env.GOOGLE_ANALYTICS_ID || '';
+    html = html.replace(/YOUR_GOOGLE_ANALYTICS_ID/g, gaId);
+    
+    res.send(html);
+  } catch (err) {
+    console.error('Error serving HTML:', err);
+    res.status(500).send('Internal Server Error');
+  }
+};
 
 // Enforce secure JWT_SECRET in production mode if explicitly set
 if (process.env.NODE_ENV === 'production') {
@@ -85,6 +109,16 @@ app.use(cookieParser());
 app.use(express.json({ limit: '5mb' })); // Supports base64 image uploads for college profiles
 app.use(morgan('dev'));
 
+// Intercept HTML file requests to dynamically inject GA / GSC environment variables
+app.get(/^\/(.*\.html)?$/, (req, res, next) => {
+  let filename = req.params[0] || 'index.html';
+  const filepath = path.join(__dirname, '../public', filename);
+  if (fs.existsSync(filepath)) {
+    return sendInjectedHtml(res, filepath);
+  }
+  next();
+});
+
 // Static files fallback (allows monolithic local serving for testing/debugging)
 app.use(express.static(path.join(__dirname, '../public')));
 
@@ -104,7 +138,8 @@ app.get('/health', (req, res) => {
 
 // Fallback to index.html for unknown frontend routes
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
+  const filepath = path.join(__dirname, '../public/index.html');
+  sendInjectedHtml(res, filepath);
 });
 
 // Error handling middleware
