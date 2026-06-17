@@ -818,5 +818,57 @@ router.delete('/onboard-requests/:id', async (req, res) => {
   }
 });
 
+// GET /settings — Retrieve configuration settings (Admin only)
+router.get('/settings', async (req, res) => {
+  try {
+    const mongoose = require('mongoose');
+    const db = mongoose.connection.db;
+    const settingsCol = db.collection('settings');
+
+    const gaDoc = await settingsCol.findOne({ key: 'google_analytics_id' });
+    const gscDoc = await settingsCol.findOne({ key: 'google_site_verification' });
+
+    res.json({
+      success: true,
+      data: {
+        googleAnalyticsId: gaDoc ? gaDoc.value : '',
+        googleSiteVerification: gscDoc ? gscDoc.value : ''
+      }
+    });
+  } catch (err) {
+    console.error('Fetch settings error:', err.message);
+    res.status(500).json({ success: false, error: 'Internal Server Error' });
+  }
+});
+
+// POST /settings — Save configuration settings (Admin only)
+router.post('/settings', async (req, res) => {
+  try {
+    const mongoose = require('mongoose');
+    const { googleAnalyticsId, googleSiteVerification } = req.body;
+    const db = mongoose.connection.db;
+    const settingsCol = db.collection('settings');
+
+    // Update Google Analytics ID
+    await settingsCol.updateOne(
+      { key: 'google_analytics_id' },
+      { $set: { value: googleAnalyticsId || '', updatedAt: new Date() } },
+      { upsert: true }
+    );
+
+    // Update Google Search Console Key
+    await settingsCol.updateOne(
+      { key: 'google_site_verification' },
+      { $set: { value: googleSiteVerification || '', updatedAt: new Date() } },
+      { upsert: true }
+    );
+
+    res.json({ success: true, message: 'Settings saved successfully' });
+  } catch (err) {
+    console.error('Save settings error:', err.message);
+    res.status(500).json({ success: false, error: 'Internal Server Error' });
+  }
+});
+
 module.exports = router;
 
