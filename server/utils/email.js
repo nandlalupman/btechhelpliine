@@ -1,5 +1,4 @@
 const nodemailer = require('nodemailer');
-const path = require('path');
 
 let transporter;
 const hasEmailCredentials = process.env.EMAIL_USER && process.env.EMAIL_PASS;
@@ -209,7 +208,7 @@ const getEmailWrapper = (title, preheader, bodyHtml) => {
       <div class="header-bar"></div>
       <div class="header">
         <a href="${PUBLIC_URL}" style="text-decoration: none; display: block;">
-          <img class="logo-img" src="cid:logo" alt="BtechHelpline">
+          <img class="logo-img" src="https://www.btechhelpline.com/assets/logos/logo.png" alt="BtechHelpline">
         </a>
       </div>
       <div class="content">
@@ -236,18 +235,6 @@ const getEmailWrapper = (title, preheader, bodyHtml) => {
   `;
 };
 
-// Helper to get standard attachments (embedded logo)
-const getLogoAttachments = () => {
-  return [
-    {
-      filename: 'logo.png',
-      path: path.join(__dirname, '../../public/assets/logos/logo.png'),
-      cid: 'logo',
-      disposition: 'inline'
-    }
-  ];
-};
-
 exports.sendVerificationEmail = async (email, name, token, baseUrl) => {
   const base = baseUrl || PUBLIC_URL;
   const url = `${base}/login.html?verifyToken=${token}`;
@@ -269,8 +256,7 @@ exports.sendVerificationEmail = async (email, name, token, baseUrl) => {
     to: email,
     subject: title,
     text: `Hello ${name},\n\nThank you for registering at BtechHelpline.com.\n\nPlease verify your account by clicking the link below:\n${url}\n\nThis link will expire in 24 hours.\n\nBest regards,\nBtechHelpline team`,
-    html: getEmailWrapper(title, 'Verify your email address', bodyHtml),
-    attachments: getLogoAttachments()
+    html: getEmailWrapper(title, 'Verify your email address', bodyHtml)
   };
 
   return transporter.sendMail(mailOptions);
@@ -294,8 +280,7 @@ exports.sendVerificationOTPEmail = async (email, name, otp) => {
     to: email,
     subject: title,
     text: `Hello ${name},\n\nYour one-time verification code is ${otp}.\n\nThis OTP is valid for 10 minutes.\n\nBest regards,\nBtechHelpline team`,
-    html: getEmailWrapper(title, 'Verify your email address with OTP', bodyHtml),
-    attachments: getLogoAttachments()
+    html: getEmailWrapper(title, 'Verify your email address with OTP', bodyHtml)
   };
 
   return transporter.sendMail(mailOptions);
@@ -322,8 +307,7 @@ exports.sendPasswordResetEmail = async (email, name, token, baseUrl) => {
     to: email,
     subject: title,
     text: `Hello ${name},\n\nYou requested a password reset.\n\nPlease reset your password by clicking the link below:\n${url}\n\nIf you did not request this, you can ignore this email.\n\nBest regards,\nBtechHelpline team`,
-    html: getEmailWrapper(title, 'Reset your password', bodyHtml),
-    attachments: getLogoAttachments()
+    html: getEmailWrapper(title, 'Reset your password', bodyHtml)
   };
 
   return transporter.sendMail(mailOptions);
@@ -344,8 +328,7 @@ exports.sendLeadConfirmation = async (email, name, leadId) => {
     to: email,
     subject: title,
     text: `Hello ${name},\n\nWe have received your B.Tech admission counselling request (ID: ${leadId}).\n\nOne of our expert counsellors will contact you on your registered phone number shortly.\n\nBest regards,\nBtechHelpline team`,
-    html: getEmailWrapper(title, 'Consultation request received', bodyHtml),
-    attachments: getLogoAttachments()
+    html: getEmailWrapper(title, 'Consultation request received', bodyHtml)
   };
 
   return transporter.sendMail(mailOptions);
@@ -399,8 +382,7 @@ exports.sendStatusUpdateEmail = async (email, name, status) => {
     to: email,
     subject: title,
     text: `Hello ${name},\n\nThe status of your B.Tech counselling request has been updated to: ${statusText}.\n\n${details}\n\nLog in to your dashboard for more details.\n\nBest regards,\nBtechHelpline team`,
-    html: getEmailWrapper(title, `Counselling status updated to ${statusText}`, bodyHtml),
-    attachments: getLogoAttachments()
+    html: getEmailWrapper(title, `Counselling status updated to ${statusText}`, bodyHtml)
   };
 
   return transporter.sendMail(mailOptions);
