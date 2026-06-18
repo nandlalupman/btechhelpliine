@@ -40,7 +40,9 @@ if (hasEmailCredentials) {
   };
 }
 
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
+// Automatically resolve public website domain vs localhost based on environment
+const PUBLIC_URL = process.env.FRONTEND_URL || 
+  (process.env.NODE_ENV === 'production' ? 'https://btechhelpline.com' : 'http://localhost:3000');
 const EMAIL_FROM = process.env.EMAIL_FROM || 'noreply@btechhelpline.com';
 const EMAIL_FROM_NAME = process.env.EMAIL_FROM_NAME || 'BtechHelpline';
 
@@ -206,7 +208,7 @@ const getEmailWrapper = (title, preheader, bodyHtml) => {
     <div class="container">
       <div class="header-bar"></div>
       <div class="header">
-        <a href="${FRONTEND_URL}" style="text-decoration: none; display: block;">
+        <a href="${PUBLIC_URL}" style="text-decoration: none; display: block;">
           <img class="logo-img" src="cid:logo" alt="BtechHelpline">
         </a>
       </div>
@@ -220,11 +222,11 @@ const getEmailWrapper = (title, preheader, bodyHtml) => {
           WhatsApp: <a href="https://wa.me/917300012345?text=Hi%20I%20need%20help%20with%20B.Tech%20admission" style="color: #10b981; text-decoration: none; font-weight: 600;" target="_blank">Chat Now</a> &nbsp;|&nbsp; 
           Email: <a href="mailto:info@btechhelpline.com" style="color: #2563eb; text-decoration: none; font-weight: 600;">info@btechhelpline.com</a>
         </p>
-        <p class="footer-text">© ${new Date().getFullYear()} BtechHelpline. All rights reserved.</p>
+        <p class="footer-text">© 2026 BtechHelpline. All rights reserved.</p>
         <p class="footer-text" style="font-size: 11px; color: #94a3b8;">This is an automated transactional email. Please do not reply directly to this message.</p>
         <p class="footer-links">
-          <a href="${FRONTEND_URL}/terms.html">Terms of Service</a> | 
-          <a href="${FRONTEND_URL}/privacy.html">Privacy Policy</a>
+          <a href="${PUBLIC_URL}/terms.html">Terms of Service</a> | 
+          <a href="${PUBLIC_URL}/privacy.html">Privacy Policy</a>
         </p>
       </div>
     </div>
@@ -246,7 +248,7 @@ const getLogoAttachments = () => {
 };
 
 exports.sendVerificationEmail = async (email, name, token, baseUrl) => {
-  const base = baseUrl || process.env.FRONTEND_URL || 'http://localhost:3000';
+  const base = baseUrl || PUBLIC_URL;
   const url = `${base}/login.html?verifyToken=${token}`;
   
   const title = 'Verify your BtechHelpline Account';
@@ -299,7 +301,7 @@ exports.sendVerificationOTPEmail = async (email, name, otp) => {
 };
 
 exports.sendPasswordResetEmail = async (email, name, token, baseUrl) => {
-  const base = baseUrl || process.env.FRONTEND_URL || 'http://localhost:3000';
+  const base = baseUrl || PUBLIC_URL;
   const url = `${base}/reset-password.html?resetToken=${token}`;
 
   const title = 'Reset your BtechHelpline Password';
