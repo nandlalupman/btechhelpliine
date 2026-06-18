@@ -242,7 +242,8 @@ const getLogoAttachments = () => {
     {
       filename: 'logo.png',
       path: path.join(__dirname, '../../public/assets/logos/logo.png'),
-      cid: 'logo'
+      cid: 'logo',
+      disposition: 'inline'
     }
   ];
 };
