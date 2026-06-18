@@ -40,7 +40,7 @@ if (hasEmailCredentials) {
 }
 
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
-const EMAIL_FROM = process.env.EMAIL_FROM || process.env.EMAIL_USER || 'noreply@btechhelpline.com';
+const EMAIL_FROM = process.env.EMAIL_FROM || 'noreply@btechhelpline.com';
 const EMAIL_FROM_NAME = process.env.EMAIL_FROM_NAME || 'BtechHelpline';
 
 exports.sendVerificationEmail = async (email, name, token, baseUrl) => {
