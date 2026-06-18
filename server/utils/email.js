@@ -89,15 +89,17 @@ const getEmailWrapper = (title, preheader, bodyHtml) => {
       text-align: center;
       border-bottom: 1px solid #f1f5f9;
     }
-    .logo-text {
+    .logo-img {
+      display: block;
+      margin: 0 auto;
+      border: 0;
+      height: 48px;
+      max-height: 48px;
+      font-family: 'Inter', sans-serif;
       font-size: 24px;
       font-weight: 800;
       color: #1e3a8a;
-      text-decoration: none;
       letter-spacing: -0.5px;
-    }
-    .logo-text span {
-      color: #2563eb;
     }
     .content {
       padding: 40px 32px;
@@ -203,17 +205,25 @@ const getEmailWrapper = (title, preheader, bodyHtml) => {
     <div class="container">
       <div class="header-bar"></div>
       <div class="header">
-        <a href="https://btechhelpline.com" class="logo-text">Btech<span>Helpline</span></a>
+        <a href="${FRONTEND_URL}" style="text-decoration: none; display: block;">
+          <img class="logo-img" src="${FRONTEND_URL}/assets/logos/logo.png" alt="BtechHelpline">
+        </a>
       </div>
       <div class="content">
         ${bodyHtml}
       </div>
       <div class="footer">
+        <p class="footer-text" style="font-weight: 600; color: #475569; font-size: 13px; margin-bottom: 8px;">Need help or have questions?</p>
+        <p class="footer-text" style="margin-bottom: 24px; font-size: 13px;">
+          Call: <a href="tel:+917300012345" style="color: #2563eb; text-decoration: none; font-weight: 600;">+91 73000 12345</a> &nbsp;|&nbsp; 
+          WhatsApp: <a href="https://wa.me/917300012345?text=Hi%20I%20need%20help%20with%20B.Tech%20admission" style="color: #10b981; text-decoration: none; font-weight: 600;" target="_blank">Chat Now</a> &nbsp;|&nbsp; 
+          Email: <a href="mailto:info@btechhelpline.com" style="color: #2563eb; text-decoration: none; font-weight: 600;">info@btechhelpline.com</a>
+        </p>
         <p class="footer-text">© ${new Date().getFullYear()} BtechHelpline. All rights reserved.</p>
-        <p class="footer-text">This is an automated transactional email. Please do not reply directly to this message.</p>
+        <p class="footer-text" style="font-size: 11px; color: #94a3b8;">This is an automated transactional email. Please do not reply directly to this message.</p>
         <p class="footer-links">
-          <a href="https://btechhelpline.com/terms.html">Terms of Service</a> | 
-          <a href="https://btechhelpline.com/privacy.html">Privacy Policy</a>
+          <a href="${FRONTEND_URL}/terms.html">Terms of Service</a> | 
+          <a href="${FRONTEND_URL}/privacy.html">Privacy Policy</a>
         </p>
       </div>
     </div>
