@@ -222,8 +222,8 @@ router.post(
 
     try {
       const user = await User.findOne({ email });
-      if (!user) {
-        // Return success message even if email doesn't exist for security
+      if (!user || !user.isVerified) {
+        // Return success message even if email doesn't exist or is not verified for security
         return res.json({ success: true, message: 'Password reset link sent to your email if registered.' });
       }
 
