@@ -10,19 +10,36 @@ const fs = require('fs');
 const connectDB = require('./config/db');
 
 // Helper to serve HTML with GA and GSC environment variables injected
-const sendInjectedHtml = (res, filepath) => {
+const sendInjectedHtml = async (res, filepath) => {
   try {
     if (!fs.existsSync(filepath)) {
       return res.status(404).send('Not Found');
     }
     let html = fs.readFileSync(filepath, 'utf8');
     
-    // Inject Google Search Console key if configured
-    const gscKey = process.env.GOOGLE_SITE_VERIFICATION || '';
+    // Fetch values from DB (since they are editable via Admin settings)
+    let dbGaId = '';
+    let dbGscKey = '';
+    
+    try {
+      const mongoose = require('mongoose');
+      if (mongoose.connection && mongoose.connection.db) {
+        const settingsCol = mongoose.connection.db.collection('settings');
+        const gaDoc = await settingsCol.findOne({ key: 'google_analytics_id' });
+        const gscDoc = await settingsCol.findOne({ key: 'google_site_verification' });
+        if (gaDoc) dbGaId = gaDoc.value;
+        if (gscDoc) dbGscKey = gscDoc.value;
+      }
+    } catch (dbErr) {
+      console.error('Error fetching GA/GSC settings from DB:', dbErr.message);
+    }
+    
+    // Inject Google Search Console key (fallback to env)
+    const gscKey = dbGscKey || process.env.GOOGLE_SITE_VERIFICATION || '';
     html = html.replace(/YOUR_GOOGLE_SEARCH_CONSOLE_KEY/g, gscKey);
     
-    // Inject Google Analytics ID if configured
-    const gaId = process.env.GOOGLE_ANALYTICS_ID || '';
+    // Inject Google Analytics ID (fallback to env)
+    const gaId = dbGaId || process.env.GOOGLE_ANALYTICS_ID || '';
     html = html.replace(/YOUR_GOOGLE_ANALYTICS_ID/g, gaId);
     
     res.send(html);
@@ -110,11 +127,16 @@ app.use(express.json({ limit: '5mb' })); // Supports base64 image uploads for co
 app.use(morgan('dev'));
 
 // Intercept HTML file requests to dynamically inject GA / GSC environment variables
-app.get(/^\/(.*\.html)?$/, (req, res, next) => {
+app.get(/^\/(.*\.html)?$/, async (req, res, next) => {
   let filename = req.params[0] || 'index.html';
   const filepath = path.join(__dirname, '../public', filename);
   if (fs.existsSync(filepath)) {
-    return sendInjectedHtml(res, filepath);
+    try {
+      await sendInjectedHtml(res, filepath);
+      return;
+    } catch (err) {
+      return next(err);
+    }
   }
   next();
 });
@@ -137,9 +159,14 @@ app.get('/health', (req, res) => {
 });
 
 // Fallback to index.html for unknown frontend routes
-app.get('*', (req, res) => {
+app.get('*', async (req, res) => {
   const filepath = path.join(__dirname, '../public/index.html');
-  sendInjectedHtml(res, filepath);
+  try {
+    await sendInjectedHtml(res, filepath);
+  } catch (err) {
+    console.error('Fallback routing error:', err);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 // Error handling middleware
