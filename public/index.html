@@ -1101,6 +1101,7 @@
         // Get cover image for college
         function getCollegeImageUrl(col) {
           if (col.imageUrl) return col.imageUrl;
+          if (col.bannerUrl) return col.bannerUrl;
           const nameLower = col.name.toLowerCase();
           if (nameLower.includes('mnit') || nameLower.includes('malaviya national')) {
             return 'assets/colleges/mnit.webp';

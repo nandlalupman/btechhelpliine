@@ -7,8 +7,24 @@
       "destination": "/api"
     },
     {
+      "source": "/assets/:path*",
+      "destination": "/public/assets/:path*"
+    },
+    {
+      "source": "/styles.css",
+      "destination": "/public/styles.css"
+    },
+    {
+      "source": "/script.js",
+      "destination": "/public/script.js"
+    },
+    {
+      "source": "/favicon.png",
+      "destination": "/public/favicon.png"
+    },
+    {
       "source": "/:path*",
-      "destination": "/public/:path*"
+      "destination": "/api"
     }
   ]
 }

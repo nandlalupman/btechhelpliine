@@ -127,8 +127,19 @@ app.use(express.json({ limit: '5mb' })); // Supports base64 image uploads for co
 app.use(morgan('dev'));
 
 // Intercept HTML file requests to dynamically inject GA / GSC environment variables
-app.get(/^\/(.*\.html)?$/, async (req, res, next) => {
-  let filename = req.params[0] || 'index.html';
+app.get('*', async (req, res, next) => {
+  // Only intercept page requests: skip API, skip health check, and skip requests with typical static file extensions
+  if (req.path.startsWith('/api') || req.path === '/health' || req.path.match(/\.(css|js|png|jpg|jpeg|gif|webp|svg|ico)$/)) {
+    return next();
+  }
+
+  let filename = req.path.substring(1);
+  if (!filename || filename === '/') {
+    filename = 'index.html';
+  } else if (!filename.endsWith('.html')) {
+    filename = filename + '.html';
+  }
+
   const filepath = path.join(__dirname, '../public', filename);
   if (fs.existsSync(filepath)) {
     try {

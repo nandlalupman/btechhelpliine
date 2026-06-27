@@ -762,7 +762,7 @@ router.put('/onboard-requests/:id/status', async (req, res) => {
         description: description,
         branches: branchesList.length > 0 ? branchesList : undefined,
         website: request.website || undefined,
-        imageUrl: null,
+        imageUrl: request.bannerUrl || null,
         isOnboarded: true,
         aicteApproved: request.aicteApproved !== false,
         ugcRecognized: request.ugcRecognized !== false,
