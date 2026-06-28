@@ -387,3 +387,22 @@ exports.sendStatusUpdateEmail = async (email, name, status) => {
 
   return transporter.sendMail(mailOptions);
 };
+
+exports.sendCustomEmail = async (email, subject, bodyText) => {
+  const title = subject;
+  // Replace newlines with <br> for HTML rendering, maintaining spaces
+  const bodyHtml = `
+    <h2 class="title">${subject}</h2>
+    <p class="text" style="white-space: pre-wrap; line-height: 1.6;">${bodyText.replace(/\n/g, '<br>')}</p>
+  `;
+
+  const mailOptions = {
+    from: `"${EMAIL_FROM_NAME}" <${EMAIL_FROM}>`,
+    to: email,
+    subject: subject,
+    text: bodyText,
+    html: getEmailWrapper(title, subject, bodyHtml)
+  };
+
+  return transporter.sendMail(mailOptions);
+};

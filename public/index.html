@@ -221,6 +221,41 @@
     }
     </script>
     <style>
+      /* Write Review Modal Styles */
+      .modal {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(15, 23, 42, 0.4);
+        backdrop-filter: blur(8px);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 100000;
+        padding: 20px;
+      }
+      .modal.open { display: flex; }
+      .modal-card {
+        background: var(--white);
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        padding: 30px;
+        width: 100%;
+        max-width: 550px;
+        position: relative;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: var(--shadow-lg);
+        color: var(--ink);
+      }
+      .modal-close {
+        position: absolute;
+        top: 15px; right: 15px;
+        background: none; border: none;
+        font-size: 1.5rem; cursor: pointer;
+        color: var(--muted);
+      }
+      .modal-close:hover { color: var(--rose); }
+
       /* ── College Explorer Section ── */
       .explorer-section { background: linear-gradient(180deg, #f0f4ff 0%, #f8fafc 100%); }
 
@@ -1071,6 +1106,63 @@
       </div>
     </div>
 
+    <!-- Write Review Modal -->
+    <div class="modal" id="review-write-modal" style="z-index: 1000000;">
+      <div class="modal-card" style="max-width: 550px; width: 100%;">
+        <button class="modal-close" onclick="closeReviewWriteModal()">&times;</button>
+        <h2 style="margin-bottom: 12px; font-weight:800; border-left:4px solid #3b82f6; padding-left:10px;">Write a Review</h2>
+        <p style="font-size:0.8rem; color:var(--muted); margin-bottom:20px;">Share your personal experience to help future engineering candidates select their dream campus.</p>
+        
+        <form id="review-write-form" onsubmit="submitReviewForm(event)" style="display:flex; flex-direction:column; gap:16px; text-align:left;">
+          <!-- Sectional Ratings -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+            <div>
+              <label style="font-size:0.8rem; font-weight:700; color:var(--ink); display:block; margin-bottom:4px;">Academics & Faculty</label>
+              <div class="star-rating-input" data-section="academics" style="display:flex; gap:4px; font-size:1.4rem; color:var(--line); cursor:pointer;">
+                <span data-value="1">★</span><span data-value="2">★</span><span data-value="3">★</span><span data-value="4">★</span><span data-value="5">★</span>
+              </div>
+            </div>
+            <div>
+              <label style="font-size:0.8rem; font-weight:700; color:var(--ink); display:block; margin-bottom:4px;">Placement Opportunities</label>
+              <div class="star-rating-input" data-section="placements" style="display:flex; gap:4px; font-size:1.4rem; color:var(--line); cursor:pointer;">
+                <span data-value="1">★</span><span data-value="2">★</span><span data-value="3">★</span><span data-value="4">★</span><span data-value="5">★</span>
+              </div>
+            </div>
+            <div>
+              <label style="font-size:0.8rem; font-weight:700; color:var(--ink); display:block; margin-bottom:4px;">Infrastructure & Facilities</label>
+              <div class="star-rating-input" data-section="infrastructure" style="display:flex; gap:4px; font-size:1.4rem; color:var(--line); cursor:pointer;">
+                <span data-value="1">★</span><span data-value="2">★</span><span data-value="3">★</span><span data-value="4">★</span><span data-value="5">★</span>
+              </div>
+            </div>
+            <div>
+              <label style="font-size:0.8rem; font-weight:700; color:var(--ink); display:block; margin-bottom:4px;">Campus Life & Clubs</label>
+              <div class="star-rating-input" data-section="socialLife" style="display:flex; gap:4px; font-size:1.4rem; color:var(--line); cursor:pointer;">
+                <span data-value="1">★</span><span data-value="2">★</span><span data-value="3">★</span><span data-value="4">★</span><span data-value="5">★</span>
+              </div>
+            </div>
+          </div>
+          
+          <label style="display:flex; flex-direction:column; gap:6px; font-size:0.85rem; font-weight:700; color:var(--ink);">
+            Detailed Comment
+            <textarea id="review-comment" rows="4" required placeholder="Describe details like actual placement criteria, faculty teaching style, curfew strictness, club activities, cafeteria food quality..." style="padding:10px; border:1px solid var(--line); border-radius:8px; font-size:0.9rem; font-family:inherit; resize:vertical; background:var(--white); color:var(--ink);"></textarea>
+          </label>
+          
+          <!-- Image Upload Block -->
+          <div>
+            <label style="font-size:0.85rem; font-weight:700; color:var(--ink); display:block; margin-bottom:6px;">Upload Photos (Campus, Labs, Hostel)</label>
+            <div style="border:2px dashed var(--line); border-radius:8px; padding:16px; text-align:center; background:var(--soft); cursor:pointer; position:relative;" onclick="document.getElementById('review-images-input').click()">
+              <input type="file" id="review-images-input" multiple accept="image/*" style="display:none;" onchange="handleReviewImageUploads(event)" />
+              <div style="font-size:1.8rem; color:var(--muted); margin-bottom:6px;">📷</div>
+              <span style="font-size:0.8rem; color:var(--muted); font-weight:600;">Drag & Drop or Click to Upload</span>
+            </div>
+            <div id="review-images-preview" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;"></div>
+          </div>
+          
+          <button class="btn-action btn-add" type="submit" style="width: 100%; margin: 8px 0 0 0; padding: 12px 20px; font-weight:700;">Submit Review</button>
+        </form>
+      </div>
+    </div>
+
     <!-- College Explorer JS -->
     <script>
       document.addEventListener('DOMContentLoaded', () => {
@@ -1397,7 +1489,68 @@
                     </div>
                   </div>
 
-                  <!-- Sticky Sidebar Column -->
+                  <!-- Reviews Section -->
+                  <div style="margin-top: 32px; border-top: 1px solid var(--line); padding-top: 24px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+                      <h4 class="details-section-title" style="margin:0;">Student Reviews & Ratings</h4>
+                      <div id="write-review-btn-container"></div>
+                    </div>
+                    
+                    <!-- Rating Summary -->
+                    <div id="reviews-summary-container" style="background:var(--soft); border-radius:12px; padding:16px; border:1px solid var(--line); margin-bottom:20px; display:grid; grid-template-columns: 1fr 2fr; gap:20px; align-items:center;">
+                      <div style="text-align:center; border-right: 1px solid var(--line); padding-right:10px;">
+                        <div style="font-size: 2.6rem; font-weight: 800; color: var(--ink); line-height:1;" id="avg-overall-rating">0.0</div>
+                        <div style="color: #f59e0b; font-size:1.1rem; margin:6px 0;" id="avg-overall-stars">☆☆☆☆☆</div>
+                        <div style="font-size:0.75rem; color: var(--muted);" id="total-reviews-count">Based on 0 reviews</div>
+                      </div>
+                      <div style="display:flex; flex-direction:column; gap:8px;">
+                        <div>
+                          <div style="display:flex; justify-content:space-between; font-size:0.8rem; font-weight:600; margin-bottom:2px;">
+                            <span>Academics & Faculty</span>
+                            <span id="avg-academics-rating">0.0 / 5</span>
+                          </div>
+                          <div style="height:6px; background:var(--line); border-radius:3px; overflow:hidden;">
+                            <div id="bar-academics" style="height:100%; width:0%; background:var(--blue); border-radius:3px;"></div>
+                          </div>
+                        </div>
+                        <div>
+                          <div style="display:flex; justify-content:space-between; font-size:0.8rem; font-weight:600; margin-bottom:2px;">
+                            <span>Placement & Career</span>
+                            <span id="avg-placements-rating">0.0 / 5</span>
+                          </div>
+                          <div style="height:6px; background:var(--line); border-radius:3px; overflow:hidden;">
+                            <div id="bar-placements" style="height:100%; width:0%; background:var(--green-dark); border-radius:3px;"></div>
+                          </div>
+                        </div>
+                        <div>
+                          <div style="display:flex; justify-content:space-between; font-size:0.8rem; font-weight:600; margin-bottom:2px;">
+                            <span>Infrastructure & Facilities</span>
+                            <span id="avg-infrastructure-rating">0.0 / 5</span>
+                          </div>
+                          <div style="height:6px; background:var(--line); border-radius:3px; overflow:hidden;">
+                            <div id="bar-infrastructure" style="height:100%; width:0%; background:var(--orange-dark); border-radius:3px;"></div>
+                          </div>
+                        </div>
+                        <div>
+                          <div style="display:flex; justify-content:space-between; font-size:0.8rem; font-weight:600; margin-bottom:2px;">
+                            <span>Campus Life & Clubs</span>
+                            <span id="avg-socialLife-rating">0.0 / 5</span>
+                          </div>
+                          <div style="height:6px; background:var(--line); border-radius:3px; overflow:hidden;">
+                            <div id="bar-socialLife" style="height:100%; width:0%; background:var(--violet); border-radius:3px;"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Reviews List -->
+                    <div id="reviews-list-container" style="display:flex; flex-direction:column; gap:16px;">
+                      <!-- Reviews populated dynamically -->
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Sticky Sidebar Column -->
                   <div class="details-sticky-wrapper">
                     <div class="details-sidebar-card">
                       <h4 style="margin: 0 0 4px 0; color: var(--ink); font-size: 1.1rem; font-weight: 800; text-align: left;">Quick Highlights</h4>
@@ -1504,6 +1657,9 @@
           fetchExplorerColleges();
         });
 
+        // Initialize Star rating selectors
+        initStarRatingInputs();
+
         // Cookie consent banner logic
         const consent = localStorage.getItem('cookie-consent');
         const banner = document.getElementById('cookie-consent');
@@ -1519,6 +1675,256 @@
           banner.style.display = 'none';
         });
       });
+
+      // Review Star Selectors & State
+      let reviewRatings = { academics: 0, placements: 0, infrastructure: 0, socialLife: 0 };
+      let reviewBase64Images = [];
+      let currentReviewCollegeId = null;
+
+      function initStarRatingInputs() {
+        document.querySelectorAll('.star-rating-input').forEach(container => {
+          const section = container.getAttribute('data-section');
+          const stars = container.querySelectorAll('span');
+          
+          stars.forEach(star => {
+            star.style.transition = 'transform 0.1s';
+            star.onmouseover = () => star.style.transform = 'scale(1.2)';
+            star.onmouseout = () => star.style.transform = 'scale(1)';
+            
+            star.onclick = () => {
+              const val = parseInt(star.getAttribute('data-value'));
+              reviewRatings[section] = val;
+              
+              stars.forEach(s => {
+                const sVal = parseInt(s.getAttribute('data-value'));
+                if (sVal <= val) {
+                  s.style.color = '#f59e0b';
+                } else {
+                  s.style.color = 'var(--line)';
+                }
+              });
+            };
+          });
+        });
+      }
+
+      window.handleReviewImageUploads = function(e) {
+        const files = Array.from(e.target.files);
+        const preview = document.getElementById('review-images-preview');
+        
+        files.forEach(file => {
+          if (!file.type.startsWith('image/')) return;
+          
+          const reader = new FileReader();
+          reader.onload = function(evt) {
+            const base64 = evt.target.result;
+            reviewBase64Images.push(base64);
+            
+            const thumb = document.createElement('div');
+            thumb.style = 'position:relative; width:64px; height:64px; border-radius:6px; overflow:hidden; border:1px solid var(--line); margin-right:8px;';
+            thumb.innerHTML = `
+              <img src="${base64}" style="width:100%; height:100%; object-fit:cover;" />
+              <button type="button" style="position:absolute; top:2px; right:2px; width:16px; height:16px; border-radius:50%; background:rgba(0,0,0,0.6); color:white; border:none; font-size:10px; cursor:pointer; display:flex; align-items:center; justify-content:center;" onclick="removeReviewImage(this, '${base64}')">&times;</button>
+            `;
+            preview.appendChild(thumb);
+          };
+          reader.readAsDataURL(file);
+        });
+      };
+
+      window.removeReviewImage = function(btn, base64) {
+        const idx = reviewBase64Images.indexOf(base64);
+        if (idx !== -1) {
+          reviewBase64Images.splice(idx, 1);
+        }
+        btn.parentElement.remove();
+      };
+
+      window.openReviewWriteModal = function(collegeId) {
+        currentReviewCollegeId = collegeId;
+        reviewRatings = { academics: 0, placements: 0, infrastructure: 0, socialLife: 0 };
+        reviewBase64Images = [];
+        
+        document.getElementById('review-write-form').reset();
+        document.getElementById('review-images-preview').innerHTML = '';
+        document.querySelectorAll('.star-rating-input span').forEach(s => s.style.color = 'var(--line)');
+        
+        document.getElementById('review-write-modal').classList.add('open');
+      };
+
+      window.closeReviewWriteModal = function() {
+        document.getElementById('review-write-modal').classList.remove('open');
+        currentReviewCollegeId = null;
+      };
+
+      window.submitReviewForm = async function(e) {
+        e.preventDefault();
+        
+        if (!currentReviewCollegeId) return;
+        
+        const { academics, placements, infrastructure, socialLife } = reviewRatings;
+        if (!academics || !placements || !infrastructure || !socialLife) {
+          alert('Please click to select rating stars for all four sections!');
+          return;
+        }
+        
+        const comment = document.getElementById('review-comment').value.trim();
+        const overallRating = parseFloat(((academics + placements + infrastructure + socialLife) / 4).toFixed(1));
+        
+        const payload = {
+          rating: overallRating,
+          comment,
+          ratings: reviewRatings,
+          images: reviewBase64Images
+        };
+        
+        const submitBtn = document.querySelector('#review-write-form button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
+        
+        const apiBase = typeof API_URL !== 'undefined' ? API_URL : 'http://localhost:3000';
+        try {
+          const res = await fetch(`${apiBase}/api/colleges/${currentReviewCollegeId}/reviews`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify(payload)
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            alert('Review submitted successfully!');
+            closeReviewWriteModal();
+            await fetchAndRenderReviews(currentReviewCollegeId);
+          } else {
+            alert(data.error || 'Failed to submit review.');
+          }
+        } catch (err) {
+          console.error(err);
+          alert('Connection error submitting review.');
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Submit Review';
+        }
+      };
+
+      async function fetchAndRenderReviews(collegeId) {
+        const apiBase = typeof API_URL !== 'undefined' ? API_URL : 'http://localhost:3000';
+        try {
+          const res = await fetch(`${apiBase}/api/colleges/${collegeId}/reviews`);
+          const data = await res.json();
+          
+          const listContainer = document.getElementById('reviews-list-container');
+          if (!listContainer) return;
+          
+          if (res.ok && data.success) {
+            const reviews = data.data;
+            const count = reviews.length;
+            
+            if (count === 0) {
+              listContainer.innerHTML = `
+                <div style="text-align:center; padding:24px; color:var(--muted); font-size:0.88rem; background:var(--soft); border-radius:8px; border:1px dashed var(--line);">
+                  No reviews submitted yet. Be the first to review this college!
+                </div>
+              `;
+              document.getElementById('avg-overall-rating').textContent = '0.0';
+              document.getElementById('avg-overall-stars').textContent = '☆☆☆☆☆';
+              document.getElementById('total-reviews-count').textContent = 'Based on 0 reviews';
+              document.getElementById('avg-academics-rating').textContent = '0.0 / 5';
+              document.getElementById('bar-academics').style.width = '0%';
+              document.getElementById('avg-placements-rating').textContent = '0.0 / 5';
+              document.getElementById('bar-placements').style.width = '0%';
+              document.getElementById('avg-infrastructure-rating').textContent = '0.0 / 5';
+              document.getElementById('bar-infrastructure').style.width = '0%';
+              document.getElementById('avg-socialLife-rating').textContent = '0.0 / 5';
+              document.getElementById('bar-socialLife').style.width = '0%';
+              return;
+            }
+            
+            let overallSum = 0, acadSum = 0, placeSum = 0, infraSum = 0, socialSum = 0;
+            reviews.forEach(r => {
+              overallSum += r.rating;
+              acadSum += r.ratings.academics;
+              placeSum += r.ratings.placements;
+              infraSum += r.ratings.infrastructure;
+              socialSum += r.ratings.socialLife;
+            });
+            
+            const avgOverall = (overallSum / count).toFixed(1);
+            const avgAcad = (acadSum / count).toFixed(1);
+            const avgPlace = (placeSum / count).toFixed(1);
+            const avgInfra = (infraSum / count).toFixed(1);
+            const avgSocial = (socialSum / count).toFixed(1);
+            
+            document.getElementById('avg-overall-rating').textContent = avgOverall;
+            document.getElementById('avg-overall-stars').textContent = getStarString(parseFloat(avgOverall));
+            document.getElementById('total-reviews-count').textContent = `Based on \${count} review\${count > 1 ? 's' : ''}`;
+            
+            document.getElementById('avg-academics-rating').textContent = `\${avgAcad} / 5`;
+            document.getElementById('bar-academics').style.width = `\${(avgAcad / 5) * 100}%`;
+            
+            document.getElementById('avg-placements-rating').textContent = `\${avgPlace} / 5`;
+            document.getElementById('bar-placements').style.width = `\${(avgPlace / 5) * 100}%`;
+            
+            document.getElementById('avg-infrastructure-rating').textContent = `\${avgInfra} / 5`;
+            document.getElementById('bar-infrastructure').style.width = `\${(avgInfra / 5) * 100}%`;
+            
+            document.getElementById('avg-socialLife-rating').textContent = `\${avgSocial} / 5`;
+            document.getElementById('bar-socialLife').style.width = `\${(avgSocial / 5) * 100}%`;
+            
+            listContainer.innerHTML = reviews.map(r => {
+              const reviewDate = new Date(r.createdAt).toLocaleDateString('en-IN', {
+                year: 'numeric', month: 'short', day: 'numeric'
+              });
+              
+              const imgHtml = (r.images && r.images.length > 0) ? `
+                <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;">
+                  \${r.images.map(img => \`
+                    <img src="\${img}" style="width:72px; height:72px; object-fit:cover; border-radius:6px; cursor:zoom-in; border:1px solid var(--line);" onclick="openLightbox('\${img}', 'Review Photo')" />
+                  \`).join('')}
+                </div>
+              ` : '';
+              
+              return `
+                <div style="background:var(--white); border:1px solid var(--line); border-radius:12px; padding:16px; box-shadow: var(--shadow-sm); display:flex; flex-direction:column; gap:8px; text-align:left;">
+                  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                    <div>
+                      <strong style="color:var(--ink);">\${escapeHTML(r.studentName)}</strong>
+                      <span style="font-size:0.75rem; color:var(--muted); margin-left:8px;">\${reviewDate}</span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:4px; font-weight:700; color:#f59e0b; font-size:0.9rem;">
+                      <span>\${r.rating.toFixed(1)}</span>
+                      <span>\${getStarString(r.rating)}</span>
+                    </div>
+                  </div>
+                  
+                  <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap:6px 12px; font-size:0.75rem; color:var(--muted); background:var(--soft); padding:8px 12px; border-radius:8px;">
+                    <div>Acad: <strong style="color:var(--blue);">\${r.ratings.academics}★</strong></div>
+                    <div>Placement: <strong style="color:var(--green-dark);">\${r.ratings.placements}★</strong></div>
+                    <div>Infra: <strong style="color:var(--orange-dark);">\${r.ratings.infrastructure}★</strong></div>
+                    <div>Campus Life: <strong style="color:var(--violet);">\${r.ratings.socialLife}★</strong></div>
+                  </div>
+                  
+                  <p style="margin:6px 0 0 0; font-size:0.88rem; line-height:1.5; color:#334155; white-space:pre-wrap;">\${escapeHTML(r.comment)}</p>
+                  \${imgHtml}
+                </div>
+              `;
+            }).join('');
+          } else {
+            listContainer.innerHTML = '<div style="color:var(--rose); font-size:0.85rem;">Failed to load reviews.</div>';
+          }
+        } catch (err) {
+          console.error(err);
+          const listContainer = document.getElementById('reviews-list-container');
+          if (listContainer) listContainer.innerHTML = '<div style="color:var(--rose); font-size:0.85rem;">Connection error loading reviews.</div>';
+        }
+      }
+
+      function getStarString(rating) {
+        const fullStars = Math.round(rating);
+        return '★'.repeat(fullStars) + '☆'.repeat(5 - fullStars);
+      }
     </script>
 
     <!-- Cookie Consent Banner -->

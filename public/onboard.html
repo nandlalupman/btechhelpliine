@@ -960,6 +960,14 @@
               <span>I hereby certify that the metrics submitted herein have been validated by the competitive analytics and admissions boards. Btechhelpline.com is explicitly authorized to compile, normalize, and configure these properties onto its live interactive filter architecture.</span>
             </label>
           </div>
+
+          <!-- Admin Direct Onboarding Option -->
+          <div id="admin-direct-onboard-block" style="display:none; background:#eff6ff; border:1px solid #bfdbfe; padding:16px; border-radius:12px; margin-top:20px;">
+            <label class="checkbox-item" style="margin-bottom:0; color:#1e40af; font-weight:600; display:flex; align-items:center; gap:10px; cursor:pointer;">
+              <input type="checkbox" id="directOnboard" style="width:18px; height:18px; cursor:pointer;" />
+              <span>Admin Mode: Onboard directly to active database (Skip review/approval queue)</span>
+            </label>
+          </div>
         </section>
 
         <!-- Form Navigation Actions -->
@@ -1881,6 +1889,12 @@
           document.getElementById('instructions-modal').style.display = 'grid';
         }
 
+        // Show Admin Direct Onboard block if role is admin
+        if (localStorage.getItem('role') === 'admin') {
+          const adminBlock = document.getElementById('admin-direct-onboard-block');
+          if (adminBlock) adminBlock.style.display = 'block';
+        }
+
         // Restore draft if any
         if (localStorage.getItem('onboard_draft')) {
           loadDraft();
@@ -1996,10 +2010,19 @@
           attestationConsent: document.getElementById('attestationConsent').checked
         };
 
+        const directOnboardVal = document.getElementById('directOnboard') ? document.getElementById('directOnboard').checked : false;
+        formData.directOnboard = directOnboardVal;
+
+        const tokenVal = localStorage.getItem('token');
+        const headersVal = { 'Content-Type': 'application/json' };
+        if (tokenVal) {
+          headersVal['Authorization'] = `Bearer ${tokenVal}`;
+        }
+
         try {
           const res = await fetch(`${API_URL}/api/colleges/onboard`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: headersVal,
             body: JSON.stringify(formData)
           });
           const data = await res.json();

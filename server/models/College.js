@@ -110,6 +110,14 @@ const CollegeSchema = new mongoose.Schema(
         caption: { type: String, default: '' },
       }
     ],
+    ratingAverage: {
+      type: Number,
+      default: 0,
+    },
+    ratingCount: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,

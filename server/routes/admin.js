@@ -820,5 +820,113 @@ router.delete('/onboard-requests/:id', async (req, res) => {
 
 
 
+// POST /onboard-requests/direct — Onboard a college directly (Admin only)
+router.post('/onboard-requests/direct', async (req, res) => {
+  try {
+    const College = require('../models/College');
+    const request = req.body;
+
+    if (!request.name || !request.city || !request.state) {
+      return res.status(400).json({ success: false, error: 'Name, city, and state are required.' });
+    }
+
+    // Determine type from governance
+    let collegeType = 'Other';
+    if (request.governance) {
+      const gov = request.governance.toLowerCase();
+      if (gov.includes('iit') && !gov.includes('iiit')) collegeType = 'IIT';
+      else if (gov.includes('iiit')) collegeType = 'IIIT';
+      else if (gov.includes('nit')) collegeType = 'NIT';
+      else if (gov.includes('bits')) collegeType = 'BITS';
+      else if (gov.includes('vit')) collegeType = 'VIT';
+      else if (gov.includes('state') || gov.includes('government')) collegeType = 'State';
+      else if (gov.includes('private')) collegeType = 'Private';
+    }
+
+    // Determine CSE cutoff rank
+    let cseCutoff = 'N/A';
+    if (request.cutoffs && request.cutoffs.length > 0) {
+      const cseCutoffObj = request.cutoffs.find(c => c.streamName && c.streamName.includes('Computer Science'));
+      if (cseCutoffObj) {
+        cseCutoff = cseCutoffObj.jeeClosingRank ? `~${cseCutoffObj.jeeClosingRank} (JEE)` : (cseCutoffObj.stateClosingRank ? `~${cseCutoffObj.stateClosingRank} (State)` : 'N/A');
+      }
+    }
+
+    // Determine avg and highest placement
+    let avgPlacement = 5.0;
+    let highestPlacement = 10.0;
+    if (request.placements && request.placements.length > 0) {
+      const techPlacement = request.placements.find(p => p.poolName && (p.poolName.includes('Tech') || p.poolName.includes('CSE')));
+      if (techPlacement) {
+        avgPlacement = techPlacement.averageCTC || techPlacement.medianCTC || 5.0;
+        highestPlacement = techPlacement.highestCTC || 10.0;
+      }
+    }
+
+    // Synthesize description if not provided
+    const description = request.description || `Established in ${request.establishmentYear}, ${request.name} is a premier ${request.autonomyStatus ? request.autonomyStatus.toLowerCase() : 'autonomous'} college situated in ${request.city}, ${request.state}. Onboarded with BtechHelpline and approved by AICTE, it offers excellent B.Tech degrees with a strong faculty-to-student ratio of 1:${request.facultyToStudentRatio || 15} and ${request.phdFacultyPercent || 30}% PhD faculty. The campus lifestyle maintains a ${request.lifestyle && request.lifestyle.curfewPolicy ? request.lifestyle.curfewPolicy.toLowerCase() : 'moderate curfew'} curfew structure and features ${request.lifestyle && request.lifestyle.totalCodingClubs || 3} active tech and coding clubs.`;
+
+    // Branches list
+    const branchesList = request.branches ? request.branches.map(b => b.branchName) : [];
+
+    const college = new College({
+      name: request.name,
+      type: collegeType,
+      nirfRank: request.nirfRank || null,
+      city: request.city,
+      state: request.state,
+      admissionMode: request.acceptedExams ? request.acceptedExams.join(', ') : 'JEE Main',
+      feesPerYear: request.fees ? request.fees.tuitionGeneral : 100000,
+      cutoffRankCSE: cseCutoff,
+      avgPlacement: avgPlacement,
+      highestPlacement: highestPlacement,
+      description: description,
+      branches: branchesList.length > 0 ? branchesList : undefined,
+      website: request.website || undefined,
+      imageUrl: request.bannerUrl || null,
+      bannerUrl: request.bannerUrl || null,
+      facilities: request.facilities || [],
+      isOnboarded: true,
+      aicteApproved: request.aicteApproved !== undefined ? request.aicteApproved : true,
+      ugcRecognized: request.ugcRecognized !== undefined ? request.ugcRecognized : true,
+      naacRating: request.naacRating || null,
+      nbaAccredited: request.nbaAccredited !== undefined ? request.nbaAccredited : false,
+      nbaBranches: request.nbaBranches || []
+    });
+
+    await college.save();
+    res.status(201).json({ success: true, message: 'College onboarded directly', data: college });
+  } catch (err) {
+    console.error('Admin direct onboarding error:', err.message);
+    res.status(500).json({ success: false, error: 'Internal Server Error' });
+  }
+});
+
+
+// POST /onboard-requests/:id/send-email — Send a custom status email (Admin only)
+router.post('/onboard-requests/:id/send-email', async (req, res) => {
+  try {
+    const AffiliationRequest = require('../models/AffiliationRequest');
+    const { subject, body } = req.body;
+
+    if (!subject || !body) {
+      return res.status(400).json({ success: false, error: 'Please provide email subject and body.' });
+    }
+
+    const request = await AffiliationRequest.findById(req.params.id);
+    if (!request) {
+      return res.status(404).json({ success: false, error: 'Onboarding request not found.' });
+    }
+
+    const { sendCustomEmail } = require('../utils/email');
+    await sendCustomEmail(request.email, subject, body);
+
+    res.json({ success: true, message: 'Email sent successfully to submitter.' });
+  } catch (err) {
+    console.error('Admin send custom email error:', err.message);
+    res.status(500).json({ success: false, error: 'Failed to send email. Please verify SMTP setup.' });
+  }
+});
+
 module.exports = router;
 
