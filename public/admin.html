@@ -782,6 +782,9 @@
             </select>
             <button class="btn-action btn-reset" onclick="resetAffiliationFilters()">Reset</button>
           </div>
+          <button class="btn-action btn-add" onclick="window.location.href='onboard.html'" style="background: linear-gradient(135deg, #10b981, #059669); border:none; color:white;">
+            + Direct Onboard College
+          </button>
         </div>
 
         <div class="table-wrapper">
@@ -905,34 +908,40 @@
 
     <!-- Affiliation Details Modal -->
     <div class="modal" id="affiliation-details-modal">
-      <div class="modal-card" style="max-width: 800px; width: 100%;">
+      <div class="modal-card" style="max-width: 95vw; width: 95vw; height: 95vh; max-height: 95vh; display: flex; flex-direction: column; justify-content: space-between; padding: 24px;">
         <button class="modal-close" onclick="closeAffiliationModal()">&times;</button>
-        <h2 id="affiliation-modal-title" style="margin-bottom: 20px; font-weight:800; border-left:4px solid #3b82f6; padding-left:10px;">Institution Onboarding Request Detail</h2>
+        <h2 id="affiliation-modal-title" style="margin-bottom: 12px; font-weight:800; border-left:4px solid #3b82f6; padding-left:10px;">Institution Onboarding Request Detail</h2>
         
-        <div id="affiliation-modal-content" style="font-size:0.92rem; display:flex; flex-direction:column; gap:24px; max-height: 48vh; overflow-y: auto; padding-right: 8px;">
+        <div id="affiliation-modal-content" style="font-size:0.92rem; display:flex; flex-direction:column; gap:24px; flex-grow: 1; overflow-y: auto; padding-right: 8px; margin-bottom: 16px;">
           <!-- Loaded dynamically -->
         </div>
 
         <!-- Manual Custom Email Section -->
-        <div id="affiliation-email-section" style="border-top: 1px solid var(--line); padding-top:16px; margin-top: 16px;">
-          <h3 style="margin:0 0 12px 0; font-weight:800; color:var(--blue); font-size:1rem;">Send Status Update Email</h3>
-          <div style="display: flex; flex-direction: column; gap: 10px;">
-            <div style="display: flex; gap: 10px; align-items: center;">
-              <span style="font-weight: 600; font-size: 0.85rem; color: var(--muted);">Select Template:</span>
-              <select id="aff-email-template" onchange="applyAffiliationEmailTemplate()" style="padding: 6px 12px; border-radius: 6px; border: 1px solid var(--line); background: var(--white); color: var(--ink);">
-                <option value="">-- Select Template --</option>
-                <option value="received">Application Received</option>
-                <option value="approved">College Approved</option>
-                <option value="rejected">Application Rejected</option>
-              </select>
+        <div id="affiliation-email-section" style="border-top: 1px solid var(--line); padding-top:12px; margin-top: 0px;">
+          <h3 style="margin:0 0 10px 0; font-weight:800; color:var(--blue); font-size:1rem;">Send Status Update Email</h3>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: center;">
+              <div style="display: flex; gap: 10px; align-items: center;">
+                <span style="font-weight: 600; font-size: 0.85rem; color: var(--muted); min-width: 100px; text-align: left;">Select Template:</span>
+                <select id="aff-email-template" onchange="applyAffiliationEmailTemplate()" style="padding: 6px 12px; border-radius: 6px; border: 1px solid var(--line); background: var(--white); color: var(--ink); flex-grow: 1;">
+                  <option value="">-- Select Template --</option>
+                  <option value="received">Application Received</option>
+                  <option value="approved">College Approved</option>
+                  <option value="rejected">Application Rejected</option>
+                </select>
+              </div>
+              <div style="display: flex; gap: 10px; align-items: center;">
+                <span style="font-weight: 600; font-size: 0.85rem; color: var(--muted); min-width: 90px; text-align: left;">Send To Email:</span>
+                <input type="email" id="aff-email-recipient" placeholder="recipient@college.edu" style="padding: 6px 12px; border: 1px solid var(--line); border-radius: 6px; font-size: 0.9rem; background: var(--white); color: var(--ink); flex-grow: 1;" />
+              </div>
             </div>
             <input type="text" id="aff-email-subject" placeholder="Email Subject" style="padding: 8px 12px; border: 1px solid var(--line); border-radius: 6px; font-size: 0.9rem; background: var(--white); color: var(--ink);" />
-            <textarea id="aff-email-body" rows="4" placeholder="Customize email body here..." style="padding: 8px 12px; border: 1px solid var(--line); border-radius: 6px; font-size: 0.9rem; background: var(--white); color: var(--ink); font-family: inherit; resize: vertical;"></textarea>
+            <textarea id="aff-email-body" rows="3" placeholder="Customize email body here..." style="padding: 8px 12px; border: 1px solid var(--line); border-radius: 6px; font-size: 0.9rem; background: var(--white); color: var(--ink); font-family: inherit; resize: vertical;"></textarea>
             <button class="btn-action btn-add" style="width: fit-content; margin: 0; padding: 6px 12px; font-size: 0.85rem;" onclick="sendAffiliationEmail()">Send Manual Email ✉️</button>
           </div>
         </div>
 
-        <div style="border-top: 1px solid var(--line); padding-top:20px; margin-top: 20px; display:flex; justify-content: flex-end; gap:12px;" id="affiliation-modal-actions">
+        <div style="border-top: 1px solid var(--line); padding-top:12px; margin-top: 12px; display:flex; justify-content: flex-end; gap:12px;" id="affiliation-modal-actions">
           <!-- Loaded dynamically -->
         </div>
       </div>
@@ -2504,6 +2513,7 @@
             
             // Reset email fields
             document.getElementById('aff-email-template').value = '';
+            document.getElementById('aff-email-recipient').value = req.email || '';
             document.getElementById('aff-email-subject').value = '';
             document.getElementById('aff-email-body').value = '';
             
@@ -2855,9 +2865,14 @@
         const req = window.currentAffiliationRequest;
         if (!req) return;
         
+        const toEmail = document.getElementById('aff-email-recipient').value.trim();
         const subject = document.getElementById('aff-email-subject').value.trim();
         const body = document.getElementById('aff-email-body').value.trim();
         
+        if (!toEmail) {
+          alert('Please enter a recipient email address.');
+          return;
+        }
         if (!subject || !body) {
           alert('Please fill out both the email subject and body.');
           return;
@@ -2874,7 +2889,7 @@
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ subject, body })
+            body: JSON.stringify({ subject, body, toEmail })
           });
           const data = await res.json();
           if (res.ok && data.success) {

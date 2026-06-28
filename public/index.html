@@ -1487,10 +1487,9 @@
                         }
                       </div>
                     </div>
-                  </div>
 
-                  <!-- Reviews Section -->
-                  <div style="margin-top: 32px; border-top: 1px solid var(--line); padding-top: 24px;">
+                    <!-- Reviews Section -->
+                    <div style="margin-top: 32px; border-top: 1px solid var(--line); padding-top: 24px;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
                       <h4 class="details-section-title" style="margin:0;">Student Reviews & Ratings</h4>
                       <div id="write-review-btn-container"></div>
@@ -1597,6 +1596,24 @@
                   </div>
                 </div>
               `;
+              
+              // Initialize Star rating logic, write review button container, and fetch reviews
+              const tokenVal = localStorage.getItem('token');
+              const writeBtnContainer = document.getElementById('write-review-btn-container');
+              if (writeBtnContainer) {
+                if (tokenVal) {
+                  writeBtnContainer.innerHTML = `
+                    <button class="btn-action btn-add" style="margin:0; padding:8px 16px; font-size:0.85rem;" onclick="openReviewWriteModal('${id}')">Write Review ✍️</button>
+                  `;
+                } else {
+                  writeBtnContainer.innerHTML = `
+                    <span style="font-size:0.82rem; color:var(--muted); font-style:italic;">Log in to write a review</span>
+                  `;
+                }
+              }
+              
+              // Load ratings & reviews
+              await fetchAndRenderReviews(id);
             } else {
               explorerModalContent.innerHTML = `<div style="text-align:center; padding:40px; color:#f87171;">${data.error || 'Failed to load details'}</div>`;
             }

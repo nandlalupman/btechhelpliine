@@ -907,7 +907,7 @@ router.post('/onboard-requests/direct', async (req, res) => {
 router.post('/onboard-requests/:id/send-email', async (req, res) => {
   try {
     const AffiliationRequest = require('../models/AffiliationRequest');
-    const { subject, body } = req.body;
+    const { subject, body, toEmail } = req.body;
 
     if (!subject || !body) {
       return res.status(400).json({ success: false, error: 'Please provide email subject and body.' });
@@ -918,10 +918,15 @@ router.post('/onboard-requests/:id/send-email', async (req, res) => {
       return res.status(404).json({ success: false, error: 'Onboarding request not found.' });
     }
 
-    const { sendCustomEmail } = require('../utils/email');
-    await sendCustomEmail(request.email, subject, body);
+    const recipient = toEmail ? toEmail.trim() : request.email;
+    if (!recipient) {
+      return res.status(400).json({ success: false, error: 'Recipient email address is required.' });
+    }
 
-    res.json({ success: true, message: 'Email sent successfully to submitter.' });
+    const { sendCustomEmail } = require('../utils/email');
+    await sendCustomEmail(recipient, subject, body);
+
+    res.json({ success: true, message: 'Email sent successfully.' });
   } catch (err) {
     console.error('Admin send custom email error:', err.message);
     res.status(500).json({ success: false, error: 'Failed to send email. Please verify SMTP setup.' });
