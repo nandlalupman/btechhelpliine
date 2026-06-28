@@ -1,16 +1,14 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Google Search Console -->
-    <meta name="google-site-verification" content="YOUR_GOOGLE_SEARCH_CONSOLE_KEY" />
-
-    <!-- Google Analytics (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=YOUR_GOOGLE_ANALYTICS_ID"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G7NM5HQRF2"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'YOUR_GOOGLE_ANALYTICS_ID');
+
+      gtag('config', 'G-G7NM5HQRF2');
     </script>
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon.png" />
@@ -881,28 +879,7 @@
           </div>
         </div>
 
-        <!-- Google Integration Settings Configuration Card -->
-        <div class="chart-card" style="margin-bottom: 40px; text-align: left;">
-          <h3>Google Search Console & Google Analytics Integration Settings</h3>
-          <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 20px;">
-            Configure your global site tracking and verification codes code-free. These keys will be dynamically injected into the HTML templates served to visitors.
-          </p>
-          <form id="settings-form" style="display: grid; gap: 16px; max-width: 600px;">
-            <label style="display: flex; flex-direction: column; gap: 6px; font-weight: 700; font-size: 0.9rem;">
-              Google Analytics Measurement ID
-              <input type="text" id="setting-ga-id" placeholder="e.g. G-H2J8K9L0M1" style="padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none;" />
-            </label>
-            <label style="display: flex; flex-direction: column; gap: 6px; font-weight: 700; font-size: 0.9rem;">
-              Google Search Console Site-Verification Code
-              <input type="text" id="setting-gsc-key" placeholder="e.g. google-site-verification=abc123xyz..." style="padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none;" />
-            </label>
-            <div style="display: flex; gap: 10px; align-items: center;">
-              <button type="submit" class="btn-action btn-add" style="padding: 10px 20px; font-size: 0.9rem; font-weight: 700; width: fit-content; border: none; cursor: pointer; border-radius: 6px;">Save Settings</button>
-              <span id="settings-success-msg" style="color: #34d399; font-weight: 600; font-size: 0.85rem; display: none;">Settings saved successfully!</span>
-              <span id="settings-error-msg" style="color: #ef4444; font-weight: 600; font-size: 0.85rem; display: none;"></span>
-            </div>
-          </form>
-        </div>
+
       </section>
 
     </div>
@@ -1789,9 +1766,7 @@
               `;
               workloadTbody.appendChild(tr);
             });
-
-            // Fetch Google integration settings
-            loadGoogleSettings();
+            // End workload data loading
           }
         } catch (err) {
           console.error(err);
@@ -2769,58 +2744,7 @@
         }
       }
 
-      // ── SETTINGS MANAGEMENT LOGIC ──
-      async function loadGoogleSettings() {
-        try {
-          const res = await fetch(`${API_URL}/api/admin/settings`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-          });
-          const data = await res.json();
-          if (res.ok && data.success) {
-            document.getElementById('setting-ga-id').value = data.data.googleAnalyticsId || '';
-            document.getElementById('setting-gsc-key').value = data.data.googleSiteVerification || '';
-          }
-        } catch (err) {
-          console.error('Failed to load settings:', err);
-        }
-      }
 
-      async function saveGoogleSettings(e) {
-        if (e) e.preventDefault();
-        const successMsg = document.getElementById('settings-success-msg');
-        const errorMsg = document.getElementById('settings-error-msg');
-        successMsg.style.display = 'none';
-        errorMsg.style.display = 'none';
-
-        const googleAnalyticsId = document.getElementById('setting-ga-id').value.trim();
-        const googleSiteVerification = document.getElementById('setting-gsc-key').value.trim();
-
-        try {
-          const res = await fetch(`${API_URL}/api/admin/settings`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ googleAnalyticsId, googleSiteVerification })
-          });
-          const data = await res.json();
-          if (res.ok && data.success) {
-            successMsg.style.display = 'inline';
-            setTimeout(() => { successMsg.style.display = 'none'; }, 3000);
-            showToast('Google integration settings saved successfully');
-          } else {
-            errorMsg.textContent = data.error || 'Failed to save settings';
-            errorMsg.style.display = 'inline';
-            showToast(data.error || 'Failed to save settings', 'error');
-          }
-        } catch (err) {
-          console.error(err);
-          errorMsg.textContent = 'Connection error';
-          errorMsg.style.display = 'inline';
-          showToast('Connection error', 'error');
-        }
-      }
 
       // Init Load
       async function init() {
@@ -2828,10 +2752,7 @@
         fetchLeads();
         initCrudBannerUploader();
 
-        const settingsForm = document.getElementById('settings-form');
-        if (settingsForm) {
-          settingsForm.addEventListener('submit', saveGoogleSettings);
-        }
+
 
         // Close modals on backdrop click
         const detailsModal = document.getElementById('details-modal');
