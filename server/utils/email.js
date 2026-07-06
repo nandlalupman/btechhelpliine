@@ -217,8 +217,8 @@ const getEmailWrapper = (title, preheader, bodyHtml) => {
       <div class="footer">
         <p class="footer-text" style="font-weight: 600; color: #475569; font-size: 13px; margin-bottom: 8px;">Need help or have questions?</p>
         <p class="footer-text" style="margin-bottom: 24px; font-size: 13px;">
-          Call: <a href="tel:+917300012345" style="color: #2563eb; text-decoration: none; font-weight: 600;">+91 73000 12345</a> &nbsp;|&nbsp; 
-          WhatsApp: <a href="https://wa.me/917300012345?text=Hi%20I%20need%20help%20with%20B.Tech%20admission" style="color: #10b981; text-decoration: none; font-weight: 600;" target="_blank">Chat Now</a> &nbsp;|&nbsp; 
+          Call: <a href="tel:+919509698089" style="color: #2563eb; text-decoration: none; font-weight: 600;">+91 95096 98089</a> &nbsp;|&nbsp; 
+          WhatsApp: <a href="https://wa.me/919509698089?text=Hi%20I%20need%20help%20with%20B.Tech%20admission" style="color: #10b981; text-decoration: none; font-weight: 600;" target="_blank">Chat Now</a> &nbsp;|&nbsp; 
           Email: <a href="mailto:info@btechhelpline.com" style="color: #2563eb; text-decoration: none; font-weight: 600;">info@btechhelpline.com</a>
         </p>
         <p class="footer-text">© 2026 BtechHelpline. All rights reserved.</p>
