@@ -34,6 +34,7 @@ const local = path.join(root, '.local');
       fs.writeFileSync(path.join(local, 'access.json'), JSON.stringify({ email, password, note: 'Local development account only; never use these credentials in production.' }, null, 2), { mode: 0o600 });
     }
     console.log('Local database ready. Administrator login details: .local/access.json');
+    await require('../server/services/collegeEvidence').syncEvidence();
     const { CounsellingSlot } = require('../server/models/Journey');
     if (!await CounsellingSlot.exists({ startAt: { $gt: new Date() }, cancelled: false })) {
       const admin = await User.findOne({ email });

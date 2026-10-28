@@ -50,6 +50,8 @@
     const load = async () => {
       if (token()) { const result = await api('/api/journey/applications', { auth: true }); account = true; applications = result.data; feedback('#application-storage', 'Saved in your account'); }
       else { applications = read(key, []); feedback('#application-storage', 'Saved on this browser'); }
+      const hint = new URLSearchParams(location.search);
+      if (hint.get('task') && !applicationForm.elements.title.value) { applicationForm.elements.title.value = hint.get('task').slice(0,160); const source = hint.get('source'); if (source && /^https?:\/\//i.test(source)) applicationForm.elements.sourceUrl.value = safeLink(source); }
       storageReady = true;
       applicationForm.elements.emailReminder.disabled = !account;
       render();

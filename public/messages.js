@@ -60,6 +60,7 @@
     $('#refresh-my-messages').addEventListener('click', () => refresh().catch(error => notice('#find-message-result', error.message, true)));
     formSubmit($('#find-message'), async values => { const item = await api('/api/messages/access', 'POST', { accessKey: values.accessKey }); remember(item._id, values.accessKey, item.subject); await open({ ...item, accessKey: values.accessKey }); notice('#find-message-result', 'Request opened. Keep the tracking code private.'); }, '#find-message-result');
     const newForm = $('#new-message');
+    const subjectHint = new URLSearchParams(location.search).get('subject'); if (subjectHint) newForm.elements.subject.value = subjectHint.slice(0,160);
     if (token()) api('/api/user/me').then(user => { notice('#message-account', `Signed in as ${user.name}. New requests will be saved to your account.`); for (const [name, value] of Object.entries({ name: user.name, email: user.email, mobile: user.phone })) if (!newForm.elements[name].value) newForm.elements[name].value = value; }).catch(() => {});
     formSubmit(newForm, async values => {
       notice('#new-message-result', 'Saving your message…');

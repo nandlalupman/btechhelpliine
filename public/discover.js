@@ -51,8 +51,14 @@
   }
   const money = n => n == null ? 'Not verified' : `₹${Math.round(n).toLocaleString('en-IN')}`;
   const smallArrow = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg>';
-  function card(c) {
-    return `<article class="college-card" data-college="${esc(c.slug)}"><a class="college-image ${c.image ? '' : 'college-image-fallback'}" href="/colleges/${esc(c.slug)}/">${c.image ? `<img src="${esc(c.image)}" width="600" height="360" loading="lazy" alt="${esc(c.name)} campus">` : `<span class="college-monogram">${esc(c.name.split(/\s+/).slice(0, 3).map(w => w[0]).join(''))}</span>`}<span class="type-badge">${esc(c.type)}</span></a><button class="save-button icon-button" data-save="${esc(c.slug)}" aria-label="Save ${esc(c.name)}" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></button><div class="college-card-body"><p class="college-location">${esc(c.city)}, ${esc(c.state)}</p><h3><a href="/colleges/${esc(c.slug)}/">${esc(c.name)}</a></h3><div class="college-facts"><div><span>Annual tuition</span><strong>${c.feesPerYear == null ? 'Check official fees' : money(c.feesPerYear)}</strong></div><div><span>Admission route</span><strong>${esc(c.admissionMode.split('/')[0].trim())}</strong></div></div><div class="card-bottom"><label class="compare-check"><input type="checkbox" data-compare="${esc(c.slug)}"> Compare</label><a class="card-link" href="/colleges/${esc(c.slug)}/">Explore college ${smallArrow}</a></div></div></article>`;
+  function card(c) { return window.BtechCollegeCards.render(c); }
+  let featuredSlugs = $("#featured-grid [data-college]").map(node => node.dataset.college);
+  function renderFeatured(value = "All") {
+    const selected = value === "All" ? featuredSlugs.map(find).filter(Boolean) : colleges.filter(c => c.state === value || c.type === value).slice(0,6);
+    const grid = $("#featured-grid"); if (!grid) return;
+    grid.innerHTML = selected.length ? selected.map(card).join("") : "<p>No matching listings in this selection. Explore the full directory.</p>";
+    const status = $("#featured-status"); if (status) status.textContent = `${selected.length} listings to explore${value === "All" ? "" : " · " + value}. Check programme and source details before deciding.`;
+    updateControls();
   }
   let limit = 12;
   const filters = $('#directory-filters');
@@ -84,8 +90,7 @@
   $('[data-reset-filters]')?.addEventListener('click', () => { filters.reset(); filters.elements.q.value = ''; filters.elements.state.value = ''; filters.elements.type.value = ''; limit = 12; updateFilterUrl(); renderDirectory(); });
   $$('[data-feature-filter]').forEach(button => button.addEventListener('click', () => {
     const value = button.dataset.featureFilter;
-    const selected = value === 'All' ? colleges.filter(c => c.image).slice(0, 6) : colleges.filter(c => c.state === value || c.type === value).slice(0, 6);
-    $('#featured-grid').innerHTML = selected.map(card).join('');
+    renderFeatured(value);
     $$('[data-feature-filter]').forEach(b => { b.classList.toggle('active', b === button); b.setAttribute('aria-pressed', String(b === button)); });
     updateControls(); track('browse_featured', { category: value });
   }));
@@ -108,7 +113,7 @@
     if (!selected.length) { table.innerHTML = '<caption>Your college comparison</caption><tbody><tr><th>Ready when you are</th><td>Choose a college above to begin.</td></tr></tbody>'; return; }
     const rows = [
       ['College', c => `<a href="/colleges/${esc(c.slug)}/">${esc(c.name)}</a>`], ['Location', c => esc(`${c.city}, ${c.state}`)], ['Type', c => esc(c.type)],
-      ['Listed admission route', c => esc(c.admissionMode)], ['Annual tuition', c => money(c.feesPerYear)], ['Annual hostel', c => money(c.hostelPerYear)],
+      ['Published fee component', c => c.feeSummary ? `${esc(c.feeSummary.label)}: ${money(c.feeSummary.amount)} / ${esc(c.feeSummary.period)}<br><small>${esc(c.feeSummary.scope)} · ${esc(c.feeSummary.year)}</small>` : 'No reviewed programme fee snapshot'], ['Listed admission route', c => esc(c.admissionMode)], ['Annual tuition', c => money(c.feesPerYear)], ['Annual hostel', c => money(c.hostelPerYear)],
       ['Annual mess', c => money(c.messPerYear)], ['Other annual mandatory fees', c => money(c.mandatoryFeesPerYear)],
       ['Median placement', c => c.medianPlacement == null ? 'Not verified' : `₹${c.medianPlacement} LPA`],
       ['Listed branches', c => c.branches.map(esc).join('<br>') || 'Confirm with institution'],
@@ -176,7 +181,8 @@
   if (path === '/') fetch('/api/discovery').then(r => r.ok ? r.json() : null).then(result => {
     if (!result?.live || !Array.isArray(result.colleges)) return;
     colleges = result.colleges;
-    $('#featured-grid').innerHTML = colleges.slice(0, 6).map(card).join('');
+    featuredSlugs = result.featuredSlugs || featuredSlugs;
+    renderFeatured($("[data-feature-filter].active")?.dataset.featureFilter || "All");
     updateControls();
   }).catch(() => {});
   // Merge real account choices into the browser list; never erase a local shortlist.

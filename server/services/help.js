@@ -1,6 +1,17 @@
 const guides = require('../data/guides');
 function answer(question, language = 'en') {
   const text = question.toLowerCase();
+  if (/scholar|छात्रवृत्ति|स्कॉलरशिप/.test(text)) return {
+    title: language === 'hi' ? 'छात्रवृत्ति के सही स्रोत से शुरुआत करें' : 'Start with a scholarship source you can check',
+    answer: language === 'hi' ? 'छात्रवृत्ति पेज पर राष्ट्रीय, राज्य और निजी फाउंडेशन के संसाधन देखें। अपने कोर्स, संस्थान, डोमिसाइल और वर्तमान सत्र की शर्तें आधिकारिक नोटिस से मिलाएं। अंतिम तिथि और संस्थान सत्यापन की तारीख अलग हो सकती हैं।' : 'Browse national, state and foundation resources in the scholarship section. Check the current scheme notice for your course, institution, domicile and entry year. Student and institute-verification deadlines can differ; save your confirmed date in the tracker.',
+    links: [{ title: 'Scholarship resources', url: '/scholarships/' }, { title: 'State government resources', url: '/states/' }, { title: 'National Scholarship Portal', url: 'https://scholarships.gov.in/' }],
+    note: language === 'hi' ? 'यह संसाधन खोजने में मदद है; पात्रता या चयन का निर्णय नहीं।' : 'Resource discovery guidance; eligibility and selection belong to the scheme provider.'
+  };
+  if (/government|govt|state scheme|सरकार|राज्य/.test(text)) return {
+    title: language === 'hi' ? 'अपने राज्य के आधिकारिक संसाधन देखें' : 'Find your state’s official starting points',
+    answer: language === 'hi' ? 'राज्य पेज पर सरकारी पोर्टल, समीक्षा किए गए छात्रवृत्ति संसाधन और प्रवेश की जानकारी के लिंक मिलेंगे। डोमिसाइल और काउंसलिंग की पात्रता अलग से जांचें।' : 'Open the state resource hub for government portals, reviewed scholarship resources and admission-information starting points. Confirm domicile requirements and counselling eligibility separately.',
+    links: [{ title: 'All states and union territories', url: '/states/' }, { title: 'Government website directory', url: 'https://igod.gov.in/sg/states' }]
+  };
   const groups = [
     { terms: /fee|cost|budget|scholar|loan|फीस|खर्च|बजट|छात्रवृत्ति/, slug: 'understanding-btech-fees' },
     { terms: /branch|cse|ece|career|placement|salary|ब्रांच|नौकरी|प्लेसमेंट/, slug: 'choosing-engineering-branch' },

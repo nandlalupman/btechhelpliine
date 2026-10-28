@@ -39,12 +39,24 @@ Copy `.env.example` to `.env` locally and configure the existing database, JWT a
 - `/messages/`: private questions, account request history, anonymous tracking codes and two-way conversations. The homepage form also saves a trackable private request.
 - `/inbox/`: administrator assignment, assigned counsellor queue, search/status filters, priority, follow-up dates, private notes and optional reply emails. See [the message workflow](docs/MESSAGE_WORKFLOW.md) for account setup, ownership and daily operating steps.
 - `/sitemap.xml`, `/robots.txt`: generated crawl configuration. Invalid routes return 404.
+- `/scholarships/`: 20 curated national/state scholarship resources, audience/state/search filters, browser-saved schemes, source-linked detail pages and a manual planning-task handoff. Private foundation awards are labelled separately. No live eligibility decision or invented application deadline is supplied.
+- `/states/`: a searchable hub for all 28 states and 8 union territories, with government websites, reviewed specialist portals where available, national resources, document planning and matching directory colleges. This is a curated student hub, not a complete database of every government notice.
 
 The established login, student/counsellor/admin portals, institution onboarding, privacy and terms pages remain available at their clean URLs. Legacy `.html` URLs redirect in the Express server and deployment configuration.
 
 ## Editing and verification
 
 The shared page templates live in `server/views/site.js` and `server/views/journey.js`; styles/interactions are `public/discover.*` and `public/journey.*`. The original logo assets and BtechHelpline wordmark are preserved. `public/planning.js` is shared with the budget tests. Run `npm run build:home` after changing templates or directory identities to regenerate the static homepage fallback.
+
+The restrained blue/red theme in `public/brand.css` follows the original logo. College cards use the same `public/college-card.js` renderer on the server and client, preserving fee periods, course scope and curated homepage order after the discovery API refresh. Campus images are matched to exact institution identities rather than broad name fragments.
+
+Scholarships/state resources live in `server/data/student-resources.js` and render through `server/views/resources.js`. The client uses the testable `public/resource-filters.js` helpers. Keep the source-review date honest; do not infer a current application window from an old notice. A provider's current official rules take precedence.
+
+`server/data/college-evidence.js` contains field-level, dated source snapshots for five named institutions: three fee snapshots and two official-information link collections. Numeric fee examples are course/category/period-specific, not institution-wide promises. For example, a semester tuition charge remains a semester charge, and an annual academic total is not a hostel-inclusive degree total. Existing general fees and placements remain independently subject to their evidence rules.
+
+Run `npm run sync:college-evidence` to retain the reviewed snapshot in each matching MongoDB college's `officialEvidence` field. It does not alter other college fields, create missing colleges or apply another campus's data. Local bootstrap performs the same sync. Public rendering uses the reviewed source catalogue, so arbitrary `officialEvidence` edits cannot introduce unsupported fees.
+
+For a bounded read-only check of external resource links, run `node scripts/check-resource-links.js`. Its ignored `.local/resource-link-report.json` records HTTP status, redirect/title and timestamps. HTTP 200 alone does not prove useful content; government portals can return an error page, require JavaScript or time out from this environment. A failed reachability check never changes a scheme's application status.
 
 Historical ranks live in `server/data/cutoffs.json` with source/year/round/import timestamp. `npm run import:ranks` reimports the current public official JoSAA form; inspect the resulting year, round and diff before publishing. It does not supply future cutoffs or determine quota eligibility.
 

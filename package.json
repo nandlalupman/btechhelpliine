@@ -8,6 +8,7 @@
     "dev": "node --watch server/server.js",
     "local": "node scripts/local.js",
     "check:messages": "node scripts/check-local-messages.js",
+    "sync:college-evidence": "node scripts/sync-college-evidence.js",
     "test": "node --test tests/*.test.js",
     "build:home": "node scripts/build-public-home.js",
     "import:ranks": "node scripts/import-josaa.js",
