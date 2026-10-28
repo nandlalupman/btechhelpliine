@@ -1,15 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6B390BG8Q2"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-6B390BG8Q2');
-    </script>
+    <script src="/consent.js" defer></script>
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon.png" />
     <meta charset="utf-8" />
@@ -607,7 +599,7 @@
       }
     </style>
   </head>
-  <body class="admin-body">
+  <body class="admin-body"><div style="padding:10px 24px;background:#153d35;color:white;font-size:14px"><a href="/inbox/" style="color:white;margin-right:24px">Student message inbox →</a><a href="/staff/" style="color:white">Sessions, appointments & review moderation →</a></div>
     <!-- Header -->
     <header class="dash-header">
       <div class="dash-header-container">
@@ -1029,7 +1021,7 @@
         <button class="modal-close" onclick="closeCollegeFormModal()">&times;</button>
         <h2 id="college-modal-title" style="margin-bottom: 20px; font-weight:800; border-left:4px solid #3b82f6; padding-left:10px;">Add New College</h2>
         <form id="college-crud-form" class="profile-form" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-          <input type="hidden" id="crud-college-id" />
+          <input type="hidden" id="crud-college-id" /><fieldset style="grid-column:1/-1;border:1px solid #475569;border-radius:8px;padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:15px"><legend>Data sources & verification</legend><p style="grid-column:1/-1;font-size:12px;color:#cbd5e1">Only mark verified after checking all entered numeric figures against the cited document and year. Unknown figures may stay blank.</p><label>Data status<select id="crud-evidence-dataStatus" style="width:100%;padding:10px 14px;background:#112038;border:1px solid #475569;border-radius:8px;color:white"><option value="needs_review">Needs review</option><option value="institution_reported">Institution reported</option><option value="verified">Source verified</option></select></label><label>Source academic year<input id="crud-evidence-dataYear" type="number" min="0" step="any" style="width:100%;padding:10px 14px;background:#112038;border:1px solid #475569;border-radius:8px;color:white"></label><label>Source document URL<input id="crud-evidence-sourceUrl" type="url"  style="width:100%;padding:10px 14px;background:#112038;border:1px solid #475569;border-radius:8px;color:white"></label><label>Verification date<input id="crud-evidence-verifiedAt" type="date"  style="width:100%;padding:10px 14px;background:#112038;border:1px solid #475569;border-radius:8px;color:white"></label><label>Median placement (LPA)<input id="crud-evidence-medianPlacement" type="number" min="0" step="any" style="width:100%;padding:10px 14px;background:#112038;border:1px solid #475569;border-radius:8px;color:white"></label><label>Annual hostel (INR)<input id="crud-evidence-hostelPerYear" type="number" min="0" step="any" style="width:100%;padding:10px 14px;background:#112038;border:1px solid #475569;border-radius:8px;color:white"></label><label>Annual mess (INR)<input id="crud-evidence-messPerYear" type="number" min="0" step="any" style="width:100%;padding:10px 14px;background:#112038;border:1px solid #475569;border-radius:8px;color:white"></label><label>Other mandatory annual fees (INR)<input id="crud-evidence-mandatoryFeesPerYear" type="number" min="0" step="any" style="width:100%;padding:10px 14px;background:#112038;border:1px solid #475569;border-radius:8px;color:white"></label></fieldset>
           
           <label style="grid-column: 1/-1;">
             College Name
@@ -1077,17 +1069,17 @@
           
           <label style="margin-bottom: 0;">
             Yearly Fees (INR)
-            <input type="number" id="crud-college-fees" placeholder="e.g. 225000" required style="width: 100%; padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none;" />
+            <input type="number" id="crud-college-fees" placeholder="e.g. 225000" style="width: 100%; padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none;" />
           </label>
           
           <label style="margin-bottom: 0;">
             Average Placement (LPA)
-            <input type="number" step="0.1" id="crud-college-avg" placeholder="e.g. 22.2" required style="width: 100%; padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none;" />
+            <input type="number" step="0.1" id="crud-college-avg" placeholder="e.g. 22.2" style="width: 100%; padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none;" />
           </label>
           
           <label style="margin-bottom: 0;">
             Highest Placement (LPA)
-            <input type="number" step="0.1" id="crud-college-highest" placeholder="e.g. 210.0" required style="width: 100%; padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none;" />
+            <input type="number" step="0.1" id="crud-college-highest" placeholder="e.g. 210.0" style="width: 100%; padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; outline: none;" />
           </label>
           
           <label style="margin-bottom: 0;">
@@ -1107,7 +1099,7 @@
               AICTE Approved
             </label>
             <label style="display: flex; flex-direction: row; gap: 8px; align-items: center; margin-bottom: 0; cursor: pointer; color: white;">
-              <input type="checkbox" id="crud-college-ugc" checked style="width: 16px; height: 16px; margin: 0; cursor: pointer;" />
+              <input type="checkbox" id="crud-college-ugc" style="width: 16px; height: 16px; margin: 0; cursor: pointer;" />
               UGC Recognized
             </label>
             <label style="display: flex; flex-direction: row; gap: 8px; align-items: center; margin-bottom: 0; cursor: pointer; flex-grow: 1; color: white;">
@@ -1768,7 +1760,7 @@
             document.getElementById('analytic-total-users').textContent = stats.totalUsers;
             document.getElementById('analytic-total-counsellors').textContent = stats.totalCounsellors;
             document.getElementById('analytic-total-colleges').textContent = stats.totalColleges;
-            document.getElementById('analytic-avg-placement').textContent = `₹${stats.avgPlacement.toFixed(1)} LPA`;
+            document.getElementById('analytic-avg-placement').textContent = `₹${stats.avgPlacement == null ? '—' : Number(stats.avgPlacement).toFixed(1)} LPA`;
             document.getElementById('analytic-max-placement').textContent = `₹${stats.maxPlacement.toFixed(1)} LPA`;
             document.getElementById('analytic-conversion').textContent = stats.conversionRate;
 
@@ -1943,7 +1935,7 @@
                 <td><span class="badge ${badgeClass}">${col.type}</span></td>
                 <td>${rankText}</td>
                 <td>${escapeHTML(col.cutoffRankCSE)}</td>
-                <td><strong style="color:var(--green-dark);">₹${col.avgPlacement.toFixed(1)} LPA</strong></td>
+                <td><strong style="color:var(--green-dark);">₹${col.avgPlacement == null ? '—' : Number(col.avgPlacement).toFixed(1)} LPA</strong></td>
                 <td>${feesText}</td>
                 <td style="text-align:right;">
                   <button class="btn-toggle btn-toggle-activate" style="padding:6px 10px;margin-right:5px;" onclick="openEditCollegeModal('${col._id}')">Edit</button>
@@ -2235,8 +2227,8 @@
 
         // Reset accreditations
         document.getElementById('crud-college-aicte').checked = false;
-        document.getElementById('crud-college-ugc').checked = true;
-        document.getElementById('crud-college-nba').checked = false;
+        document.getElementById('crud-college-ugc').checked = false;
+        document.getElementById('crud-college-nba-branches').value = '';
         document.getElementById('crud-college-naac').value = '';
 
         collegeFormModal.classList.add('open');
@@ -2268,6 +2260,14 @@
             document.getElementById('crud-college-branches').value = col.branches ? col.branches.join(', ') : '';
             document.getElementById('crud-college-description').value = col.description;
 
+            document.getElementById('crud-evidence-dataStatus').value = col.dataStatus ?? 'needs_review';
+document.getElementById('crud-evidence-dataYear').value = col.dataYear ?? '';
+document.getElementById('crud-evidence-sourceUrl').value = col.sourceUrl ?? '';
+document.getElementById('crud-evidence-verifiedAt').value = col.verifiedAt ? col.verifiedAt.slice(0,10) : '';
+document.getElementById('crud-evidence-medianPlacement').value = col.medianPlacement ?? '';
+document.getElementById('crud-evidence-hostelPerYear').value = col.hostelPerYear ?? '';
+document.getElementById('crud-evidence-messPerYear').value = col.messPerYear ?? '';
+document.getElementById('crud-evidence-mandatoryFeesPerYear').value = col.mandatoryFeesPerYear ?? '';
             // Load accreditations
             document.getElementById('crud-college-aicte').checked = !!col.aicteApproved;
             document.getElementById('crud-college-ugc').checked = col.ugcRecognized !== false;
@@ -2331,9 +2331,9 @@
         const state = document.getElementById('crud-college-state').value.trim();
         const admissionMode = document.getElementById('crud-college-admission').value.trim();
         const cutoffRankCSE = document.getElementById('crud-college-cutoff').value.trim();
-        const feesPerYear = Number(document.getElementById('crud-college-fees').value);
-        const avgPlacement = Number(document.getElementById('crud-college-avg').value);
-        const highestPlacement = Number(document.getElementById('crud-college-highest').value);
+        const feesPerYear = document.getElementById('crud-college-fees').value === '' ? null : Number(document.getElementById('crud-college-fees').value);
+        const avgPlacement = document.getElementById('crud-college-avg').value === '' ? null : Number(document.getElementById('crud-college-avg').value);
+        const highestPlacement = document.getElementById('crud-college-highest').value === '' ? null : Number(document.getElementById('crud-college-highest').value);
         const website = document.getElementById('crud-college-website').value.trim();
         const imageUrl = document.getElementById('crud-college-image').value.trim() || null;
         const description = document.getElementById('crud-college-description').value.trim();
@@ -2356,6 +2356,14 @@
         })).filter(f => f.imageUrl);
 
         const payload = {
+          dataStatus: document.getElementById('crud-evidence-dataStatus').value || '',
+          dataYear: document.getElementById('crud-evidence-dataYear').value === '' ? null : Number(document.getElementById('crud-evidence-dataYear').value),
+          sourceUrl: document.getElementById('crud-evidence-sourceUrl').value || '',
+          verifiedAt: document.getElementById('crud-evidence-verifiedAt').value || null,
+          medianPlacement: document.getElementById('crud-evidence-medianPlacement').value === '' ? null : Number(document.getElementById('crud-evidence-medianPlacement').value),
+          hostelPerYear: document.getElementById('crud-evidence-hostelPerYear').value === '' ? null : Number(document.getElementById('crud-evidence-hostelPerYear').value),
+          messPerYear: document.getElementById('crud-evidence-messPerYear').value === '' ? null : Number(document.getElementById('crud-evidence-messPerYear').value),
+          mandatoryFeesPerYear: document.getElementById('crud-evidence-mandatoryFeesPerYear').value === '' ? null : Number(document.getElementById('crud-evidence-mandatoryFeesPerYear').value),
           name, type, nirfRank, city, state, admissionMode, cutoffRankCSE, feesPerYear, avgPlacement, highestPlacement, website, imageUrl, description, branches, bannerUrl, facilities, aicteApproved, ugcRecognized, nbaAccredited, nbaBranches, naacRating
         };
 

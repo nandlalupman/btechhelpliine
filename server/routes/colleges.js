@@ -1,3 +1,4 @@
+const { collegeDescription, placementData, positiveNumber } = require('../utils/collegeData');
 const express = require('express');
 const College = require('../models/College');
 
@@ -10,7 +11,7 @@ router.get('/', async (req, res) => {
     const filter = {};
 
     if (search) {
-      filter.name = { $regex: search.trim(), $options: 'i' };
+      filter.name = { $regex: search.trim().slice(0, 100).replace(/[.*+?^${}()|[\]\\]/g, char => `\\${char}`), $options: 'i' };
     }
 
     if (type) {
@@ -52,27 +53,29 @@ router.get('/public-stats', async (req, res) => {
     
     // Calculate average placement dynamically
     const avgPlacementsResult = await College.aggregate([
-      { $match: { avgPlacement: { $ne: null } } },
+      { $match: { avgPlacement: { $ne: null }, dataStatus: 'verified' } },
       { $group: { _id: null, avgPlacement: { $avg: '$avgPlacement' } } }
     ]);
     const averagePlacement = avgPlacementsResult.length > 0 
       ? parseFloat(avgPlacementsResult[0].avgPlacement.toFixed(1)) 
-      : 15.6;
+      : null;
 
     // Fetch actual count of users (or active students)
-    const User = require('../models/User');
     const Lead = require('../models/Lead');
-    const studentCount = await User.countDocuments({ role: 'student' });
-    const leadsCount = await Lead.countDocuments();
-    const totalStudentsGuided = 1000 + studentCount + leadsCount;
+    const completed = await Lead.aggregate([
+      { $match: { $or: [{ status: 'counselled' }, { counselledAt: { $ne: null } }] } },
+      { $group: { _id: '$phone' } },
+      { $count: 'total' }
+    ]);
+    const totalStudentsGuided = completed[0]?.total || 0;
 
     // Calculate unique cities covered
     const citiesResult = await College.distinct('city');
-    const totalCities = citiesResult.length > 0 ? citiesResult.length : 15;
+    const totalCities = citiesResult.length;
 
     // Pick a featured college (highest average placement NIT or IIT)
     const featuredCollege = await College.findOne({ 
-      type: { $in: ['IIT', 'NIT'] }, 
+      type: { $in: ['IIT', 'NIT'] }, dataStatus: 'verified',
       avgPlacement: { $ne: null } 
     }).sort({ avgPlacement: -1 });
 
@@ -196,17 +199,10 @@ router.post('/onboard', async (req, res) => {
         }
       }
 
-      let avgPlacement = 5.0;
-      let highestPlacement = 10.0;
-      if (requestData.placements && Array.isArray(requestData.placements)) {
-        const techPlacement = requestData.placements.find(p => p.poolName && p.poolName.includes('Tech'));
-        if (techPlacement) {
-          avgPlacement = techPlacement.averageCTC || techPlacement.medianCTC || 5.0;
-          highestPlacement = techPlacement.highestCTC || 10.0;
-        }
-      }
+      const { avgPlacement, highestPlacement } = placementData(requestData);
 
-      const description = `Established in ${requestData.establishmentYear}, ${requestData.name} is a premier ${requestData.autonomyStatus ? requestData.autonomyStatus.toLowerCase() : 'autonomous'} college situated in ${requestData.city}, ${requestData.state}. Onboarded with BtechHelpline and approved by AICTE, it offers excellent B.Tech degrees with a strong faculty-to-student ratio of 1:${requestData.facultyToStudentRatio || 15} and ${requestData.phdFacultyPercent || 30}% PhD faculty. The campus lifestyle maintains a ${requestData.lifestyle && requestData.lifestyle.curfewPolicy ? requestData.lifestyle.curfewPolicy.toLowerCase() : 'moderate curfew'} curfew structure and features ${requestData.lifestyle && requestData.lifestyle.totalCodingClubs || 3} active tech and coding clubs.`;
+
+      const description = collegeDescription(requestData);
 
       const branchesList = requestData.branches ? requestData.branches.map(b => b.branchName) : [];
 
@@ -216,8 +212,8 @@ router.post('/onboard', async (req, res) => {
         nirfRank: requestData.nirfRank || null,
         city: requestData.city,
         state: requestData.state,
-        admissionMode: (requestData.acceptedExams && requestData.acceptedExams.join(', ')) || 'JEE Main',
-        feesPerYear: requestData.fees ? requestData.fees.tuitionGeneral : 0,
+        admissionMode: (requestData.acceptedExams && requestData.acceptedExams.join(', ')) || 'Confirm with institution',
+        feesPerYear: positiveNumber(requestData.fees?.tuitionGeneral),
         cutoffRankCSE: cseCutoff,
         avgPlacement: avgPlacement,
         highestPlacement: highestPlacement,
@@ -226,8 +222,8 @@ router.post('/onboard', async (req, res) => {
         website: requestData.website || undefined,
         imageUrl: requestData.bannerUrl || null,
         isOnboarded: true,
-        aicteApproved: requestData.aicteApproved !== false,
-        ugcRecognized: requestData.ugcRecognized !== false,
+        aicteApproved: requestData.aicteApproved === true,
+        ugcRecognized: requestData.ugcRecognized === true,
         naacRating: requestData.naacRating || null,
         nbaAccredited: !!(requestData.nbaAccredited || (requestData.branches && requestData.branches.some(b => b.nbaAccredited))),
         nbaBranches: requestData.nbaBranches || [],
@@ -272,8 +268,8 @@ router.post('/onboard', async (req, res) => {
 router.get('/:id/reviews', async (req, res) => {
   try {
     const Review = require('../models/Review');
-    const reviews = await Review.find({ collegeId: req.params.id }).sort({ createdAt: -1 });
-    res.json({ success: true, data: reviews });
+    const reviews = await Review.find({ collegeId: req.params.id, moderationStatus: 'published' }).select('studentName rating ratings comment images createdAt').sort({ createdAt: -1 }).limit(20).lean();
+    res.json({ success: true, data: reviews.map(review => ({ ...review, images: require('../utils/reviewImages').images(review.images) })) });
   } catch (err) {
     console.error('Fetch reviews error:', err.message);
     res.status(500).json({ success: false, error: 'Internal Server Error' });
@@ -286,6 +282,14 @@ router.post('/:id/reviews', verifyToken, async (req, res) => {
   try {
     const Review = require('../models/Review');
     const { rating, comment, ratings, images } = req.body;
+    if (images && (!Array.isArray(images) || images.length > 3 || images.some(image => typeof image !== 'string' || image.length > 400000 || !/^data:image\/(?:png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(image)))) {
+      return res.status(400).json({ success: false, error: 'Attach up to three compressed PNG, JPEG or WebP images, each below 300 KB.' });
+    }
+
+    if (typeof comment !== 'string' || comment.trim().length < 10 || comment.length > 4000 || ![rating, ...Object.values(ratings || {})].every(value => Number.isFinite(Number(value)) && Number(value) >= 1 && Number(value) <= 5)) {
+      return res.status(400).json({ success: false, error: 'Use ratings from 1 to 5 and a review of 10–4000 characters.' });
+    }
+    if (!await College.exists({ _id: req.params.id })) return res.status(404).json({ success: false, error: 'College not found' });
 
     if (!rating || !comment || !ratings) {
       return res.status(400).json({ success: false, error: 'Please provide rating, comment, and sectional ratings.' });
@@ -319,17 +323,19 @@ router.post('/:id/reviews', verifyToken, async (req, res) => {
         socialLife: parseFloat(socialLife)
       },
       comment,
-      images: images || []
+      images: images || [],
+      moderationStatus: 'pending',
+      moderatedAt: null
     };
 
     const review = await Review.findOneAndUpdate(
       { collegeId, studentId },
       reviewData,
-      { upsert: true, new: true }
+      { upsert: true, new: true, runValidators: true }
     );
 
     // Re-calculate average ratings for the college
-    const allReviews = await Review.find({ collegeId });
+    const allReviews = await Review.find({ collegeId, moderationStatus: 'published' });
     const count = allReviews.length;
     let sum = 0;
     allReviews.forEach(r => sum += r.rating);
@@ -343,7 +349,7 @@ router.post('/:id/reviews', verifyToken, async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: 'Your review has been saved successfully.',
+      message: 'Your review has been submitted for moderation.',
       data: review
     });
   } catch (err) {

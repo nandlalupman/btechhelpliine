@@ -4,6 +4,7 @@ const NoteSchema = new mongoose.Schema({
   text: {
     type: String,
     required: true,
+    maxlength: 4000,
   },
   addedBy: {
     type: mongoose.Schema.Types.ObjectId,
@@ -62,7 +63,15 @@ const LeadSchema = new mongoose.Schema(
     message: {
       type: String,
       default: '',
+      maxlength: 2000,
     },
+    subject: { type: String, default: 'Admission counselling', maxlength: 160 },
+    trackingTokenHash: { type: String, select: false, index: { unique: true, sparse: true } },
+    lastMessageFrom: { type: String, enum: ['student', 'team'], default: 'student' },
+    lastMessageAt: { type: Date, default: Date.now, index: true },
+    studentReadAt: { type: Date, default: null },
+    staffReadAt: { type: Date, default: null },
+    followUpAt: { type: Date, default: null, index: true },
     status: {
       type: String,
       enum: ['new', 'contacted', 'in_progress', 'counselled', 'closed', 'dropped', 'cancelled'],
@@ -83,6 +92,13 @@ const LeadSchema = new mongoose.Schema(
       type: String,
       default: 'website_form',
     },
+    exam: { type: String, default: '' },
+    homeState: { type: String, default: '' },
+    contactConsent: { type: Boolean, default: false },
+    partnerConsent: { type: Boolean, default: false },
+    consentAt: { type: Date, default: null },
+    preferredContactTime: { type: String, default: '' },
+    counselledAt: { type: Date, default: null },
   },
   {
     timestamps: true,

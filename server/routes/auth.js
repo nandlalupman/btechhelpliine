@@ -56,7 +56,7 @@ router.post(
       const hashedPassword = await bcrypt.hash(password, salt);
 
       // Create new user (pending verification)
-      const emailOtp = Math.floor(100000 + Math.random() * 900000).toString();
+      const emailOtp = crypto.randomInt(100000, 1000000).toString();
 
       const user = new User({
         name,
@@ -78,16 +78,17 @@ router.post(
         await emailUtils.sendVerificationOTPEmail(email, name, emailOtp);
       } catch (mailErr) {
         console.error('Failed to send verification email:', mailErr.message);
+        return res.status(503).json({ success: false, error: 'Account created, but verification email could not be delivered. Please use resend verification after email service is restored.', email: user.email });
       }
 
       const responseData = {
         success: true,
-        message: 'Registration successful! A verification OTP has been sent to your email.',
+        message: process.env.LOCAL_PREVIEW === '1' ? 'Registration saved. Open Local tools to read your verification OTP.' : 'Registration successful! A verification OTP has been sent to your email.',
         email: user.email
       };
 
       // Expose OTP in non-production environments for automated testing
-      if (process.env.NODE_ENV !== 'production') {
+      if (process.env.LOCAL_PREVIEW === '1') {
         responseData.otp = emailOtp;
       }
 
@@ -132,7 +133,7 @@ router.post(
 
       // Check if user is verified
       if (!user.isVerified) {
-        const emailOtp = Math.floor(100000 + Math.random() * 900000).toString();
+        const emailOtp = crypto.randomInt(100000, 1000000).toString();
         user.emailOtpCode = emailOtp;
         user.emailOtpExpires = Date.now() + 10 * 60 * 1000;
         await user.save();
@@ -141,16 +142,17 @@ router.post(
           await emailUtils.sendVerificationOTPEmail(user.email, user.name, emailOtp);
         } catch (mailErr) {
           console.error('Failed to send verification email:', mailErr.message);
+          return res.status(503).json({ success: false, error: 'Verification email could not be delivered. Please try again later.' });
         }
 
         const responseData = {
           success: false,
           unverified: true,
-          error: 'Please verify your email address. A verification OTP has been sent.',
+          error: process.env.LOCAL_PREVIEW === '1' ? 'Please verify your email. Read the OTP in Local tools.' : 'Please verify your email address. A verification OTP has been sent.',
           email: user.email
         };
 
-        if (process.env.NODE_ENV !== 'production') {
+        if (process.env.LOCAL_PREVIEW === '1') {
           responseData.otp = emailOtp;
         }
 
@@ -323,17 +325,21 @@ router.post(
       }
 
       // Generate a 6-digit OTP code
-      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+      const otp = crypto.randomInt(100000, 1000000).toString();
       user.otpCode = otp;
       user.otpExpires = Date.now() + 5 * 60 * 1000; // valid for 5 mins
       await user.save();
 
-      // Send OTP via 2Factor API or simulation fallback
+      // Local previews never contact a live SMS provider.
       const apiKey = process.env.TWO_FACTOR_API_KEY;
-      let sentSuccess = true;
-      let gatewayMessage = 'OTP sent successfully via SMS simulation.';
+      let sentSuccess = false;
+      let gatewayMessage = 'SMS delivery is not configured. Please use email and password.';
 
-      if (apiKey && apiKey !== 'your-actual-2factor-api-key-here') {
+      if (process.env.LOCAL_PREVIEW === '1') {
+        await emailUtils.sendCustomEmail(user.email, 'Local preview login code', `Local SMS preview for ${phone}: your login code is ${otp}. Valid for 5 minutes. No SMS was sent.`);
+        sentSuccess = true;
+        gatewayMessage = 'Local preview code saved in Local tools. No SMS was sent.';
+      } else if (apiKey && apiKey !== 'your-actual-2factor-api-key-here') {
         try {
           // 2Factor.in standard API URL format: https://2factor.in/API/V1/{api_key}/SMS/{phone_number}/{otp_val}/AUTOGEN
           // This triggers the default 2Factor authentication template.
@@ -342,6 +348,7 @@ router.post(
           const apiJson = await apiRes.json();
           
           if (apiJson.Status === 'Success') {
+            sentSuccess = true;
             gatewayMessage = 'OTP sent successfully via SMS.';
             console.log(`[2Factor] SMS sent to +91 ${phone}. Details: ${apiJson.Details}`);
           } else {
@@ -354,12 +361,6 @@ router.post(
           sentSuccess = false;
           gatewayMessage = 'Failed to connect to the SMS gateway.';
         }
-      } else {
-        // Simulate sending SMS via console log
-        console.log(`\n================ SMS GATEWAY SIMULATION ================`);
-        console.log(`SENDING OTP TO: +91 ${phone}`);
-        console.log(`MESSAGE: Your BtechHelpline login OTP is ${otp}. Valid for 5 minutes.`);
-        console.log(`========================================================\n`);
       }
 
       if (!sentSuccess) {
@@ -368,7 +369,7 @@ router.post(
 
       // In non-production, return it directly in response for easier testing
       const responseData = { success: true, message: gatewayMessage };
-      if (process.env.NODE_ENV !== 'production') {
+      if (process.env.LOCAL_PREVIEW === '1') {
         responseData.otp = otp; // Expose to frontend during dev
       }
 
@@ -536,7 +537,7 @@ router.post(
       }
 
       // Generate a new 6-digit OTP code
-      const emailOtp = Math.floor(100000 + Math.random() * 900000).toString();
+      const emailOtp = crypto.randomInt(100000, 1000000).toString();
       user.emailOtpCode = emailOtp;
       user.emailOtpExpires = Date.now() + 10 * 60 * 1000; // valid for 10 mins
       await user.save();
@@ -546,14 +547,15 @@ router.post(
         await emailUtils.sendVerificationOTPEmail(user.email, user.name, emailOtp);
       } catch (mailErr) {
         console.error('Failed to send verification email:', mailErr.message);
+        return res.status(503).json({ success: false, error: 'Verification email could not be delivered. Please try again later.' });
       }
 
       const responseData = {
         success: true,
-        message: 'A new verification OTP has been sent to your email.'
+        message: process.env.LOCAL_PREVIEW === '1' ? 'Read the new verification OTP in Local tools.' : 'A new verification OTP has been sent to your email.'
       };
 
-      if (process.env.NODE_ENV !== 'production') {
+      if (process.env.LOCAL_PREVIEW === '1') {
         responseData.otp = emailOtp;
       }
 

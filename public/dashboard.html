@@ -1,15 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6B390BG8Q2"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-6B390BG8Q2');
-    </script>
+    <script src="/consent.js" defer></script>
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon.png" />
     <meta charset="utf-8" />
@@ -602,7 +594,7 @@
     </style>
 
   </head>
-  <body class="student-body">
+  <body class="student-body"><div style="padding:10px 24px;background:#153d35;color:white;font-size:14px;display:flex;gap:24px;flex-wrap:wrap"><a href="/messages/" style="color:white">My messages →</a><a href="/applications/" style="color:white">My application tracker →</a><a href="/appointments/" style="color:white">Book counselling →</a><a href="/rank-explorer/" style="color:white">Historical rank explorer →</a></div>
     <!-- Header -->
     <header class="dash-header">
       <div class="dash-header-container">
@@ -892,7 +884,7 @@
             Any Message / Question?
             <textarea id="req-message" style="width:100%;height:80px;background:var(--white);border:1px solid var(--line);border-radius:8px;color:var(--ink);padding:10px;outline:none;transition:all 0.3s;" placeholder="Tell us if you have any questions..."></textarea>
           </label>
-          <button type="submit" class="btn-save" id="btn-submit-request" style="background: linear-gradient(135deg, var(--green), var(--green-dark)); box-shadow: 0 4px 12px rgba(16,185,129,0.2);">Submit Request</button>
+          <label style="display:flex;gap:10px;align-items:flex-start"><input id="req-contact-consent" type="checkbox" required style="width:18px;height:18px;margin-top:3px"><span>I agree to contact about this request. <a href="/privacy">Privacy policy</a></span></label><button type="submit" class="btn-save" id="btn-submit-request" style="background: linear-gradient(135deg, var(--green), var(--green-dark)); box-shadow: 0 4px 12px rgba(16,185,129,0.2);">Submit Request</button>
           <p class="privacy-disclaimer" style="margin-top: 12px; font-size: 0.75rem; color: var(--muted); text-align: center; line-height: 1.4;">
             Your information may be shared with our trusted partners and service providers where necessary to provide services and improve your experience. Please refer to our <a href="privacy.html" target="_blank" style="color: var(--blue); text-decoration: underline;">Privacy Policy</a> for complete details.
           </p>
@@ -1077,7 +1069,7 @@
                   <span class="status-badge status-${lead.status}">${lead.status.replace('_', ' ')}</span>
                 </div>
                 <div class="lead-details">
-                  <span>Branch: <strong>${escapeHTML(lead.preferredBranch)}</strong></span>
+                  <span>Branch: <strong>${escapeHTML(lead.preferredBranch)}</strong></span><a href="/messages/" style="color:var(--blue);font-weight:600">Open conversation →</a>
                   <span>State: <strong>${escapeHTML(lead.preferredState)}</strong></span>
                   <span>Budget: <strong>${escapeHTML(lead.budget)}</strong></span>
                   <span>Date: <strong>${createdDate}</strong></span>
@@ -1208,11 +1200,11 @@
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ name, mobile, email, jeeRank, branch, state, budget, category, message })
+            body: JSON.stringify({ name, mobile, email, jeeRank, branch, state, budget, category, message, contactConsent: document.getElementById("req-contact-consent").checked, partnerConsent: false })
           });
           const data = await res.json();
           if (res.ok && data.success) {
-            msg.textContent = 'Consultation request submitted!';
+            msg.textContent = 'Request saved. Open My messages to read replies.';
             msg.className = 'form-msg success';
             document.getElementById('request-form').reset();
             fetchLeads();
@@ -1437,7 +1429,7 @@
                   </div>
                   <div class="college-meta-item">
                     <span>Avg Package:</span>
-                    <strong style="color: #34d399;">₹${col.avgPlacement.toFixed(1)} LPA</strong>
+                    <strong style="color: #34d399;">₹${col.avgPlacement == null ? '—' : Number(col.avgPlacement).toFixed(1)} LPA</strong>
                   </div>
                   <div class="college-meta-item">
                     <span>Fees:</span>
@@ -1471,7 +1463,7 @@
             
             const rankText = col.nirfRank ? `NIRF Rank: #${col.nirfRank}` : 'NIRF Rank: N/A';
             const feesText = col.feesPerYear ? `₹${col.feesPerYear.toLocaleString('en-IN')} / Year` : 'N/A';
-            const highestPackage = col.highestPlacement >= 100 ? `₹${(col.highestPlacement / 100).toFixed(2)} Cr` : `₹${col.highestPlacement.toFixed(1)} LPA`;
+            const highestPackage = col.highestPlacement >= 100 ? `₹${(col.highestPlacement / 100).toFixed(2)} Cr` : `₹${col.highestPlacement == null ? '—' : Number(col.highestPlacement).toFixed(1)} LPA`;
             
             let branchesHTML = '';
             if (col.branches && col.branches.length > 0) {
@@ -1660,7 +1652,7 @@
 
                     <div class="details-highlight-widget">
                       <span class="details-highlight-label">Average Placement Package</span>
-                      <strong class="details-highlight-value" style="color: var(--green-dark);">₹${col.avgPlacement.toFixed(1)} LPA</strong>
+                      <strong class="details-highlight-value" style="color: var(--green-dark);">₹${col.avgPlacement == null ? '—' : Number(col.avgPlacement).toFixed(1)} LPA</strong>
                     </div>
 
                     <div class="details-highlight-widget">
@@ -1887,7 +1879,7 @@
                 <div style="background: var(--soft); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--line); margin-top: auto; margin-bottom: 12px;">
                   <div class="college-meta-item">
                     <span>Avg Package:</span>
-                    <strong style="color: #34d399;">₹${col.avgPlacement.toFixed(1)} LPA</strong>
+                    <strong style="color: #34d399;">₹${col.avgPlacement == null ? '—' : Number(col.avgPlacement).toFixed(1)} LPA</strong>
                   </div>
                   <div class="college-meta-item">
                     <span>Fees:</span>
@@ -2001,11 +1993,15 @@
         const preview = document.getElementById('review-images-preview');
         
         files.forEach(file => {
-          if (!file.type.startsWith('image/')) return;
+          if (!['image/png', 'image/jpeg', 'image/webp'].includes(file.type) || file.size > 300000 || reviewBase64Images.length >= 3) {
+            alert('Use up to three PNG, JPEG or WebP images below 300 KB each.');
+            return;
+          }
           
           const reader = new FileReader();
           reader.onload = function(evt) {
             const base64 = evt.target.result;
+            if (reviewBase64Images.length >= 3 || base64.length > 400000) return;
             reviewBase64Images.push(base64);
             
             const thumb = document.createElement('div');
@@ -2082,7 +2078,7 @@
           });
           const data = await res.json();
           if (res.ok && data.success) {
-            alert('Review submitted successfully!');
+            alert(data.message || 'Review submitted for moderation.');
             closeReviewWriteModal();
             await fetchAndRenderReviews(currentReviewCollegeId);
           } else {

@@ -1,0 +1,3925 @@
+[
+  {
+    "name": "IIT Madras",
+    "type": "IIT",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "admissionMode": "JEE Advanced",
+    "website": "https://www.iitm.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Chemical Engineering",
+      "Aerospace Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIT Delhi",
+    "type": "IIT",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "admissionMode": "JEE Advanced",
+    "website": "https://home.iitd.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Chemical Engineering",
+      "Biotechnology",
+      "Textile Technology"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIT Bombay",
+    "type": "IIT",
+    "city": "Mumbai",
+    "state": "Maharashtra",
+    "admissionMode": "JEE Advanced",
+    "website": "https://www.iitb.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Aerospace Engineering",
+      "Metallurgical Engineering",
+      "Chemical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIT Kanpur",
+    "type": "IIT",
+    "city": "Kanpur",
+    "state": "Uttar Pradesh",
+    "admissionMode": "JEE Advanced",
+    "website": "https://www.iitk.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Materials Science",
+      "Aerospace Engineering",
+      "Chemical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIT Roorkee",
+    "type": "IIT",
+    "city": "Roorkee",
+    "state": "Uttarakhand",
+    "admissionMode": "JEE Advanced",
+    "website": "https://www.iitr.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Civil Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Chemical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIT Kharagpur",
+    "type": "IIT",
+    "city": "Kharagpur",
+    "state": "West Bengal",
+    "admissionMode": "JEE Advanced",
+    "website": "https://www.iitkgp.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Electrical Communication",
+      "Mechanical Engineering",
+      "Ocean Engineering",
+      "Mining Engineering",
+      "Agricultural Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIT Guwahati",
+    "type": "IIT",
+    "city": "Guwahati",
+    "state": "Assam",
+    "admissionMode": "JEE Advanced",
+    "website": "https://www.iitg.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Electrical Engineering",
+      "Mechanical Engineering",
+      "Chemical Science & Technology",
+      "Biotechnology"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIT Hyderabad",
+    "type": "IIT",
+    "city": "Sangareddy",
+    "state": "Telangana",
+    "admissionMode": "JEE Advanced",
+    "website": "https://www.iith.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electrical Engineering",
+      "Mechanical & Aerospace Engineering",
+      "Biomedical Engineering",
+      "Materials Science & Metallurgical"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIT Indore",
+    "type": "IIT",
+    "city": "Indore",
+    "state": "Madhya Pradesh",
+    "admissionMode": "JEE Advanced",
+    "website": "https://www.iiti.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering",
+      "Metallurgical Engineering & Materials Science"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIT BHU Varanasi",
+    "type": "IIT",
+    "city": "Varanasi",
+    "state": "Uttar Pradesh",
+    "admissionMode": "JEE Advanced",
+    "website": "https://iitbhu.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Chemical Engineering",
+      "Ceramic Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIT ISM Dhanbad",
+    "type": "IIT",
+    "city": "Dhanbad",
+    "state": "Jharkhand",
+    "admissionMode": "JEE Advanced",
+    "website": "https://www.iitism.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mining Engineering",
+      "Petroleum Engineering",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIT Ropar",
+    "type": "IIT",
+    "city": "Rupnagar",
+    "state": "Punjab",
+    "admissionMode": "JEE Advanced",
+    "website": "https://www.iitrpr.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Chemical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIT Gandhinagar",
+    "type": "IIT",
+    "city": "Gandhinagar",
+    "state": "Gujarat",
+    "admissionMode": "JEE Advanced",
+    "website": "https://iitgn.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Chemical Engineering",
+      "Materials Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIT Jodhpur",
+    "type": "IIT",
+    "city": "Jodhpur",
+    "state": "Rajasthan",
+    "admissionMode": "JEE Advanced",
+    "website": "https://www.iitj.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Bioengineering",
+      "Materials Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIT Patna",
+    "type": "IIT",
+    "city": "Patna",
+    "state": "Bihar",
+    "admissionMode": "JEE Advanced",
+    "website": "https://www.iitp.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Chemical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIT Bhubaneswar",
+    "type": "IIT",
+    "city": "Bhubaneswar",
+    "state": "Odisha",
+    "admissionMode": "JEE Advanced",
+    "website": "https://www.iitbbs.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electrical Engineering",
+      "Electronics & Communication",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIT Mandi",
+    "type": "IIT",
+    "city": "Mandi",
+    "state": "Himachal Pradesh",
+    "admissionMode": "JEE Advanced",
+    "website": "https://www.iitmandi.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Data Science & Engineering",
+      "Bioengineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIT Tirupati",
+    "type": "IIT",
+    "city": "Tirupati",
+    "state": "Andhra Pradesh",
+    "admissionMode": "JEE Advanced",
+    "website": "https://iittp.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering",
+      "Chemical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIT Palakkad",
+    "type": "IIT",
+    "city": "Palakkad",
+    "state": "Kerala",
+    "admissionMode": "JEE Advanced",
+    "website": "https://iitpkd.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIT Dharwad",
+    "type": "IIT",
+    "city": "Dharwad",
+    "state": "Karnataka",
+    "admissionMode": "JEE Advanced",
+    "website": "https://iitdh.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Engineering Physics"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIT Bhilai",
+    "type": "IIT",
+    "city": "Bhilai",
+    "state": "Chhattisgarh",
+    "admissionMode": "JEE Advanced",
+    "website": "https://iitbhilai.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Data Science & Artificial Intelligence"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIT Goa",
+    "type": "IIT",
+    "city": "Ponda",
+    "state": "Goa",
+    "admissionMode": "JEE Advanced",
+    "website": "https://iitgoa.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Mathematics and Computing"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIT Jammu",
+    "type": "IIT",
+    "city": "Jammu",
+    "state": "Jammu & Kashmir",
+    "admissionMode": "JEE Advanced",
+    "website": "https://iitjammu.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering",
+      "Materials Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NIT Trichy",
+    "type": "NIT",
+    "city": "Tiruchirappalli",
+    "state": "Tamil Nadu",
+    "admissionMode": "JEE Mains",
+    "website": "https://www.nitt.edu",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering",
+      "Mechanical Engineering",
+      "Production Engineering",
+      "Chemical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NIT Surathkal",
+    "type": "NIT",
+    "city": "Surathkal",
+    "state": "Karnataka",
+    "admissionMode": "JEE Mains",
+    "website": "https://www.nitk.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Mining Engineering",
+      "Metallurgical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NIT Rourkela",
+    "type": "NIT",
+    "city": "Rourkela",
+    "state": "Odisha",
+    "admissionMode": "JEE Mains",
+    "website": "https://www.nitrkl.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Chemical Engineering",
+      "Biotechnology"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NIT Warangal",
+    "type": "NIT",
+    "city": "Warangal",
+    "state": "Telangana",
+    "admissionMode": "JEE Mains",
+    "website": "https://www.nitw.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Electrical & Electronics",
+      "Mechanical Engineering",
+      "Chemical Engineering",
+      "Metallurgical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NIT Calicut",
+    "type": "NIT",
+    "city": "Kozhikode",
+    "state": "Kerala",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.nitc.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Electrical & Electronics",
+      "Mechanical Engineering",
+      "Civil Engineering",
+      "Chemical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "VNIT Nagpur",
+    "type": "NIT",
+    "city": "Nagpur",
+    "state": "Maharashtra",
+    "admissionMode": "JEE Mains",
+    "website": "https://www.vnit.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Electrical & Electronics",
+      "Mechanical Engineering",
+      "Civil Engineering",
+      "Chemical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "SVNIT Surat",
+    "type": "NIT",
+    "city": "Surat",
+    "state": "Gujarat",
+    "admissionMode": "JEE Mains",
+    "website": "https://www.svnit.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Chemical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "MNNIT Allahabad",
+    "type": "NIT",
+    "city": "Prayagraj",
+    "state": "Uttar Pradesh",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.mnnit.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Information Technology",
+      "Chemical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NIT Kurukshetra",
+    "type": "NIT",
+    "city": "Kurukshetra",
+    "state": "Haryana",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.nitkkr.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NIT Silchar",
+    "type": "NIT",
+    "city": "Silchar",
+    "state": "Assam",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.nits.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering",
+      "Instrumentation Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NIT Durgapur",
+    "type": "NIT",
+    "city": "Durgapur",
+    "state": "West Bengal",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.nitdgp.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Chemical Engineering",
+      "Biotechnology"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NIT Jalandhar",
+    "type": "NIT",
+    "city": "Jalandhar",
+    "state": "Punjab",
+    "admissionMode": "JEE Mains",
+    "website": "https://www.nitj.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Chemical Engineering",
+      "Industrial & Production"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NIT Patna",
+    "type": "NIT",
+    "city": "Patna",
+    "state": "Bihar",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.nitp.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NIT Raipur",
+    "type": "NIT",
+    "city": "Raipur",
+    "state": "Chhattisgarh",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.nitrr.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication",
+      "Mechanical Engineering",
+      "Metallurgical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NIT Jamshedpur",
+    "type": "NIT",
+    "city": "Jamshedpur",
+    "state": "Jharkhand",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.nitjsr.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Metallurgical & Materials",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NIT Hamirpur",
+    "type": "NIT",
+    "city": "Hamirpur",
+    "state": "Himachal Pradesh",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.nith.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Chemical Engineering",
+      "Material Science"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NIT Goa",
+    "type": "NIT",
+    "city": "Farmagudi",
+    "state": "Goa",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.nitgoa.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Electrical & Electronics",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NIT Uttarakhand",
+    "type": "NIT",
+    "city": "Srinagar",
+    "state": "Uttarakhand",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.nituk.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Electrical & Electronics",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NIT Manipur",
+    "type": "NIT",
+    "city": "Imphal",
+    "state": "Manipur",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.nitmanipur.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NIT Meghalaya",
+    "type": "NIT",
+    "city": "Shillong",
+    "state": "Meghalaya",
+    "admissionMode": "JEE Mains",
+    "website": "http://nitmeghalaya.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "MNIT Jaipur",
+    "type": "NIT",
+    "city": "Jaipur",
+    "state": "Rajasthan",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.mnit.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Chemical Engineering",
+      "Civil Engineering",
+      "Metallurgical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NIT Srinagar",
+    "type": "NIT",
+    "city": "Srinagar",
+    "state": "Jammu & Kashmir",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.nitsri.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Chemical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NIT Agartala",
+    "type": "NIT",
+    "city": "Agartala",
+    "state": "Tripura",
+    "admissionMode": "JEE Mains",
+    "website": "https://www.nita.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Chemical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "MANIT Bhopal",
+    "type": "NIT",
+    "city": "Bhopal",
+    "state": "Madhya Pradesh",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.manit.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Chemical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NIT Puducherry",
+    "type": "NIT",
+    "city": "Karaikal",
+    "state": "Puducherry",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.nitpy.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Electrical & Electronics",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NIT Sikkim",
+    "type": "NIT",
+    "city": "Ravangla",
+    "state": "Sikkim",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.nitsikkim.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Electrical & Electronics",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NIT Arunachal Pradesh",
+    "type": "NIT",
+    "city": "Yupia",
+    "state": "Arunachal Pradesh",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.nitap.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NIT Mizoram",
+    "type": "NIT",
+    "city": "Aizawl",
+    "state": "Mizoram",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.nitmz.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Electrical & Electronics",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NIT Nagaland",
+    "type": "NIT",
+    "city": "Chumukedima",
+    "state": "Nagaland",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.nitnagaland.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Electrical & Electronics",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NIT Delhi",
+    "type": "NIT",
+    "city": "Narela",
+    "state": "Delhi",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.nitdelhi.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Electrical & Electronics",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NIT Andhra Pradesh",
+    "type": "NIT",
+    "city": "Tadepalligudem",
+    "state": "Andhra Pradesh",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.nitandhra.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Chemical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Hyderabad",
+    "type": "IIIT",
+    "city": "Hyderabad",
+    "state": "Telangana",
+    "admissionMode": "JEE Mains / DASA",
+    "website": "https://www.iiit.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Bangalore",
+    "type": "IIIT",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "admissionMode": "JEE Mains",
+    "website": "https://www.iiitb.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Delhi",
+    "type": "State",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "admissionMode": "JAC Delhi / JEE Mains",
+    "website": "https://www.iiitd.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Computer Science & Applied Math",
+      "Electronics & Communication"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Allahabad",
+    "type": "IIIT",
+    "city": "Prayagraj",
+    "state": "Uttar Pradesh",
+    "admissionMode": "JEE Mains",
+    "website": "https://www.iiita.ac.in",
+    "branches": [
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "IT (Specialization in Business Informatics)"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Gwalior",
+    "type": "IIIT",
+    "city": "Gwalior",
+    "state": "Madhya Pradesh",
+    "admissionMode": "JEE Mains",
+    "website": "https://www.iiitm.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Integrated M.Tech (IT)"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Jabalpur",
+    "type": "IIIT",
+    "city": "Jabalpur",
+    "state": "Madhya Pradesh",
+    "admissionMode": "JEE Mains",
+    "website": "https://www.iiitdmj.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Smart Manufacturing",
+      "Electronics & Communication",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Kancheepuram",
+    "type": "IIIT",
+    "city": "Kancheepuram",
+    "state": "Tamil Nadu",
+    "admissionMode": "JEE Mains",
+    "website": "https://www.iiitdm.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication (Design)",
+      "Mechanical Engineering (Design)"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Lucknow",
+    "type": "IIIT",
+    "city": "Lucknow",
+    "state": "Uttar Pradesh",
+    "admissionMode": "JEE Mains",
+    "website": "https://www.iiitl.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Computer Science & Business"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Sri City",
+    "type": "IIIT",
+    "city": "Sri City",
+    "state": "Andhra Pradesh",
+    "admissionMode": "JEE Mains",
+    "website": "https://www.iiits.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Vadodara",
+    "type": "IIIT",
+    "city": "Vadodara",
+    "state": "Gujarat",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.iiitvadodara.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Kota",
+    "type": "IIIT",
+    "city": "Kota",
+    "state": "Rajasthan",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.iiitkota.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Guwahati",
+    "type": "IIIT",
+    "city": "Guwahati",
+    "state": "Assam",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.iiitg.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Kalyani",
+    "type": "IIIT",
+    "city": "Kalyani",
+    "state": "West Bengal",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.iiitkalyani.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Dharwad",
+    "type": "IIIT",
+    "city": "Dharwad",
+    "state": "Karnataka",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.iiitdwd.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Data Science & Artificial Intelligence",
+      "Electronics & Communication"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Bhagalpur",
+    "type": "IIIT",
+    "city": "Bhagalpur",
+    "state": "Bihar",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.iiitbh.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Mechatronics Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Bhopal",
+    "type": "IIIT",
+    "city": "Bhopal",
+    "state": "Madhya Pradesh",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.iiitbhopal.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Kottayam",
+    "type": "IIIT",
+    "city": "Kottayam",
+    "state": "Kerala",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.iiitkottayam.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Cyber Security",
+      "Artificial Intelligence",
+      "Electronics & Communication"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Ranchi",
+    "type": "IIIT",
+    "city": "Ranchi",
+    "state": "Jharkhand",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.iiitranchi.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Nagpur",
+    "type": "IIIT",
+    "city": "Nagpur",
+    "state": "Maharashtra",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.iiitn.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Internet of Things",
+      "Electronics & Communication"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Pune",
+    "type": "IIIT",
+    "city": "Pune",
+    "state": "Maharashtra",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.iiitp.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Surat",
+    "type": "IIIT",
+    "city": "Surat",
+    "state": "Gujarat",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.iiitsurat.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Manipur",
+    "type": "IIIT",
+    "city": "Imphal",
+    "state": "Manipur",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.iiitmanipur.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Tiruchirappalli",
+    "type": "IIIT",
+    "city": "Tiruchirappalli",
+    "state": "Tamil Nadu",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.iiitt.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Sonepat",
+    "type": "IIIT",
+    "city": "Sonepat",
+    "state": "Haryana",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.iiitsonepat.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Una",
+    "type": "IIIT",
+    "city": "Una",
+    "state": "Himachal Pradesh",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.iiitu.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Kurnool",
+    "type": "IIIT",
+    "city": "Kurnool",
+    "state": "Andhra Pradesh",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.iiitk.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Agartala",
+    "type": "IIIT",
+    "city": "Agartala",
+    "state": "Tripura",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.iiitagartala.ac.in",
+    "branches": [
+      "Computer Science Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Raichur",
+    "type": "IIIT",
+    "city": "Raichur",
+    "state": "Karnataka",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.iiitr.ac.in",
+    "branches": [
+      "Computer Science Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "BITS Pilani",
+    "type": "BITS",
+    "city": "Pilani",
+    "state": "Rajasthan",
+    "admissionMode": "BITSAT",
+    "website": "https://www.bits-pilani.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electrical & Electronics Engineering",
+      "Electronics & Instrumentation Engineering",
+      "Mechanical Engineering",
+      "Chemical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "BITS Goa",
+    "type": "BITS",
+    "city": "Zuarinagar",
+    "state": "Goa",
+    "admissionMode": "BITSAT",
+    "website": "https://www.bits-pilani.ac.in/goa/",
+    "branches": [
+      "Computer Science Engineering",
+      "Electrical & Electronics Engineering",
+      "Electronics & Instrumentation",
+      "Mechanical Engineering",
+      "Chemical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "BITS Hyderabad",
+    "type": "BITS",
+    "city": "Jawaharnagar",
+    "state": "Telangana",
+    "admissionMode": "BITSAT",
+    "website": "https://www.bits-pilani.ac.in/hyderabad/",
+    "branches": [
+      "Computer Science Engineering",
+      "Electrical & Electronics Engineering",
+      "Electronics & Communication",
+      "Mechanical Engineering",
+      "Chemical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "VIT Vellore",
+    "type": "VIT",
+    "city": "Vellore",
+    "state": "Tamil Nadu",
+    "admissionMode": "VITEEE",
+    "website": "https://vit.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering",
+      "Mechanical Engineering",
+      "Biotechnology"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "VIT Chennai",
+    "type": "VIT",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "admissionMode": "VITEEE",
+    "website": "https://chennai.vit.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "VIT Bhopal",
+    "type": "VIT",
+    "city": "Bhopal",
+    "state": "Madhya Pradesh",
+    "admissionMode": "VITEEE",
+    "website": "https://vitbhopal.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Cyber Security & Forensic",
+      "AI & Machine Learning",
+      "Electronics & Communication"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "VIT AP",
+    "type": "VIT",
+    "city": "Amaravati",
+    "state": "Andhra Pradesh",
+    "admissionMode": "VITEEE",
+    "website": "https://vitap.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Computer Science & Business Systems",
+      "Data Analytics",
+      "Electronics & Communication"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Jadavpur University",
+    "type": "State",
+    "city": "Kolkata",
+    "state": "West Bengal",
+    "admissionMode": "WBJEE",
+    "website": "http://www.jaduniv.edu.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Telecommunication",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Power Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Anna University",
+    "type": "State",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "admissionMode": "TNEA",
+    "website": "https://www.annauniv.edu",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Information Technology",
+      "Mechanical Engineering",
+      "Electrical & Electronics Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "ICT Mumbai",
+    "type": "State",
+    "city": "Mumbai",
+    "state": "Maharashtra",
+    "admissionMode": "MHT-CET / JEE Mains",
+    "website": "https://www.ictmumbai.edu.in",
+    "branches": [
+      "Chemical Engineering",
+      "Dyestuff Technology",
+      "Polymer Engineering",
+      "Food Engineering",
+      "Pharmaceutical Technology"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Amrita Vishwa Vidyapeetham",
+    "type": "Private",
+    "city": "Coimbatore",
+    "state": "Tamil Nadu",
+    "admissionMode": "AEEE / JEE Mains",
+    "website": "https://www.amrita.edu",
+    "branches": [
+      "Computer Science Engineering",
+      "Artificial Intelligence",
+      "Electronics & Communication",
+      "Mechanical Engineering",
+      "Electrical & Computer Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Thapar Institute (TIET)",
+    "type": "Private",
+    "city": "Patiala",
+    "state": "Punjab",
+    "admissionMode": "JEE Mains",
+    "website": "https://www.thapar.edu",
+    "branches": [
+      "Computer Science Engineering",
+      "Computer Engineering",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Biotechnology"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "SRM Institute (KTR)",
+    "type": "Private",
+    "city": "Kattankulathur",
+    "state": "Tamil Nadu",
+    "admissionMode": "SRMJEE",
+    "website": "https://www.srmist.edu.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Biotechnology",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "DTU Delhi",
+    "type": "State",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "admissionMode": "JEE Mains",
+    "website": "https://dtu.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Software Engineering",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Electrical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Siksha 'O' Anusandhan",
+    "type": "Private",
+    "city": "Bhubaneswar",
+    "state": "Odisha",
+    "admissionMode": "SAAT / JEE Mains",
+    "website": "https://www.soa.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication",
+      "Electrical Engineering",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Aligarh Muslim University",
+    "type": "State",
+    "city": "Aligarh",
+    "state": "Uttar Pradesh",
+    "admissionMode": "AMUEEE",
+    "website": "https://www.amu.ac.in",
+    "branches": [
+      "Computer Engineering",
+      "Electronics Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "SASTRA University",
+    "type": "Private",
+    "city": "Thanjavur",
+    "state": "Tamil Nadu",
+    "admissionMode": "JEE Mains + Boards",
+    "website": "https://www.sastra.edu",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication",
+      "Mechanical Engineering",
+      "Bioengineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "KIIT Bhubaneswar",
+    "type": "Private",
+    "city": "Bhubaneswar",
+    "state": "Odisha",
+    "admissionMode": "KIITEE",
+    "website": "https://kiit.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Aerospace Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIEST Shibpur",
+    "type": "State",
+    "city": "Shibpur",
+    "state": "West Bengal",
+    "admissionMode": "JEE Mains",
+    "website": "https://www.iiests.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Telecommunication",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering",
+      "Mining Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Kalasalingam Academy",
+    "type": "Private",
+    "city": "Krishnankoil",
+    "state": "Tamil Nadu",
+    "admissionMode": "KEEE / Merit",
+    "website": "https://www.kalasalingam.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication",
+      "Electrical & Electronics",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "SSN College of Engineering",
+    "type": "Private",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "admissionMode": "TNEA / Merit",
+    "website": "https://www.ssn.edu.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication",
+      "Electrical & Electronics",
+      "Mechanical Engineering",
+      "Chemical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "PSG College of Technology",
+    "type": "Private",
+    "city": "Coimbatore",
+    "state": "Tamil Nadu",
+    "admissionMode": "TNEA",
+    "website": "http://www.psgtech.edu",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication",
+      "Mechanical Engineering",
+      "Metallurgical Engineering",
+      "Production Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NSUT Delhi",
+    "type": "State",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.nsut.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Instrumentation & Control Engineering",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "PEC Chandigarh",
+    "type": "State",
+    "city": "Chandigarh",
+    "state": "Chandigarh",
+    "admissionMode": "JEE Mains",
+    "website": "https://pec.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Aeronautical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "BMS College of Engineering",
+    "type": "Private",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "admissionMode": "COMEDK / KCET",
+    "website": "https://bmsce.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Science Engineering",
+      "Electronics & Communication",
+      "Mechanical Engineering",
+      "Electrical & Electronics"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "MSRIT Bengaluru",
+    "type": "Private",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "admissionMode": "COMEDK / KCET",
+    "website": "https://www.msrit.edu",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Science Engineering",
+      "Electronics & Communication",
+      "Electrical & Electronics",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "CEG Guindy",
+    "type": "State",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "admissionMode": "TNEA",
+    "website": "https://ceg.annauniv.edu",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Electrical & Electronics",
+      "Mechanical Engineering",
+      "Information Technology"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "MIT Chennai",
+    "type": "State",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "admissionMode": "TNEA",
+    "website": "https://mitindia.edu",
+    "branches": [
+      "Computer Science Engineering",
+      "Aeronautical Engineering",
+      "Electronics & Communication",
+      "Information Technology",
+      "Automobile Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "RV College of Engineering",
+    "type": "Private",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "admissionMode": "COMEDK",
+    "website": "https://rvce.edu.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Science Engineering",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Electrical & Electronics Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "LNMIIT Jaipur",
+    "type": "Private",
+    "city": "Jaipur",
+    "state": "Rajasthan",
+    "admissionMode": "JEE Mains",
+    "website": "https://www.lnmiit.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Communication & Computer Engineering",
+      "Electronics & Communication",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Nirma University",
+    "type": "Private",
+    "city": "Ahmedabad",
+    "state": "Gujarat",
+    "admissionMode": "JEE Mains / GUJCET",
+    "website": "https://nirmauni.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Chemical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "KJ Somaiya College",
+    "type": "Private",
+    "city": "Mumbai",
+    "state": "Maharashtra",
+    "admissionMode": "MHT-CET / JEE / SAT",
+    "website": "https://kjsce.somaiya.edu",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Telecommunication",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "DJSCE Mumbai",
+    "type": "Private",
+    "city": "Mumbai",
+    "state": "Maharashtra",
+    "admissionMode": "MHT-CET / JEE",
+    "website": "https://www.djsce.ac.in",
+    "branches": [
+      "Computer Engineering",
+      "Information Technology",
+      "Electronics & Telecommunication",
+      "Mechanical Engineering",
+      "Data Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "VJTI Mumbai",
+    "type": "State",
+    "city": "Mumbai",
+    "state": "Maharashtra",
+    "admissionMode": "MHT-CET",
+    "website": "https://vjti.ac.in",
+    "branches": [
+      "Computer Engineering",
+      "Information Technology",
+      "Electronics Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Production Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "SPIT Mumbai",
+    "type": "Private",
+    "city": "Mumbai",
+    "state": "Maharashtra",
+    "admissionMode": "MHT-CET / JEE",
+    "website": "https://www.spit.ac.in",
+    "branches": [
+      "Computer Engineering",
+      "Information Technology",
+      "Computer Science & Enterprise",
+      "Electronics & Telecommunication"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "JECRC University",
+    "type": "Private",
+    "city": "Jaipur",
+    "state": "Rajasthan",
+    "admissionMode": "Merit / JEE",
+    "website": "https://jecrcuniversity.edu.in",
+    "branches": [
+      "Computer Science Engineering",
+      "AI & Machine Learning",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "SKIT Jaipur",
+    "type": "State",
+    "city": "Jaipur",
+    "state": "Rajasthan",
+    "admissionMode": "REAP / JEE",
+    "website": "https://www.skit.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Poornima College of Engineering",
+    "type": "State",
+    "city": "Jaipur",
+    "state": "Rajasthan",
+    "admissionMode": "REAP / JEE",
+    "website": "https://www.poornima.org",
+    "branches": [
+      "Computer Science Engineering",
+      "Artificial Intelligence",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Arya Institute of Engineering & Technology",
+    "type": "State",
+    "city": "Jaipur",
+    "state": "Rajasthan",
+    "admissionMode": "REAP / JEE",
+    "website": "https://www.aryacollege.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Graphic Era University",
+    "type": "Private",
+    "city": "Dehradun",
+    "state": "Uttarakhand",
+    "admissionMode": "Merit / JEE",
+    "website": "https://www.geu.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication",
+      "Mechanical Engineering",
+      "Biotechnology"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Manipal Institute of Technology",
+    "type": "Private",
+    "city": "Manipal",
+    "state": "Karnataka",
+    "admissionMode": "MET",
+    "website": "https://manipal.edu/mit.html",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Biotechnology",
+      "Aeronautical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Amity University",
+    "type": "Private",
+    "city": "Noida",
+    "state": "Uttar Pradesh",
+    "admissionMode": "Amity JEE / Merit",
+    "website": "https://www.amity.edu",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering",
+      "Aerospace Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Lovely Professional University",
+    "type": "Private",
+    "city": "Phagwara",
+    "state": "Punjab",
+    "admissionMode": "LPUNEST / JEE",
+    "website": "https://www.lpu.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering",
+      "Aerospace Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Chandigarh University",
+    "type": "Private",
+    "city": "Mohali",
+    "state": "Punjab",
+    "admissionMode": "CUCET / JEE",
+    "website": "https://www.cuchd.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering",
+      "Biotechnology"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Shiv Nadar University",
+    "type": "Private",
+    "city": "Greater Noida",
+    "state": "Uttar Pradesh",
+    "admissionMode": "SNUSAT / JEE",
+    "website": "https://snu.edu.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Chemical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Ashoka University",
+    "type": "Private",
+    "city": "Sonipat",
+    "state": "Haryana",
+    "admissionMode": "Ashoka Aptitude Test",
+    "website": "https://www.ashoka.edu.in",
+    "branches": [
+      "Computer Science",
+      "Economics",
+      "Mathematics",
+      "Physics",
+      "Biology"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Symbiosis Institute of Technology",
+    "type": "Private",
+    "city": "Pune",
+    "state": "Maharashtra",
+    "admissionMode": "SET Engineering",
+    "website": "https://www.sitpune.edu.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Telecommunication",
+      "Mechanical Engineering",
+      "Artificial Intelligence & Machine Learning"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Chitkara University",
+    "type": "Private",
+    "city": "Rajpura",
+    "state": "Punjab",
+    "admissionMode": "Merit / JEE",
+    "website": "https://www.chitkara.edu.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Bennett University",
+    "type": "Private",
+    "city": "Greater Noida",
+    "state": "Uttar Pradesh",
+    "admissionMode": "Merit / JEE",
+    "website": "https://www.bennett.edu.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Biotechnology"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "UPES Dehradun",
+    "type": "Private",
+    "city": "Dehradun",
+    "state": "Uttarakhand",
+    "admissionMode": "UPESEAT / JEE / Board Merit",
+    "website": "https://www.upes.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Aerospace Engineering",
+      "Chemical Engineering",
+      "Mechanical Engineering",
+      "Electronics & Communication Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Presidency University Bangalore",
+    "type": "Private",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "admissionMode": "Merit / PESSAT",
+    "website": "https://www.presidencyuniversity.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Christ University",
+    "type": "Private",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "admissionMode": "Christ University Entrance Test",
+    "website": "https://christuniversity.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering",
+      "Data Science"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "PES University",
+    "type": "Private",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "admissionMode": "PESSAT / KCET",
+    "website": "https://pes.edu",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Electrical & Electronics Engineering",
+      "Biotechnology"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Dayananda Sagar College of Engineering",
+    "type": "Private",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "admissionMode": "COMEDK / KCET",
+    "website": "https://www.dayanandasagar.edu.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Science Engineering",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "New Horizon College of Engineering",
+    "type": "Private",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "admissionMode": "COMEDK / KCET",
+    "website": "https://www.newhorizonindia.edu",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Science Engineering",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "DAIICT Gandhinagar",
+    "type": "Private",
+    "city": "Gandhinagar",
+    "state": "Gujarat",
+    "admissionMode": "JEE Mains / DAIICT Test",
+    "website": "https://www.daiict.ac.in",
+    "branches": [
+      "Information & Communication Technology",
+      "Mathematics & Computing",
+      "Electronics & Communication",
+      "Computer Science & Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "BIT Mesra",
+    "type": "Private",
+    "city": "Ranchi",
+    "state": "Jharkhand",
+    "admissionMode": "JEE Mains / SAT",
+    "website": "https://www.bitmesra.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering",
+      "Mechanical Engineering",
+      "Chemical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "DIT University",
+    "type": "Private",
+    "city": "Dehradun",
+    "state": "Uttarakhand",
+    "admissionMode": "Merit / JEE",
+    "website": "https://www.dituniversity.edu.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering",
+      "Electrical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Koneru Lakshmaiah Education Foundation (KL University)",
+    "type": "Private",
+    "city": "Guntur",
+    "state": "Andhra Pradesh",
+    "admissionMode": "KLEEE / JEE",
+    "website": "https://www.kluniversity.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering",
+      "Biotechnology"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Sathyabama Institute of Science and Technology",
+    "type": "Private",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "admissionMode": "Sathyabama All India Entrance Exam",
+    "website": "https://www.sathyabama.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Biomedical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "SRM University AP",
+    "type": "Private",
+    "city": "Amaravati",
+    "state": "Andhra Pradesh",
+    "admissionMode": "SRMJEEE",
+    "website": "https://srmap.edu.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Vel Tech Rangarajan Dr. Sagunthala R&D Institute",
+    "type": "Private",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "admissionMode": "VTUEEE / Merit",
+    "website": "https://www.veltech.edu.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Aerospace Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Sharda University",
+    "type": "Private",
+    "city": "Greater Noida",
+    "state": "Uttar Pradesh",
+    "admissionMode": "Merit / SUAT",
+    "website": "https://www.sharda.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering",
+      "Biotechnology"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Galgotias University",
+    "type": "Private",
+    "city": "Greater Noida",
+    "state": "Uttar Pradesh",
+    "admissionMode": "GUEE / Merit",
+    "website": "https://www.galgotiasuniversity.edu.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Jain University",
+    "type": "Private",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "admissionMode": "JET / Merit",
+    "website": "https://www.jainuniversity.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering",
+      "Automobile Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "College of Engineering Pune (COEP)",
+    "type": "State",
+    "city": "Pune",
+    "state": "Maharashtra",
+    "admissionMode": "MHT-CET / JEE Mains",
+    "website": "https://www.coep.org.in",
+    "branches": [
+      "Computer Engineering",
+      "Information Technology",
+      "Electronics & Telecommunication",
+      "Mechanical Engineering",
+      "Civil Engineering",
+      "Instrumentation & Control"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Harcourt Butler Technical University",
+    "type": "State",
+    "city": "Kanpur",
+    "state": "Uttar Pradesh",
+    "admissionMode": "UPSEE / JEE Mains",
+    "website": "https://www.hbtu.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Chemical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "University of Hyderabad",
+    "type": "State",
+    "city": "Hyderabad",
+    "state": "Telangana",
+    "admissionMode": "UoH Entrance / CUET",
+    "website": "https://uohyd.ac.in",
+    "branches": [
+      "Computer Science",
+      "Artificial Intelligence",
+      "Computational Natural Sciences"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Andhra University College of Engineering",
+    "type": "State",
+    "city": "Visakhapatnam",
+    "state": "Andhra Pradesh",
+    "admissionMode": "AP EAMCET",
+    "website": "https://www.andhrauniversity.edu.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering",
+      "Chemical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Osmania University College of Engineering",
+    "type": "State",
+    "city": "Hyderabad",
+    "state": "Telangana",
+    "admissionMode": "TS EAMCET",
+    "website": "https://www.osmania.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "JNTU Hyderabad",
+    "type": "State",
+    "city": "Hyderabad",
+    "state": "Telangana",
+    "admissionMode": "TS EAMCET",
+    "website": "https://www.jntuh.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Savitribai Phule Pune University",
+    "type": "State",
+    "city": "Pune",
+    "state": "Maharashtra",
+    "admissionMode": "MHT-CET",
+    "website": "http://www.unipune.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Telecommunication",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "University of Mumbai (SFIT / TSEC)",
+    "type": "State",
+    "city": "Mumbai",
+    "state": "Maharashtra",
+    "admissionMode": "MHT-CET / JEE",
+    "website": "https://mu.ac.in",
+    "branches": [
+      "Computer Engineering",
+      "Information Technology",
+      "Electronics & Telecommunication",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "University of Calcutta (University College of Technology)",
+    "type": "State",
+    "city": "Kolkata",
+    "state": "West Bengal",
+    "admissionMode": "WBJEE / JEE",
+    "website": "https://www.caluniv.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Chemical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Cochin University of Science and Technology (CUSAT)",
+    "type": "State",
+    "city": "Kochi",
+    "state": "Kerala",
+    "admissionMode": "CUSAT CAT / KEAM",
+    "website": "https://www.cusat.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Information Technology",
+      "Mechanical Engineering",
+      "Civil Engineering",
+      "Safety & Fire Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Government Engineering College Thrissur",
+    "type": "State",
+    "city": "Thrissur",
+    "state": "Kerala",
+    "admissionMode": "KEAM",
+    "website": "https://gectcr.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "College of Engineering Trivandrum (CET)",
+    "type": "State",
+    "city": "Thiruvananthapuram",
+    "state": "Kerala",
+    "admissionMode": "KEAM",
+    "website": "https://www.cet.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering",
+      "Architecture"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Government College of Technology Coimbatore",
+    "type": "State",
+    "city": "Coimbatore",
+    "state": "Tamil Nadu",
+    "admissionMode": "TNEA",
+    "website": "https://www.gct.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering",
+      "Production Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Thiagarajar College of Engineering",
+    "type": "Private",
+    "city": "Madurai",
+    "state": "Tamil Nadu",
+    "admissionMode": "TNEA",
+    "website": "https://www.tce.edu",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "University Visvesvaraya College of Engineering (UVCE)",
+    "type": "State",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "admissionMode": "KCET",
+    "website": "https://uvce.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "National Institute of Engineering Mysore",
+    "type": "Private",
+    "city": "Mysuru",
+    "state": "Karnataka",
+    "admissionMode": "COMEDK / KCET",
+    "website": "https://nie.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Science Engineering",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering",
+      "Electrical & Electronics Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "MITS Gwalior",
+    "type": "State",
+    "city": "Gwalior",
+    "state": "Madhya Pradesh",
+    "admissionMode": "JEE Mains",
+    "website": "https://www.mitsgwalior.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Motilal Nehru National Institute of Technology (Bangalore campus reference removed - corrected to JNTUA)",
+    "type": "State",
+    "city": "Ananthapuramu",
+    "state": "Andhra Pradesh",
+    "admissionMode": "AP EAMCET",
+    "website": "https://www.jntua.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Visvesvaraya Technological University (VTU)",
+    "type": "State",
+    "city": "Belgaum",
+    "state": "Karnataka",
+    "admissionMode": "KCET / COMEDK",
+    "website": "https://vtu.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Science Engineering",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Maulana Abul Kalam Azad University of Technology (MAKAUT)",
+    "type": "State",
+    "city": "Kolkata",
+    "state": "West Bengal",
+    "admissionMode": "WBJEE",
+    "website": "https://makautwb.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Dr. APJ Abdul Kalam Technical University (AKTU)",
+    "type": "State",
+    "city": "Lucknow",
+    "state": "Uttar Pradesh",
+    "admissionMode": "UPSEE / JEE Mains",
+    "website": "https://aktu.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Heritage Institute of Technology",
+    "type": "Private",
+    "city": "Kolkata",
+    "state": "West Bengal",
+    "admissionMode": "WBJEE / JEE",
+    "website": "https://www.heritageit.edu",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Institute of Engineering & Management (IEM)",
+    "type": "Private",
+    "city": "Kolkata",
+    "state": "West Bengal",
+    "admissionMode": "WBJEE / JEE",
+    "website": "https://iem.edu.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIITM Gwalior",
+    "type": "IIIT",
+    "city": "Gwalior",
+    "state": "Madhya Pradesh",
+    "admissionMode": "JEE Mains",
+    "website": "https://www.iiitm.ac.in",
+    "branches": [
+      "Information Technology",
+      "Integrated M.Tech (IT)",
+      "MBA (IT)"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Vellore Institute of Technology (VIT) Amaravati",
+    "type": "VIT",
+    "city": "Amaravati",
+    "state": "Andhra Pradesh",
+    "admissionMode": "VITEEE",
+    "website": "https://vitap.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Computer Science & Business Systems",
+      "Electronics & Communication",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Shanmugha Arts, Science, Technology & Research Academy (SASTRA)",
+    "type": "Private",
+    "city": "Thanjavur",
+    "state": "Tamil Nadu",
+    "admissionMode": "JEE Mains / Board Merit",
+    "website": "https://www.sastra.edu",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Netaji Subhash Engineering College",
+    "type": "Private",
+    "city": "Kolkata",
+    "state": "West Bengal",
+    "admissionMode": "WBJEE / JEE",
+    "website": "https://www.nsec.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "JSS Science and Technology University",
+    "type": "Private",
+    "city": "Mysuru",
+    "state": "Karnataka",
+    "admissionMode": "KCET / COMEDK",
+    "website": "https://jssstuniv.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Science Engineering",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "R.V. University",
+    "type": "Private",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "admissionMode": "RVEE / Merit",
+    "website": "https://rvu.edu.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Birla Vishvakarma Mahavidyalaya (BVM)",
+    "type": "State",
+    "city": "Vallabh Vidyanagar",
+    "state": "Gujarat",
+    "admissionMode": "GUJCET / JEE",
+    "website": "https://bvmengineering.ac.in",
+    "branches": [
+      "Computer Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Sardar Vallabhbhai Patel Institute of Technology (SVIT)",
+    "type": "State",
+    "city": "Vasad",
+    "state": "Gujarat",
+    "admissionMode": "GUJCET / JEE",
+    "website": "https://www.svitvasad.ac.in",
+    "branches": [
+      "Computer Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Government Engineering College Barton Hill (GEC Trivandrum)",
+    "type": "State",
+    "city": "Thiruvananthapuram",
+    "state": "Kerala",
+    "admissionMode": "KEAM",
+    "website": "https://www.gecbh.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Model Engineering College Thrikkakara",
+    "type": "State",
+    "city": "Kochi",
+    "state": "Kerala",
+    "admissionMode": "KEAM",
+    "website": "https://www.mec.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering",
+      "Mechanical Engineering",
+      "Applied Electronics & Instrumentation"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Punjab Technical University (IKG PTU)",
+    "type": "State",
+    "city": "Kapurthala",
+    "state": "Punjab",
+    "admissionMode": "JEE Mains / Merit",
+    "website": "https://www.ptu.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Rajasthan Technical University",
+    "type": "State",
+    "city": "Kota",
+    "state": "Rajasthan",
+    "admissionMode": "REAP / JEE",
+    "website": "https://www.rtu.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Gujarat Technological University (GTU)",
+    "type": "State",
+    "city": "Ahmedabad",
+    "state": "Gujarat",
+    "admissionMode": "GUJCET / JEE",
+    "website": "https://www.gtu.ac.in",
+    "branches": [
+      "Computer Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "PDEU (Pandit Deendayal Energy University)",
+    "type": "State",
+    "city": "Gandhinagar",
+    "state": "Gujarat",
+    "admissionMode": "JEE Mains / GUJCET",
+    "website": "https://www.pdpu.ac.in",
+    "branches": [
+      "Computer Engineering",
+      "Information & Communication Technology",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering",
+      "Chemical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "SRM Institute Chennai (Ramapuram Campus)",
+    "type": "Private",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "admissionMode": "SRMJEEE",
+    "website": "https://www.srmist.edu.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Automobile Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Sreenidhi Institute of Science and Technology",
+    "type": "Private",
+    "city": "Hyderabad",
+    "state": "Telangana",
+    "admissionMode": "TS EAMCET / JEE",
+    "website": "https://sreenidhi.edu.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "CVR College of Engineering",
+    "type": "Private",
+    "city": "Hyderabad",
+    "state": "Telangana",
+    "admissionMode": "TS EAMCET",
+    "website": "https://cvr.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "VNRVJIET Hyderabad",
+    "type": "Private",
+    "city": "Hyderabad",
+    "state": "Telangana",
+    "admissionMode": "TS EAMCET",
+    "website": "https://vnrvjiet.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Vasireddy Venkatadri Institute of Technology (VVIT)",
+    "type": "Private",
+    "city": "Guntur",
+    "state": "Andhra Pradesh",
+    "admissionMode": "AP EAMCET",
+    "website": "https://www.vvitguntur.com",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Maharaja Agrasen Institute of Technology (MAIT)",
+    "type": "Private",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "admissionMode": "JAC Delhi / JEE Mains",
+    "website": "https://mait.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering",
+      "Mechanical & Automation Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Bharati Vidyapeeth College of Engineering (BVCOE)",
+    "type": "Private",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "admissionMode": "JAC Delhi / JEE Mains",
+    "website": "https://www.bvcoend.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Naya Raipur",
+    "type": "IIIT",
+    "city": "Naya Raipur",
+    "state": "Chhattisgarh",
+    "admissionMode": "JEE Mains",
+    "website": "https://www.iiitnr.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Data Science & Artificial Intelligence"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Kilcheri (Tamil Nadu)",
+    "type": "IIIT",
+    "city": "Kilcheri",
+    "state": "Tamil Nadu",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.iiitt.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Thadomal Shahani Engineering College",
+    "type": "Private",
+    "city": "Mumbai",
+    "state": "Maharashtra",
+    "admissionMode": "MHT-CET / JEE",
+    "website": "https://tsec.edu",
+    "branches": [
+      "Computer Engineering",
+      "Information Technology",
+      "Electronics & Telecommunication",
+      "Mechanical Engineering",
+      "Chemical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Fr. Conceicao Rodrigues College of Engineering (CRCE)",
+    "type": "Private",
+    "city": "Mumbai",
+    "state": "Maharashtra",
+    "admissionMode": "MHT-CET / JEE",
+    "website": "https://frcrce.ac.in",
+    "branches": [
+      "Computer Engineering",
+      "Information Technology",
+      "Electronics & Telecommunication",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Veermata Jijabai Technological Institute Annexe (VJTI Annexe)",
+    "type": "State",
+    "city": "Mumbai",
+    "state": "Maharashtra",
+    "admissionMode": "MHT-CET",
+    "website": "https://vjti.ac.in",
+    "branches": [
+      "Computer Engineering",
+      "Information Technology",
+      "Electronics Engineering",
+      "Electrical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Walchand College of Engineering",
+    "type": "State",
+    "city": "Sangli",
+    "state": "Maharashtra",
+    "admissionMode": "MHT-CET / JEE Mains",
+    "website": "https://www.walchandsangli.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Government College of Engineering Aurangabad",
+    "type": "State",
+    "city": "Aurangabad",
+    "state": "Maharashtra",
+    "admissionMode": "MHT-CET",
+    "website": "https://www.geca.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Telecommunication",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Army Institute of Technology (AIT Pune)",
+    "type": "Private",
+    "city": "Pune",
+    "state": "Maharashtra",
+    "admissionMode": "MHT-CET / JEE",
+    "website": "https://www.aitpune.com",
+    "branches": [
+      "Computer Engineering",
+      "Information Technology",
+      "Electronics & Telecommunication",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Cummins College of Engineering for Women",
+    "type": "Private",
+    "city": "Pune",
+    "state": "Maharashtra",
+    "admissionMode": "MHT-CET / JEE",
+    "website": "https://www.cumminscollege.in",
+    "branches": [
+      "Computer Engineering",
+      "Information Technology",
+      "Electronics & Telecommunication",
+      "Instrumentation & Control",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Vishwakarma Institute of Technology (VIT Pune)",
+    "type": "Private",
+    "city": "Pune",
+    "state": "Maharashtra",
+    "admissionMode": "MHT-CET / JEE",
+    "website": "https://www.vit.edu",
+    "branches": [
+      "Computer Engineering",
+      "Information Technology",
+      "Electronics & Telecommunication",
+      "Mechanical Engineering",
+      "Instrumentation & Control"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "MIT World Peace University (MIT-WPU)",
+    "type": "Private",
+    "city": "Pune",
+    "state": "Maharashtra",
+    "admissionMode": "Merit / JEE",
+    "website": "https://mitwpu.edu.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Mepco Schlenk Engineering College",
+    "type": "Private",
+    "city": "Sivakasi",
+    "state": "Tamil Nadu",
+    "admissionMode": "TNEA",
+    "website": "https://www.mepcoeng.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Sri Ramakrishna Engineering College",
+    "type": "Private",
+    "city": "Coimbatore",
+    "state": "Tamil Nadu",
+    "admissionMode": "TNEA",
+    "website": "https://www.srec.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NIT Andhra Pradesh (NITAP Tadepalligudem)",
+    "type": "NIT",
+    "city": "Tadepalligudem",
+    "state": "Andhra Pradesh",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.nitandhra.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Jamia Millia Islamia",
+    "type": "State",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "admissionMode": "JMI Entrance / JEE Mains",
+    "website": "https://www.jmi.ac.in",
+    "branches": [
+      "Computer Engineering",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Delhi Institute of Technology (now NSUT East Campus)",
+    "type": "State",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "admissionMode": "JAC Delhi / JEE Mains",
+    "website": "http://www.nsut.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IGDTUW (Indira Gandhi Delhi Technical University for Women)",
+    "type": "State",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "admissionMode": "JAC Delhi / JEE Mains",
+    "website": "https://www.igdtuw.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Mechanical & Automation Engineering",
+      "Artificial Intelligence & Data Science"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "BIT Sindri",
+    "type": "State",
+    "city": "Dhanbad",
+    "state": "Jharkhand",
+    "admissionMode": "JEE Mains",
+    "website": "https://www.bitsindri.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Chemical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NIT Karnataka Surathkal (NITK)",
+    "type": "NIT",
+    "city": "Surathkal",
+    "state": "Karnataka",
+    "admissionMode": "JEE Mains",
+    "website": "https://www.nitk.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Madan Mohan Malaviya University of Technology",
+    "type": "State",
+    "city": "Gorakhpur",
+    "state": "Uttar Pradesh",
+    "admissionMode": "UPSEE / JEE Mains",
+    "website": "https://www.mmmut.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "JSS Academy of Technical Education",
+    "type": "Private",
+    "city": "Noida",
+    "state": "Uttar Pradesh",
+    "admissionMode": "UPSEE / JEE Mains",
+    "website": "https://www.jssaten.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Manipal University Jaipur",
+    "type": "Private",
+    "city": "Jaipur",
+    "state": "Rajasthan",
+    "admissionMode": "MET / JEE / Merit",
+    "website": "https://jaipur.manipal.edu",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "SRM Easwari Engineering College",
+    "type": "Private",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "admissionMode": "TNEA / SRMJEE",
+    "website": "https://www.srmeaswari.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Rajalakshmi Engineering College",
+    "type": "Private",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "admissionMode": "TNEA",
+    "website": "https://www.rajalakshmi.org",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Sri Venkateswara College of Engineering (SVCE)",
+    "type": "Private",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "admissionMode": "TNEA",
+    "website": "https://www.svce.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "SDM College of Engineering & Technology",
+    "type": "Private",
+    "city": "Dharwad",
+    "state": "Karnataka",
+    "admissionMode": "COMEDK / KCET",
+    "website": "https://www.sdmcet.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Science Engineering",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Siddaganga Institute of Technology",
+    "type": "Private",
+    "city": "Tumkur",
+    "state": "Karnataka",
+    "admissionMode": "COMEDK / KCET",
+    "website": "https://sit.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Science Engineering",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "CMR Institute of Technology",
+    "type": "Private",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "admissionMode": "COMEDK / KCET",
+    "website": "https://www.cmrit.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Science Engineering",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "REVA University",
+    "type": "Private",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "admissionMode": "REVACET / Merit",
+    "website": "https://www.rfreva.edu.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Science Engineering",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "NMIMS University (Mukesh Patel School of Technology)",
+    "type": "Private",
+    "city": "Mumbai",
+    "state": "Maharashtra",
+    "admissionMode": "NMIMS NPAT / JEE",
+    "website": "https://engineering.nmims.edu",
+    "branches": [
+      "Computer Engineering",
+      "Information Technology",
+      "Electronics & Telecommunication",
+      "Mechanical Engineering",
+      "Data Science"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IIIT Senapati Manipur",
+    "type": "IIIT",
+    "city": "Senapati",
+    "state": "Manipur",
+    "admissionMode": "JEE Mains",
+    "website": "http://www.iiitmanipur.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Ajay Kumar Garg Engineering College (AKGEC)",
+    "type": "Private",
+    "city": "Ghaziabad",
+    "state": "Uttar Pradesh",
+    "admissionMode": "JEE Main / UPCET",
+    "website": "https://www.akgec.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "KIET Group of Institutions",
+    "type": "Private",
+    "city": "Ghaziabad",
+    "state": "Uttar Pradesh",
+    "admissionMode": "JEE Main / UPCET",
+    "website": "https://www.kiet.edu",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "GL Bajaj Institute of Technology and Management",
+    "type": "Private",
+    "city": "Greater Noida",
+    "state": "Uttar Pradesh",
+    "admissionMode": "JEE Main / UPCET",
+    "website": "https://www.glbitm.org",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "J.C. Bose University of Science and Technology, YMCA",
+    "type": "State",
+    "city": "Faridabad",
+    "state": "Haryana",
+    "admissionMode": "JEE Main / HSTES",
+    "website": "https://ymcaust.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Institute of Engineering and Technology (IET), Lucknow",
+    "type": "State",
+    "city": "Lucknow",
+    "state": "Uttar Pradesh",
+    "admissionMode": "JEE Main / UPCET",
+    "website": "https://ietlucknow.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Chemical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "SGSITS Indore",
+    "type": "State",
+    "city": "Indore",
+    "state": "Madhya Pradesh",
+    "admissionMode": "JEE Main / MP DTE",
+    "website": "https://www.sgsits.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Jabalpur Engineering College (JEC)",
+    "type": "State",
+    "city": "Jabalpur",
+    "state": "Madhya Pradesh",
+    "admissionMode": "JEE Main / MP DTE",
+    "website": "https://www.jecjabalpur.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "IET DAVV",
+    "type": "State",
+    "city": "Indore",
+    "state": "Madhya Pradesh",
+    "admissionMode": "JEE Main / MP DTE",
+    "website": "https://www.iet.dauniv.ac.in",
+    "branches": [
+      "Computer Engineering",
+      "Information Technology",
+      "Electronics & Instrumentation",
+      "Electronics & Telecommunication",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "MBM University",
+    "type": "State",
+    "city": "Jodhpur",
+    "state": "Rajasthan",
+    "admissionMode": "JEE Main / REAP",
+    "website": "https://mbm.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Mining Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "College of Technology and Engineering (CTAE)",
+    "type": "State",
+    "city": "Udaipur",
+    "state": "Rajasthan",
+    "admissionMode": "JEE Main / REAP",
+    "website": "https://www.ctae.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Mining Engineering",
+      "Agricultural Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Pimpri Chinchwad College of Engineering (PCCOE)",
+    "type": "Private",
+    "city": "Pune",
+    "state": "Maharashtra",
+    "admissionMode": "MHT-CET / JEE Main",
+    "website": "https://www.pccoepune.com",
+    "branches": [
+      "Computer Engineering",
+      "Information Technology",
+      "Electronics & Telecommunication",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "GLA University",
+    "type": "Private",
+    "city": "Mathura",
+    "state": "Uttar Pradesh",
+    "admissionMode": "GLAET / JEE Main",
+    "website": "https://www.gla.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "TKM College of Engineering",
+    "type": "State",
+    "city": "Kollam",
+    "state": "Kerala",
+    "admissionMode": "KEAM",
+    "website": "https://tkmce.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering",
+      "Mechanical Engineering",
+      "Chemical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Coimbatore Institute of Technology (CIT)",
+    "type": "State",
+    "city": "Coimbatore",
+    "state": "Tamil Nadu",
+    "admissionMode": "TNEA",
+    "website": "https://www.cit.edu.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering",
+      "Chemical Engineering",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Guru Nanak Dev Engineering College (GNDEC)",
+    "type": "State",
+    "city": "Ludhiana",
+    "state": "Punjab",
+    "admissionMode": "JEE Main / PTU Counselling",
+    "website": "https://gndec.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Haldia Institute of Technology",
+    "type": "Private",
+    "city": "Haldia",
+    "state": "West Bengal",
+    "admissionMode": "WBJEE",
+    "website": "https://hithaldia.org",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Chemical Engineering",
+      "Mechanical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Noida Institute of Engineering and Technology (NIET)",
+    "type": "Private",
+    "city": "Greater Noida",
+    "state": "Uttar Pradesh",
+    "admissionMode": "JEE Main / UPCET",
+    "website": "https://www.niet.co.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Biotechnology"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "JSS Academy of Technical Education, Bangalore",
+    "type": "Private",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "admissionMode": "COMEDK / KCET",
+    "website": "https://jssateb.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Science Engineering",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "University College of Engineering (UCE), Osmania University",
+    "type": "State",
+    "city": "Hyderabad",
+    "state": "Telangana",
+    "admissionMode": "TS EAMCET",
+    "website": "https://www.uceou.edu",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering",
+      "Biomedical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "JNTUH College of Engineering, Hyderabad",
+    "type": "State",
+    "city": "Hyderabad",
+    "state": "Telangana",
+    "admissionMode": "TS EAMCET",
+    "website": "https://jntuhceh.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering",
+      "Metallurgical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Rungta College of Engineering and Technology (RCET)",
+    "type": "Private",
+    "city": "Bhilai",
+    "state": "Chhattisgarh",
+    "admissionMode": "CGPET / JEE Main",
+    "website": "https://www.rungta.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Telecommunication",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "G.H. Raisoni College of Engineering (GHRCE)",
+    "type": "Private",
+    "city": "Nagpur",
+    "state": "Maharashtra",
+    "admissionMode": "MHT-CET / JEE Main",
+    "website": "https://ghrce.raisoni.net",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Telecommunication",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Dr. Akhilesh Das Gupta Institute of Technology & Management (ADGITM)",
+    "type": "Private",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "admissionMode": "JEE Main / IPU CET",
+    "website": "https://adgitmdelhi.ac.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Bhagwan Parshuram Institute of Technology (BPIT)",
+    "type": "Private",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "admissionMode": "JEE Main / IPU CET",
+    "website": "https://www.bpitindia.com",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering"
+    ],
+    "dataStatus": "needs_review"
+  },
+  {
+    "name": "Sri Sivasubramaniya Nadar (SSN) College of Engineering",
+    "type": "Private",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "admissionMode": "TNEA / Merit Selection",
+    "website": "https://www.ssn.edu.in",
+    "branches": [
+      "Computer Science Engineering",
+      "Information Technology",
+      "Electronics & Communication Engineering",
+      "Electrical & Electronics Engineering",
+      "Chemical Engineering",
+      "Mechanical Engineering",
+      "Biomedical Engineering"
+    ],
+    "dataStatus": "needs_review"
+  }
+]

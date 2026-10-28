@@ -36,7 +36,8 @@ const CollegeSchema = new mongoose.Schema(
     },
     feesPerYear: {
       type: Number,
-      required: [true, 'Fees per year is required'],
+      default: null,
+      min: 0,
     },
     cutoffRankCSE: {
       type: String,
@@ -45,11 +46,13 @@ const CollegeSchema = new mongoose.Schema(
     },
     avgPlacement: {
       type: Number,
-      required: [true, 'Average placement package is required'],
+      default: null,
+      min: 0,
     },
     highestPlacement: {
       type: Number,
-      required: [true, 'Highest placement package is required'],
+      default: null,
+      min: 0,
     },
     description: {
       type: String,
@@ -80,7 +83,7 @@ const CollegeSchema = new mongoose.Schema(
     },
     ugcRecognized: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     naacRating: {
       type: String,
@@ -118,11 +121,30 @@ const CollegeSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    dataStatus: { type: String, enum: ['needs_review', 'institution_reported', 'verified'], default: 'needs_review' },
+    dataYear: { type: Number, default: null },
+    sourceUrl: { type: String, default: '' },
+    verifiedAt: { type: Date, default: null },
+    medianPlacement: { type: Number, default: null, min: 0 },
+    hostelPerYear: { type: Number, default: null, min: 0 },
+    messPerYear: { type: Number, default: null, min: 0 },
+    mandatoryFeesPerYear: { type: Number, default: null, min: 0 },
   },
   {
     timestamps: true,
   }
 );
+
+CollegeSchema.pre('validate', function (next) {
+  if (this.dataStatus === 'verified') {
+    let validSource = false;
+    try { validSource = ['http:', 'https:'].includes(new URL(this.sourceUrl).protocol); } catch {}
+    if (!validSource) this.invalidate('sourceUrl', 'A public source URL is required for verified data');
+    if (!this.dataYear || this.dataYear < 1900 || this.dataYear > 2100) this.invalidate('dataYear', 'A valid source year is required');
+    if (!this.verifiedAt) this.invalidate('verifiedAt', 'A verification date is required');
+  }
+  next();
+});
 
 CollegeSchema.pre('save', function (next) {
   if (this.nbaBranches && this.nbaBranches.length > 0) {

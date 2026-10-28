@@ -35,7 +35,7 @@ router.get('/leads/:id', async (req, res) => {
     }
 
     // Gating check: Counsellor must be assigned to this lead, unless they are admin
-    if (req.user.role !== 'admin' && lead.assignedTo && lead.assignedTo._id.toString() !== req.user.userId.toString()) {
+    if (req.user.role !== 'admin' && (!lead.assignedTo || lead.assignedTo._id.toString() !== req.user.userId.toString())) {
       return res.status(403).json({ success: false, error: 'Forbidden: Lead is assigned to another counsellor' });
     }
 
@@ -66,11 +66,12 @@ router.put(
       }
 
       // Check assignment
-      if (req.user.role !== 'admin' && lead.assignedTo && lead.assignedTo.toString() !== req.user.userId.toString()) {
+      if (req.user.role !== 'admin' && (!lead.assignedTo || lead.assignedTo.toString() !== req.user.userId.toString())) {
         return res.status(403).json({ success: false, error: 'Forbidden: Lead is assigned to another counsellor' });
       }
 
       lead.status = status;
+      if (status === 'counselled' && !lead.counselledAt) lead.counselledAt = new Date();
       await lead.save();
 
       // Trigger status update email
@@ -108,7 +109,7 @@ router.post(
       }
 
       // Check assignment
-      if (req.user.role !== 'admin' && lead.assignedTo && lead.assignedTo.toString() !== req.user.userId.toString()) {
+      if (req.user.role !== 'admin' && (!lead.assignedTo || lead.assignedTo.toString() !== req.user.userId.toString())) {
         return res.status(403).json({ success: false, error: 'Forbidden: Lead is assigned to another counsellor' });
       }
 

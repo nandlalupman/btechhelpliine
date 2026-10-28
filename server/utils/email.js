@@ -1,9 +1,22 @@
 const nodemailer = require('nodemailer');
+const fs = require('fs');
+const path = require('path');
+const crypto = require('crypto');
+exports.outboxDirectory = process.env.NODE_ENV === 'test' && process.env.LOCAL_OUTBOX_DIR ? process.env.LOCAL_OUTBOX_DIR : path.join(__dirname, '../../.local/outbox');
 
 let transporter;
 const hasEmailCredentials = process.env.EMAIL_USER && process.env.EMAIL_PASS;
 
-if (hasEmailCredentials) {
+exports.deliveryMode = process.env.LOCAL_PREVIEW === '1' ? 'local-preview' : hasEmailCredentials ? 'smtp' : 'unavailable';
+if (process.env.LOCAL_PREVIEW === '1') {
+  transporter = { sendMail: async options => {
+    const directory = exports.outboxDirectory;
+    fs.mkdirSync(directory, { recursive: true });
+    const messageId = `${Date.now()}-${crypto.randomBytes(8).toString('hex')}`;
+    fs.writeFileSync(path.join(directory, messageId + '.json'), JSON.stringify({ messageId, to: options.to, subject: options.subject, text: options.text, createdAt: new Date().toISOString(), delivery: 'local-preview' }), { mode: 0o600 });
+    return { messageId, localPreview: true };
+  } };
+} else if (hasEmailCredentials) {
   const mailConfig = {
     auth: {
       user: process.env.EMAIL_USER,
@@ -17,26 +30,11 @@ if (hasEmailCredentials) {
     mailConfig.host = process.env.EMAIL_HOST || 'smtp.gmail.com';
     mailConfig.port = parseInt(process.env.EMAIL_PORT || '587', 10);
     mailConfig.secure = process.env.EMAIL_SECURE === 'true';
-    mailConfig.tls = {
-      rejectUnauthorized: false
-    };
   }
 
   transporter = nodemailer.createTransport(mailConfig);
 } else {
-  // Graceful fallback for local development: logs emails to console
-  transporter = {
-    sendMail: async (options) => {
-      console.log('\n==================================================');
-      console.log('✉️  SIMULATED EMAIL LOG (No SMTP Credentials in .env)');
-      console.log(`To:      ${options.to}`);
-      console.log(`Subject: ${options.subject}`);
-      console.log('--------------------------------------------------');
-      console.log(options.text);
-      console.log('==================================================\n');
-      return { messageId: 'simulated-12345' };
-    },
-  };
+  transporter = { sendMail: async () => { throw new Error('Email delivery is not configured. Set SMTP credentials.'); } };
 }
 
 // Automatically resolve public website domain vs localhost based on environment
@@ -44,6 +42,7 @@ const PUBLIC_URL = process.env.FRONTEND_URL ||
   (process.env.NODE_ENV === 'production' ? 'https://btechhelpline.com' : 'http://localhost:3000');
 const EMAIL_FROM = process.env.EMAIL_FROM || 'noreply@btechhelpline.com';
 const EMAIL_FROM_NAME = process.env.EMAIL_FROM_NAME || 'BtechHelpline';
+const escapeHtml = value => String(value).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 const getEmailWrapper = (title, preheader, bodyHtml) => {
   return `
@@ -242,7 +241,7 @@ exports.sendVerificationEmail = async (email, name, token, baseUrl) => {
   const title = 'Verify your BtechHelpline Account';
   const bodyHtml = `
     <h2 class="title">Verify Your Account</h2>
-    <p class="text">Hello ${name},</p>
+    <p class="text">Hello ${escapeHtml(name)},</p>
     <p class="text">Thank you for registering at BtechHelpline.com. To complete your registration and secure your account, please verify your email address by clicking the button below:</p>
     <div class="btn-container">
       <a href="${url}" class="btn" target="_blank">Verify Account</a>
@@ -266,7 +265,7 @@ exports.sendVerificationOTPEmail = async (email, name, otp) => {
   const title = 'Your BtechHelpline Email Verification OTP';
   const bodyHtml = `
     <h2 class="title">Your Verification Code</h2>
-    <p class="text">Hello ${name},</p>
+    <p class="text">Hello ${escapeHtml(name)},</p>
     <p class="text">To complete your registration or verify your identity, please enter the following One-Time Password (OTP) in the app:</p>
     <div class="otp-container">
       <div class="otp-label">Verification Code</div>
@@ -293,7 +292,7 @@ exports.sendPasswordResetEmail = async (email, name, token, baseUrl) => {
   const title = 'Reset your BtechHelpline Password';
   const bodyHtml = `
     <h2 class="title" style="color: #f43f5e;">Reset Your Password</h2>
-    <p class="text">Hello ${name},</p>
+    <p class="text">Hello ${escapeHtml(name)},</p>
     <p class="text">We received a request to reset your BtechHelpline password. Click the button below to choose a new password:</p>
     <div class="btn-container">
       <a href="${url}" class="btn btn-reset" target="_blank">Reset Password</a>
@@ -313,12 +312,13 @@ exports.sendPasswordResetEmail = async (email, name, token, baseUrl) => {
   return transporter.sendMail(mailOptions);
 };
 
-exports.sendLeadConfirmation = async (email, name, leadId) => {
+exports.sendLeadConfirmation = async (email, name, leadId, accessKey) => {
   const title = 'Consultation Request Received';
   const bodyHtml = `
     <h2 class="title">Consultation Request Received</h2>
-    <p class="text">Hello ${name},</p>
+    <p class="text">Hello ${escapeHtml(name)},</p>
     <p class="text">We have successfully received your B.Tech admission counselling request (ID: <strong>#${leadId}</strong>).</p>
+    ${accessKey ? `<p class="text">Keep your private tracking code:<br><strong style="overflow-wrap:anywhere">${accessKey}</strong><br><a href="${PUBLIC_URL}/messages/">Open your private conversation</a>. Do not share this code.</p>` : ""}
     <p class="text">One of our expert counsellors will review your details and contact you on your registered phone number shortly to guide you through your college admissions.</p>
     <p class="text" style="font-weight: 500; color: #2563eb;">We are excited to help you find the best engineering branch and college for your rank!</p>
   `;
@@ -327,7 +327,7 @@ exports.sendLeadConfirmation = async (email, name, leadId) => {
     from: `"${EMAIL_FROM_NAME}" <${EMAIL_FROM}>`,
     to: email,
     subject: title,
-    text: `Hello ${name},\n\nWe have received your B.Tech admission counselling request (ID: ${leadId}).\n\nOne of our expert counsellors will contact you on your registered phone number shortly.\n\nBest regards,\nBtechHelpline team`,
+    text: `Hello ${name},\n\nWe have received your B.Tech admission counselling request (ID: ${leadId}).\n\n${accessKey ? `Keep this private tracking code: ${accessKey}\nOpen ${PUBLIC_URL}/messages/ to view or reply. Do not share your code.\n\n` : ''}Our team will review your request.\n\nBest regards,\nBtechHelpline team`,
     html: getEmailWrapper(title, 'Consultation request received', bodyHtml)
   };
 
@@ -368,7 +368,7 @@ exports.sendStatusUpdateEmail = async (email, name, status) => {
   const title = `Counselling Status Updated: ${statusText}`;
   const bodyHtml = `
     <h2 class="title">Counselling Status Update</h2>
-    <p class="text">Hello ${name},</p>
+    <p class="text">Hello ${escapeHtml(name)},</p>
     <p class="text">The status of your B.Tech counselling request has been updated to:</p>
     <div style="text-align: center; margin: 24px 0;">
       <span style="display: inline-block; padding: 10px 24px; font-weight: 700; font-size: 16px; background-color: ${badgeColor}; color: #ffffff; border-radius: 9999px; text-transform: uppercase; letter-spacing: 0.5px;">${statusText}</span>
@@ -389,11 +389,11 @@ exports.sendStatusUpdateEmail = async (email, name, status) => {
 };
 
 exports.sendCustomEmail = async (email, subject, bodyText) => {
-  const title = subject;
+  const title = escapeHtml(subject);
   // Replace newlines with <br> for HTML rendering, maintaining spaces
   const bodyHtml = `
-    <h2 class="title">${subject}</h2>
-    <p class="text" style="white-space: pre-wrap; line-height: 1.6;">${bodyText.replace(/\n/g, '<br>')}</p>
+    <h2 class="title">${escapeHtml(subject)}</h2>
+    <p class="text" style="white-space: pre-wrap; line-height: 1.6;">${escapeHtml(bodyText).replace(/\n/g, '<br>')}</p>
   `;
 
   const mailOptions = {

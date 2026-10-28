@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const { body, validationResult } = require('express-validator');
 const User = require('../models/User');
 const Lead = require('../models/Lead');
+const { studentView } = require('../services/conversations');
 const { verifyToken } = require('../middleware/auth');
 
 const router = express.Router();
@@ -125,7 +126,7 @@ router.put(
 router.get('/my-leads', async (req, res) => {
   try {
     const leads = await Lead.find({ userId: req.user.userId }).sort({ createdAt: -1 });
-    res.json({ success: true, data: leads });
+    res.json({ success: true, data: leads.map(studentView) });
   } catch (err) {
     console.error('Fetch student leads error:', err.message);
     res.status(500).json({ success: false, error: 'Internal Server Error' });
@@ -158,7 +159,7 @@ router.put(
       lead.status = status;
       await lead.save();
 
-      res.json({ success: true, message: 'Status updated successfully!', data: lead });
+      res.json({ success: true, message: 'Status updated successfully!', data: studentView(lead) });
     } catch (err) {
       console.error('Update student lead status error:', err.message);
       res.status(500).json({ success: false, error: 'Internal Server Error' });
@@ -175,7 +176,10 @@ router.delete('/me', async (req, res) => {
     }
 
     // Delete associated leads to keep the database clean
+    const ownedLeads = await Lead.find({ userId: req.user.userId }).select('_id');
+    await require('../models/ConversationMessage').deleteMany({ leadId: { $in: ownedLeads.map(lead => lead._id) } });
     await Lead.deleteMany({ userId: req.user.userId });
+    await require('../models/Journey').Application.deleteMany({ userId: req.user.userId });
 
     res.json({ success: true, message: 'Account deleted successfully' });
   } catch (err) {

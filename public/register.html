@@ -1,24 +1,16 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6B390BG8Q2"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-6B390BG8Q2');
-    </script>
+    <script src="/consent.js" defer></script>
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon.png" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Register Free | BtechHelpline — JEE Counselling 2025</title>
+    <title>Register Free | BtechHelpline — B.Tech Admission Guidance</title>
     <meta name="description" content="Create your free BtechHelpline account to get personalised JEE counselling, track your consultation status, and get matched with an expert counsellor." />
     <meta name="keywords" content="JEE counselling, engineering admission register, B.Tech counselling signup, free JEE guidance" />
-    <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://www.btechhelpline.com/register.html" />
+    <meta name="robots" content="noindex, follow" />
+    <link rel="canonical" href="https://www.btechhelpline.com/register" />
 
     <!-- Preconnect Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -619,40 +611,40 @@
         </div>
 
         <div class="promo-content">
-          <h2>Compare <span id="title-colleges-count">250+</span> Engineering Colleges & Find Your Best Fit</h2>
+          <h2>Compare <span id="title-colleges-count"></span> Engineering Colleges & Find Your Best Fit</h2>
           <p>Get matched with India's top engineering colleges based on your JEE rank, preferred branches, and budget range.</p>
           
           <div class="promo-visual">
             <div class="visual-card card-1" id="promo-card-1">
-              <strong>IIT Bombay (CSE)</strong>
-              <span>Top Cutoff Choice</span>
+              <strong>Your shortlist</strong>
+              <span>Compare your options</span>
             </div>
             <div class="visual-card card-2" id="promo-card-2">
-              <strong>CSE Average: ₹23.5 LPA</strong>
-              <span class="badge-tag">Top Tier</span>
+              <strong>Understand the full cost</strong>
+              <span class="badge-tag">Plan ahead</span>
             </div>
             <div class="visual-card card-3" id="promo-card-3">
-              <strong>Highest Package</strong>
-              <span>₹233.0 LPA</span>
+              <strong>Check the source</strong>
+              <span>Year, scope and verification</span>
             </div>
           </div>
         </div>
 
         <div class="promo-stats">
           <div class="stat-item">
-            <strong id="stat-students">1,000+</strong>
+            <strong id="stat-students">—</strong>
             <span>Students Guided</span>
           </div>
           <div class="stat-item">
-            <strong id="stat-colleges">250+</strong>
+            <strong id="stat-colleges">—</strong>
             <span>Colleges Listed</span>
           </div>
           <div class="stat-item">
-            <strong id="stat-package">₹15.6 LPA</strong>
-            <span>Avg CSE Package</span>
+            <strong id="stat-package">Sources</strong>
+            <span>Data transparency</span>
           </div>
         </div>
-        <p class="stats-disclaimer" id="stats-disclaimer-text">Active database statistics</p>
+        <p class="stats-disclaimer" id="stats-disclaimer-text">Counts appear when confirmed by the service</p>
       </section>
 
       <!-- Right Side Form Panel -->
@@ -668,7 +660,7 @@
 
           <div class="form-title-area">
             <h1>Create Free Account</h1>
-            <p class="subtitle">Join 1,000+ students and get expert JEE counselling</p>
+            <p class="subtitle">Create your account for admission guidance and saved choices</p>
           </div>
 
           <div class="form-msg" id="form-msg"></div>
@@ -796,37 +788,15 @@
       // Fetch public stats on page load
       async function loadPublicStats() {
         try {
-          const res = await fetch(`${API_URL}/api/colleges/public-stats`);
+          const res = await fetch(API_URL + '/api/colleges/public-stats');
+          if (!res.ok) return;
           const json = await res.json();
-          if (json.success && json.data) {
-            const stats = json.data;
-            document.getElementById('stat-students').textContent = `${stats.totalStudentsGuided.toLocaleString()}+`;
-            document.getElementById('stat-colleges').textContent = `${stats.totalColleges}+`;
-            document.getElementById('stat-package').textContent = `₹${stats.averagePlacement} LPA`;
-            
-            const titleCount = document.getElementById('title-colleges-count');
-            if (titleCount) titleCount.textContent = `${stats.totalColleges}+`;
-            
-            if (stats.featuredCollege) {
-              const fc = stats.featuredCollege;
-              document.getElementById('promo-card-1').innerHTML = `
-                <strong>${fc.name}</strong>
-                <span>${fc.city}, ${fc.state}</span>
-              `;
-              document.getElementById('promo-card-2').innerHTML = `
-                <strong>Average Package</strong>
-                <span class="badge-tag">₹${fc.avgPlacement} LPA</span>
-              `;
-              document.getElementById('promo-card-3').innerHTML = `
-                <strong>Highest Package</strong>
-                <span>₹${fc.highestPlacement} LPA</span>
-              `;
-            }
-            document.getElementById('stats-disclaimer-text').textContent = '• Active database statistics';
-          }
-        } catch (err) {
-          console.error('Failed to load public stats:', err);
-        }
+          if (!json.success || !json.data) return;
+          document.getElementById('stat-students').textContent = Number(json.data.totalStudentsGuided).toLocaleString();
+          document.getElementById('stat-colleges').textContent = Number(json.data.totalColleges).toLocaleString();
+          document.getElementById('title-colleges-count').textContent = Number(json.data.totalColleges).toLocaleString();
+          document.getElementById('stats-disclaimer-text').textContent = 'Completed counselling and directory records';
+        } catch { /* Keep unknown counts blank when the service is unavailable. */ }
       }
       loadPublicStats();
 
@@ -959,7 +929,7 @@
                 <h2 style="color: white; font-size: 1.8rem; font-weight: 800; margin: 0 0 12px 0;">Verify Your Email</h2>
                 <p style="color: #94a3b8; font-size: 0.95rem; line-height: 1.5; margin: 0 0 24px 0;">
                   We have sent a 6-digit verification code to <strong>${escapeHTML(email)}</strong>.<br>
-                  ${data.otp ? `<span style="color: #3b82f6; font-weight: bold; display: block; margin-top: 10px;">[Dev Mode] Simulated OTP: ${data.otp}</span>` : ''}
+                  ${data.otp ? `<span style="color: #3b82f6; font-weight: bold; display: block; margin-top: 10px;">[Local preview] Verification code: ${data.otp}</span>` : ''}
                 </p>
                 
                 <div class="form-msg" id="otp-form-msg" style="margin-bottom: 15px; display: none; text-align: center; padding: 10px; border-radius: 6px; font-size: 0.88rem;"></div>
@@ -1069,11 +1039,11 @@
                   showOtpSuccess('New verification code sent to your email!');
                   const devHint = container.querySelector('span[style*="font-weight: bold;"]');
                   if (devHint && resendData.otp) {
-                    devHint.textContent = `[Dev Mode] Simulated OTP: ${resendData.otp}`;
+                    devHint.textContent = `[Local preview] Verification code: ${resendData.otp}`;
                   } else if (resendData.otp) {
                     const hintSpan = document.createElement('span');
                     hintSpan.style = 'color: #3b82f6; font-weight: bold; display: block; margin-top: 10px;';
-                    hintSpan.textContent = `[Dev Mode] Simulated OTP: ${resendData.otp}`;
+                    hintSpan.textContent = `[Local preview] Verification code: ${resendData.otp}`;
                     container.querySelector('p').appendChild(hintSpan);
                   }
                 } else {

@@ -18,9 +18,7 @@ const connectDB = async () => {
     return conn;
   } catch (error) {
     console.error(`Database Connection Error: ${error.message}`);
-    if (!process.env.VERCEL) {
-      process.exit(1);
-    }
+    if (!process.env.VERCEL) return null;
     throw error;
   }
 };

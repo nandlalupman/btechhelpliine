@@ -7,6 +7,8 @@ const emailUtils = require('../utils/email');
 const { verifyToken } = require('../middleware/auth');
 
 const router = express.Router();
+const crypto = require('crypto');
+const { hashKey, studentView } = require('../services/conversations');
 const { getJwtSecret } = require('../config/jwt');
 
 // Optional authentication helper for lead submissions
@@ -39,14 +41,25 @@ router.post(
   '/',
   optionalVerifyToken,
   [
-    body('name').trim().notEmpty().withMessage('Name is required'),
+    body('name').isString().trim().notEmpty().isLength({ max: 100 }).withMessage('Enter your name, up to 100 characters'),
     body('mobile')
       .isLength({ min: 10, max: 10 })
       .withMessage('Mobile number must be exactly 10 digits')
-      .matches(/^\d{10}$/)
+      .matches(/^[6-9]\d{9}$/)
       .withMessage('Enter a valid 10-digit mobile number'),
-    body('branch').trim().notEmpty().withMessage('Preferred branch is required'),
-    body('state').trim().notEmpty().withMessage('Preferred state is required'),
+    body('branch').isString().trim().notEmpty().isLength({ max: 120 }).withMessage('Preferred branch is required, up to 120 characters'),
+    body('state').isString().trim().notEmpty().isLength({ max: 80 }).withMessage('Preferred state is required, up to 80 characters'),
+    body('subject').optional().isString().trim().isLength({ min: 1, max: 160 }),
+    body('jeeRank').optional({ checkFalsy: true }).isInt({ min: 1, max: 10000000 }).withMessage('Enter a valid positive rank'),
+    body('exam').optional().isString().trim().isLength({ max: 80 }),
+    body('homeState').optional().isString().trim().isLength({ max: 80 }),
+    body('preferredContactTime').optional().isString().trim().isLength({ max: 120 }),
+    body('contactConsent').custom(value => value === true).withMessage('Please agree to contact about your request.'),
+    body('partnerConsent').optional().isBoolean({ strict: true }),
+    body('email').optional({ checkFalsy: true }).isString().trim().isEmail().isLength({ max: 254 }).withMessage('Enter a valid email address'),
+    body('message').optional().isString().isLength({ max: 2000 }),
+    body('category').optional().isString().isLength({ max: 60 }),
+    body('budget').optional().isString().isLength({ max: 100 }),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -54,9 +67,10 @@ router.post(
       return res.status(400).json({ success: false, error: errors.array()[0].msg });
     }
 
-    const { name, mobile, branch, state, budget, category, message } = req.body;
+    const { name, mobile, branch, state, budget, category, message, jeeRank, exam, homeState, contactConsent, partnerConsent, preferredContactTime } = req.body;
 
     try {
+      const accessKey = crypto.randomBytes(32).toString('hex');
       const leadData = {
         name,
         phone: mobile,
@@ -65,7 +79,16 @@ router.post(
         budget: budget || 'Not Specified',
         category: category || 'General',
         message: message || '',
+        subject: req.body.subject || 'Admission counselling',
+        trackingTokenHash: hashKey(accessKey),
         source: req.user ? 'student_portal' : 'website_form',
+        jeeRank: jeeRank ? String(jeeRank) : '',
+        exam: exam || '',
+        homeState: homeState || '',
+        preferredContactTime: preferredContactTime || '',
+        contactConsent: contactConsent === true,
+        partnerConsent: partnerConsent === true,
+        consentAt: contactConsent === true ? new Date() : null,
       };
 
       // If logged in, associate with user
@@ -86,7 +109,7 @@ router.post(
 
       // Send confirmation email
       try {
-        await emailUtils.sendLeadConfirmation(leadData.email, name, lead._id);
+        await emailUtils.sendLeadConfirmation(leadData.email, name, lead._id, accessKey);
       } catch (mailErr) {
         console.error('Error sending lead confirmation email:', mailErr.message);
       }
@@ -94,7 +117,7 @@ router.post(
       res.status(201).json({
         success: true,
         message: 'Your consultation request has been submitted successfully!',
-        data: { leadId: lead._id },
+        data: { leadId: lead._id, accessKey },
       });
     } catch (err) {
       console.error('Lead submission error:', err.message);
@@ -132,7 +155,7 @@ router.get('/:id', verifyToken, async (req, res) => {
     // If student, filter out notes for privacy or keep it simple
     const responseData = lead.toObject();
     if (req.user.role === 'student') {
-      delete responseData.notes; // Hide counsellor notes from student
+      return res.json({ success: true, data: studentView(responseData) });
     }
 
     res.json({ success: true, data: responseData });

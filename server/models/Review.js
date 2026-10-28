@@ -52,6 +52,7 @@ const ReviewSchema = new mongoose.Schema(
     },
     comment: {
       type: String,
+      maxlength: 4000,
       required: [true, 'Review comment is required'],
       trim: true,
     },
@@ -59,6 +60,8 @@ const ReviewSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
+    moderationStatus: { type: String, enum: ['pending', 'published', 'rejected'], default: 'pending', index: true },
+    moderatedAt: { type: Date, default: null },
   },
   {
     timestamps: true,

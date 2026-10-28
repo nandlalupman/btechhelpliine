@@ -6,25 +6,32 @@
   "scripts": {
     "start": "node server/server.js",
     "dev": "node --watch server/server.js",
+    "local": "node scripts/local.js",
+    "check:messages": "node scripts/check-local-messages.js",
+    "test": "node --test tests/*.test.js",
+    "build:home": "node scripts/build-public-home.js",
+    "import:ranks": "node scripts/import-josaa.js",
     "seed-admin": "node server/scripts/createAdmin.js",
     "seed-colleges": "node server/scripts/seedColleges.js"
-
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
-    "express": "^4.18.2",
+    "express": "^4.22.3",
     "express-rate-limit": "^7.1.5",
     "express-validator": "^7.0.1",
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.0.0",
     "morgan": "^1.10.0",
-    "nodemailer": "^6.9.7"
+    "nodemailer": "^10.2.1"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.19.0"
+  },
+  "devDependencies": {
+    "mongodb-memory-server-core": "^11.3.0"
   }
 }

@@ -1,6 +1,13 @@
 {
   "version": 2,
-  "cleanUrls": true,
+  "functions": {
+    "api/index.js": {
+      "includeFiles": "public/**"
+    }
+  },
+  "redirects": [
+    { "source": "/:page.html", "destination": "/:page", "permanent": true }
+  ],
   "rewrites": [
     {
       "source": "/api/:path*",
@@ -8,7 +15,7 @@
     },
     {
       "source": "/:path*",
-      "destination": "/public/:path*"
+      "destination": "/api"
     }
   ]
 }

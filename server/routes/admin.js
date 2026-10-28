@@ -1,3 +1,4 @@
+const { collegeDescription, placementData, positiveNumber } = require('../utils/collegeData');
 const express = require('express');
 const { body, validationResult } = require('express-validator');
 const Lead = require('../models/Lead');
@@ -129,6 +130,7 @@ router.get('/leads/:id', async (req, res) => {
 // PUT /leads/:id — Edit any field on a lead
 router.put('/leads/:id', async (req, res) => {
   try {
+    if (req.body.status === 'counselled') req.body.counselledAt = new Date();
     const updatedLead = await Lead.findByIdAndUpdate(
       req.params.id,
       { $set: req.body },
@@ -153,6 +155,7 @@ router.delete('/leads/:id', async (req, res) => {
     if (!lead) {
       return res.status(404).json({ success: false, error: 'Lead not found' });
     }
+    await require('../models/ConversationMessage').deleteMany({ leadId: lead._id });
     res.json({ success: true, message: 'Lead deleted successfully' });
   } catch (err) {
     console.error('Admin delete lead error:', err.message);
@@ -180,7 +183,7 @@ router.put(
 
       if (assignedTo) {
         const counsellor = await User.findById(assignedTo);
-        if (!counsellor || !['counsellor', 'admin'].includes(counsellor.role)) {
+        if (!counsellor || !counsellor.isActive || !['counsellor', 'admin'].includes(counsellor.role)) {
           return res.status(400).json({ success: false, error: 'User is not a valid counsellor' });
         }
         lead.assignedTo = assignedTo;
@@ -299,7 +302,10 @@ router.delete('/users/:id', async (req, res) => {
     }
 
     // Delete associated leads for clean-up
+    const ownedLeads = await Lead.find({ userId: req.params.id }).select('_id');
+    await require('../models/ConversationMessage').deleteMany({ leadId: { $in: ownedLeads.map(lead => lead._id) } });
     await Lead.deleteMany({ userId: req.params.id });
+    await require('../models/Journey').Application.deleteMany({ userId: req.params.id });
 
     res.json({ success: true, message: 'User and all associated leads deleted successfully' });
   } catch (err) {
@@ -515,10 +521,10 @@ router.post(
     body('city').trim().notEmpty().withMessage('City is required'),
     body('state').trim().notEmpty().withMessage('State is required'),
     body('admissionMode').trim().notEmpty().withMessage('Admission mode is required'),
-    body('feesPerYear').isNumeric().withMessage('Fees per year must be a number'),
+    body('feesPerYear').optional({ nullable: true }).isFloat({ min: 0 }).withMessage('Fees per year must be a number'),
     body('cutoffRankCSE').trim().notEmpty().withMessage('Cutoff rank is required'),
-    body('avgPlacement').isNumeric().withMessage('Average placement must be a number'),
-    body('highestPlacement').isNumeric().withMessage('Highest placement must be a number'),
+    body('avgPlacement').optional({ nullable: true }).isFloat({ min: 0 }).withMessage('Average placement must be a number'),
+    body('highestPlacement').optional({ nullable: true }).isFloat({ min: 0 }).withMessage('Highest placement must be a number'),
     body('description').trim().notEmpty().withMessage('Description is required'),
   ],
   async (req, res) => {
@@ -570,6 +576,14 @@ router.post(
       }
 
       const college = new College({
+        dataStatus: req.body.dataStatus,
+        dataYear: req.body.dataYear,
+        sourceUrl: req.body.sourceUrl,
+        verifiedAt: req.body.verifiedAt,
+        medianPlacement: req.body.medianPlacement,
+        hostelPerYear: req.body.hostelPerYear,
+        messPerYear: req.body.messPerYear,
+        mandatoryFeesPerYear: req.body.mandatoryFeesPerYear,
         name,
         type,
         nirfRank: nirfRank || null,
@@ -587,7 +601,7 @@ router.post(
         bannerUrl: bannerUrl || null,
         facilities: facilities || [],
         aicteApproved: aicteApproved === true,
-        ugcRecognized: ugcRecognized !== false,
+        ugcRecognized: ugcRecognized === true,
         naacRating: naacRating || null,
         nbaAccredited: nbaAccredited === true,
         nbaBranches: nbaBranches || []
@@ -597,6 +611,7 @@ router.post(
       res.status(201).json({ success: true, message: 'College added successfully', data: college });
     } catch (err) {
       console.error('Admin add college error:', err.message);
+      if (err.name === 'ValidationError') return res.status(400).json({ success: false, error: Object.values(err.errors)[0].message });
       res.status(500).json({ success: false, error: 'Internal Server Error' });
     }
   }
@@ -631,15 +646,13 @@ router.put(
         }
       }
 
-      const updated = await College.findByIdAndUpdate(
-        req.params.id,
-        { $set: req.body },
-        { new: true, runValidators: true }
-      );
+      college.set(req.body);
+      const updated = await college.save();
 
       res.json({ success: true, message: 'College updated successfully', data: updated });
     } catch (err) {
       console.error('Admin update college error:', err.message);
+      if (err.name === 'ValidationError') return res.status(400).json({ success: false, error: Object.values(err.errors)[0].message });
       res.status(500).json({ success: false, error: 'Internal Server Error' });
     }
   }
@@ -733,16 +746,11 @@ router.put('/onboard-requests/:id/status', async (req, res) => {
       }
 
       // Determine avg and highest placement
-      let avgPlacement = 5.0;
-      let highestPlacement = 10.0;
-      const techPlacement = request.placements.find(p => p.poolName.includes('Tech'));
-      if (techPlacement) {
-        avgPlacement = techPlacement.averageCTC || techPlacement.medianCTC || 5.0;
-        highestPlacement = techPlacement.highestCTC || 10.0;
-      }
+      const { avgPlacement, highestPlacement } = placementData(request);
+
 
       // Synthesize a descriptive narrative
-      const description = `Established in ${request.establishmentYear}, ${request.name} is a premier ${request.autonomyStatus.toLowerCase()} college situated in ${request.city}, ${request.state}. Onboarded with BtechHelpline and approved by AICTE, it offers excellent B.Tech degrees with a strong faculty-to-student ratio of 1:${request.facultyToStudentRatio || 15} and ${request.phdFacultyPercent || 30}% PhD faculty. The campus lifestyle maintains a ${request.lifestyle.curfewPolicy ? request.lifestyle.curfewPolicy.toLowerCase() : 'moderate curfew'} curfew structure and features ${request.lifestyle.totalCodingClubs || 3} active tech and coding clubs.`;
+      const description = collegeDescription(request);
 
       // Branches list
       const branchesList = request.branches.map(b => b.branchName);
@@ -754,8 +762,8 @@ router.put('/onboard-requests/:id/status', async (req, res) => {
         nirfRank: request.nirfRank || null,
         city: request.city,
         state: request.state,
-        admissionMode: request.acceptedExams.join(', ') || 'JEE Main',
-        feesPerYear: request.fees.tuitionGeneral,
+        admissionMode: request.acceptedExams.join(', ') || 'Confirm with institution',
+        feesPerYear: positiveNumber(request.fees?.tuitionGeneral),
         cutoffRankCSE: cseCutoff,
         avgPlacement: avgPlacement,
         highestPlacement: highestPlacement,
@@ -764,8 +772,8 @@ router.put('/onboard-requests/:id/status', async (req, res) => {
         website: request.website || undefined,
         imageUrl: request.bannerUrl || null,
         isOnboarded: true,
-        aicteApproved: request.aicteApproved !== false,
-        ugcRecognized: request.ugcRecognized !== false,
+        aicteApproved: request.aicteApproved === true,
+        ugcRecognized: request.ugcRecognized === true,
         naacRating: request.naacRating || null,
         nbaAccredited: !!(request.nbaAccredited || (request.branches && request.branches.some(b => b.nbaAccredited))),
         nbaBranches: request.nbaBranches || [],
@@ -853,18 +861,11 @@ router.post('/onboard-requests/direct', async (req, res) => {
     }
 
     // Determine avg and highest placement
-    let avgPlacement = 5.0;
-    let highestPlacement = 10.0;
-    if (request.placements && request.placements.length > 0) {
-      const techPlacement = request.placements.find(p => p.poolName && (p.poolName.includes('Tech') || p.poolName.includes('CSE')));
-      if (techPlacement) {
-        avgPlacement = techPlacement.averageCTC || techPlacement.medianCTC || 5.0;
-        highestPlacement = techPlacement.highestCTC || 10.0;
-      }
-    }
+    const { avgPlacement, highestPlacement } = placementData(request);
+
 
     // Synthesize description if not provided
-    const description = request.description || `Established in ${request.establishmentYear}, ${request.name} is a premier ${request.autonomyStatus ? request.autonomyStatus.toLowerCase() : 'autonomous'} college situated in ${request.city}, ${request.state}. Onboarded with BtechHelpline and approved by AICTE, it offers excellent B.Tech degrees with a strong faculty-to-student ratio of 1:${request.facultyToStudentRatio || 15} and ${request.phdFacultyPercent || 30}% PhD faculty. The campus lifestyle maintains a ${request.lifestyle && request.lifestyle.curfewPolicy ? request.lifestyle.curfewPolicy.toLowerCase() : 'moderate curfew'} curfew structure and features ${request.lifestyle && request.lifestyle.totalCodingClubs || 3} active tech and coding clubs.`;
+    const description = collegeDescription(request);
 
     // Branches list
     const branchesList = request.branches ? request.branches.map(b => b.branchName) : [];
@@ -875,8 +876,8 @@ router.post('/onboard-requests/direct', async (req, res) => {
       nirfRank: request.nirfRank || null,
       city: request.city,
       state: request.state,
-      admissionMode: request.acceptedExams ? request.acceptedExams.join(', ') : 'JEE Main',
-      feesPerYear: request.fees ? request.fees.tuitionGeneral : 100000,
+      admissionMode: (request.acceptedExams && request.acceptedExams.join(', ')) || 'Confirm with institution',
+      feesPerYear: positiveNumber(request.fees?.tuitionGeneral),
       cutoffRankCSE: cseCutoff,
       avgPlacement: avgPlacement,
       highestPlacement: highestPlacement,
@@ -887,8 +888,8 @@ router.post('/onboard-requests/direct', async (req, res) => {
       bannerUrl: request.bannerUrl || null,
       facilities: request.facilities || [],
       isOnboarded: true,
-      aicteApproved: request.aicteApproved !== undefined ? request.aicteApproved : true,
-      ugcRecognized: request.ugcRecognized !== undefined ? request.ugcRecognized : true,
+      aicteApproved: request.aicteApproved === true,
+      ugcRecognized: request.ugcRecognized === true,
       naacRating: request.naacRating || null,
       nbaAccredited: request.nbaAccredited !== undefined ? request.nbaAccredited : false,
       nbaBranches: request.nbaBranches || []
