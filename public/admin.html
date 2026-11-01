@@ -619,11 +619,11 @@
 
       <!-- Tabs Nav -->
       <nav class="tabs-nav">
-        <button class="tab-btn active" onclick="switchTab('leads-tab')">Leads Management</button>
-        <button class="tab-btn" onclick="switchTab('users-tab')">User Operations</button>
-        <button class="tab-btn" onclick="switchTab('colleges-tab')">College Database</button>
-        <button class="tab-btn" onclick="switchTab('affiliation-tab')">Institution Onboarding Requests</button>
-        <button class="tab-btn" onclick="switchTab('analytics-tab')">Analytics Hub</button>
+        <button class="tab-btn active" onclick="switchTab('leads-tab', this)">Leads Management</button>
+        <button class="tab-btn" onclick="switchTab('users-tab', this)">User Operations</button>
+        <button class="tab-btn" onclick="switchTab('colleges-tab', this)">College Database</button>
+        <button class="tab-btn" onclick="switchTab('affiliation-tab', this)">Institution Onboarding Requests</button>
+        <button class="tab-btn" onclick="switchTab('analytics-tab', this)">Analytics Hub</button>
       </nav>
 
 
@@ -1163,16 +1163,13 @@
     </div>
 
 
-    <script src="config.js"></script>
+    <script src="/session.js"></script><script src="/config.js"></script>
     <script>
       const token = localStorage.getItem('token');
       const role = localStorage.getItem('role');
 
       // Authentication Lock
-      if (!token || role !== 'admin') {
-        localStorage.clear();
-        window.location.href = 'login.html';
-      }
+      window.BtechSession.protect('admin', API_URL);
 
       document.getElementById('admin-name').textContent = localStorage.getItem('userName') || 'System Admin';
 
@@ -1211,12 +1208,12 @@
       }
 
       // Tab Switcher
-      function switchTab(tabId) {
+      function switchTab(tabId, button) {
         document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
         document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
 
         // Set active
-        event.currentTarget.classList.add('active');
+        button?.classList.add('active');
         document.getElementById(tabId).classList.add('active');
 
         if (tabId === 'leads-tab') fetchLeads();
@@ -1761,7 +1758,7 @@
             document.getElementById('analytic-total-counsellors').textContent = stats.totalCounsellors;
             document.getElementById('analytic-total-colleges').textContent = stats.totalColleges;
             document.getElementById('analytic-avg-placement').textContent = `₹${stats.avgPlacement == null ? '—' : Number(stats.avgPlacement).toFixed(1)} LPA`;
-            document.getElementById('analytic-max-placement').textContent = `₹${stats.maxPlacement.toFixed(1)} LPA`;
+            document.getElementById('analytic-max-placement').textContent = `₹${stats.maxPlacement == null ? '—' : Number(stats.maxPlacement).toFixed(1)} LPA`;
             document.getElementById('analytic-conversion').textContent = stats.conversionRate;
 
             // Render Charts
@@ -1793,7 +1790,15 @@
         }
       }
 
+      function chartFallback(id, rows) {
+        const canvas = document.getElementById(id); canvas.hidden = true;
+        let summary = document.getElementById(id + '-summary');
+        if (!summary) { summary = document.createElement('div'); summary.id = id + '-summary'; canvas.after(summary); }
+        summary.innerHTML = '<p>Chart unavailable. Current totals:</p><ul>' + rows.map(([label, count]) => '<li>' + escapeHTML(String(label)) + ': <strong>' + Number(count || 0) + '</strong></li>').join('') + '</ul>';
+      }
+
       function renderStatusChart(statusData) {
+        if (typeof Chart === 'undefined') return chartFallback('statusChart', Object.entries(statusData));
         const ctx = document.getElementById('statusChart').getContext('2d');
         if (statusChartInstance) statusChartInstance.destroy();
 
@@ -1828,6 +1833,7 @@
       }
 
       function renderBranchChart(branchData) {
+        if (typeof Chart === 'undefined') return chartFallback('branchChart', branchData.map(row => [row.branch || 'Not specified', row.count]));
         const ctx = document.getElementById('branchChart').getContext('2d');
         if (branchChartInstance) branchChartInstance.destroy();
 
@@ -1893,7 +1899,7 @@
       }
 
       function handleLogout() {
-        localStorage.clear();
+        window.BtechSession.clear();
         window.location.href = 'login.html';
       }
       document.getElementById('btn-logout').addEventListener('click', handleLogout);

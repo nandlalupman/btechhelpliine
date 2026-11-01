@@ -29,6 +29,23 @@ test('canonical redirects terminate and preserve reset-password tokens', async (
     assert.equal((await fetch(base + location)).status, 200);
   }
 });
+
+test('legacy pages accept trailing slashes without breaking relative links or reset tokens', async () => {
+  for (const name of ['login', 'register', 'forgot-password', 'reset-password', 'dashboard', 'admin', 'counsellor', 'onboard', 'privacy', 'terms']) {
+    const response = await fetch(base + '/' + name + '/?token=sample&next=%2Fmessages%2F', { redirect: 'manual' });
+    assert.equal(response.status, 301, name);
+    assert.equal(response.headers.get('location'), '/' + name + '?token=sample&next=%2Fmessages%2F');
+    assert.equal((await fetch(base + response.headers.get('location'))).status, 200);
+  }
+});
+
+test('every sitemap page and linked first-party asset/anchor resolves', async () => {
+  const { audit } = require('../scripts/audit-site');
+  const report = await audit(base);
+  assert.ok(report.pages > 300);
+  assert.ok(report.internalLinks > 500);
+  assert.deepEqual(report.issues, []);
+});
 test('SSR escapes search input and JSON script content', async () => {
   const response = await fetch(base + '/colleges/?q=' + encodeURIComponent('"><img src=x onerror=alert(1)>'));
   const html = await response.text(); assert.ok(!html.includes('value=""><img')); assert.match(html, /&lt;img/);

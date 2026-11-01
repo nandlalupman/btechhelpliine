@@ -971,15 +971,12 @@
       </div>
     </div>
 
-    <script src="config.js"></script>
+    <script src="/session.js"></script><script src="/config.js"></script>
     <script>
       const token = localStorage.getItem('token');
       const role = localStorage.getItem('role');
 
-      if (!token || role !== 'student') {
-        localStorage.clear();
-        window.location.href = 'login.html';
-      }
+      window.BtechSession.protect('student', API_URL);
 
       // Helper to show toasts
       function showToast(message, type = 'success') {
@@ -1027,8 +1024,10 @@
             document.getElementById('profile-jeeRank').value = user.jeeRank || '';
             document.getElementById('profile-branch').value = user.preferredBranch || '';
             document.getElementById('profile-state').value = user.preferredState || '';
-          } else {
+          } else if (res.status === 401 || res.status === 403) {
             handleLogout();
+          } else {
+            showToast(data.error || 'Profile unavailable. Please retry.', 'error');
           }
         } catch (err) {
           console.error(err);
@@ -1161,7 +1160,7 @@
             const data = await res.json();
             if (res.ok && data.success) {
               alert('Your account has been deleted successfully.');
-              localStorage.clear();
+              window.BtechSession.clear();
               window.location.href = 'login.html';
             } else {
               alert(data.error || 'Failed to delete account. Please try again.');
@@ -1234,7 +1233,7 @@
 
       // Logout
       function handleLogout() {
-        localStorage.clear();
+        window.BtechSession.clear();
         window.location.href = 'login.html';
       }
       document.getElementById('btn-logout').addEventListener('click', handleLogout);

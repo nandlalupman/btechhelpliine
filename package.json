@@ -13,7 +13,9 @@
     "build:home": "node scripts/build-public-home.js",
     "import:ranks": "node scripts/import-josaa.js",
     "seed-admin": "node server/scripts/createAdmin.js",
-    "seed-colleges": "node server/scripts/seedColleges.js"
+    "seed-colleges": "node server/scripts/seedColleges.js",
+    "check:links": "node scripts/audit-site.js",
+    "check:links:external": "node scripts/check-resource-links.js --site"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

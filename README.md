@@ -11,7 +11,7 @@ npm install
 npm run local
 ```
 
-Open http://localhost:4173/. The launcher runs the app in the background, watches server changes and writes logs to `.local/server.log`. Running the command again reuses the existing app; `npm run local -- --restart` restarts only this launcher's own process. The app remains running when the terminal command finishes.
+Open http://localhost:4173/. The launcher runs the app in the background and writes logs to `.local/server.log`. Running the command again reuses the existing app; `npm run local -- --restart` restarts only this launcher's own process. The app remains running when the terminal command finishes. Restart it explicitly after server edits. This embedded-database preview avoids Node watch mode, which can repeatedly restart its dependency tree on Windows.
 
 When no `MONGODB_URI` is configured, the local runner downloads an official MongoDB binary on first use and starts a loopback-only persistent development database in `.local/database`. The first download is large and can take several minutes. The empty local database receives the directory identities, a local administrator and clearly labelled preview counselling slots. Existing database records are retained across restarts. Administrator credentials are in the ignored `.local/access.json`; never reuse them in production. All local email/SMS previews stay in the local inbox at `/local-tools/` and are not delivered to external recipients.
 
@@ -56,7 +56,7 @@ Scholarships/state resources live in `server/data/student-resources.js` and rend
 
 Run `npm run sync:college-evidence` to retain the reviewed snapshot in each matching MongoDB college's `officialEvidence` field. It does not alter other college fields, create missing colleges or apply another campus's data. Local bootstrap performs the same sync. Public rendering uses the reviewed source catalogue, so arbitrary `officialEvidence` edits cannot introduce unsupported fees.
 
-For a bounded read-only check of external resource links, run `node scripts/check-resource-links.js`. Its ignored `.local/resource-link-report.json` records HTTP status, redirect/title and timestamps. HTTP 200 alone does not prove useful content; government portals can return an error page, require JavaScript or time out from this environment. A failed reachability check never changes a scheme's application status.
+For a bounded read-only check of the 75 curated external resource links, run `node scripts/check-resource-links.js`. To check every external URL discovered across pages, run `npm run check:links` followed by `npm run check:links:external`; the wider report is `.local/site-external-link-report.json`. Its ignored `.local/resource-link-report.json` records HTTP status, redirect/title and timestamps. HTTP 200 alone does not prove useful content; government portals can return an error page, require JavaScript or time out from this environment. A failed reachability check never changes a scheme's application status.
 
 Historical ranks live in `server/data/cutoffs.json` with source/year/round/import timestamp. `npm run import:ranks` reimports the current public official JoSAA form; inspect the resulting year, round and diff before publishing. It does not supply future cutoffs or determine quota eligibility.
 
@@ -73,7 +73,11 @@ Optional Analytics loads only after consent. Conversion events contain college s
 ```powershell
 npm test
 npm run build:home
+npm run check:links
+npm run check:messages
 ```
+
+Start the local app before the last two commands. `check:links` checks every sitemap page and first-party link, asset and fragment using HTTP and writes `.local/site-audit.json`; it does not execute the UI or verify external sites. `check:messages` creates its own local message fixtures, verifies database persistence through an app restart and removes those fixtures. See [the latest verification scope and remaining limits](docs/SITE_VERIFICATION.md).
 
 Tests cover public HTTP routes, redirects/reset tokens, 404s, structured data, escaping, provenance, budget calculations, enquiry persistence and Analytics consent. Integration tests start an isolated temporary MongoDB instance and local test inbox to check registration/OTP/password login, application ownership, staff permissions, overlapping sessions, double booking, cancellation, reminder opt-in/idempotence and review moderation. Message tests verify anonymous secret tracking, hashed storage, account ownership, assignment restrictions, saved replies, internal-note privacy, closed requests and cursor pagination. They do not alter the user's development database or contact a real mail/SMS service.
 

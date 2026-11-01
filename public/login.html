@@ -774,17 +774,17 @@
     <!-- Toast -->
     <div class="toast" id="toast"></div>
 
-    <script src="config.js"></script>
+    <script src="/session.js"></script><script src="/config.js"></script>
     <script>
       const form = document.getElementById('login-form');
       const submitBtn = document.getElementById('btn-submit');
       const formMsg = document.getElementById('form-msg');
 
-      // Auto redirect if already logged in
-      const existingToken = localStorage.getItem('token');
-      const existingRole = localStorage.getItem('role');
-      if (existingToken && existingRole) {
-        redirectUser(existingRole);
+      // Verify a saved session before leaving the login page.
+      if (window.BtechSession.read('token')) {
+        window.BtechSession.validate(API_URL).then(user => { if (user) redirectUser(user.role); }).catch(error => {
+          formMsg.textContent = error.message; formMsg.className = 'form-msg error';
+        });
       }
 
       // Fetch public stats on page load
@@ -822,6 +822,8 @@
       }
 
       function redirectUser(role) {
+        const next = window.BtechSession.safeNext(new URLSearchParams(location.search).get('next'));
+        if (next) { window.location.replace(next); return; }
         if (role === 'admin') {
           window.location.href = 'admin.html';
         } else if (role === 'counsellor') {
@@ -939,7 +941,7 @@
           const data = await res.json();
 
           if (res.ok && data.success) {
-            showToast('OTP sent successfully!', 'success');
+            showToast(data.message || 'OTP sent successfully!', 'success');
             
             // Auto-fill in dev mode if OTP is returned
             if (data.otp) {

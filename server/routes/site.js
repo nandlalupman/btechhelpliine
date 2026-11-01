@@ -63,6 +63,7 @@ router.get('/sitemap.xml', handle(async (req, res) => {
 }));
 // Keep the established authentication, administration and onboarding pages.
 const legacy = ['login', 'register', 'forgot-password', 'reset-password', 'admin', 'dashboard', 'counsellor', 'onboard', 'privacy', 'terms'];
+router.get(legacy.map(name => `/${name}/`), (req, res) => res.redirect(301, req.path.slice(0,-1) + (req.originalUrl.includes('?') ? '?' + req.originalUrl.split('?')[1] : '')));
 router.get(legacy.map(name => `/${name}.html`), (req, res) => res.redirect(301, req.path.replace(/\.html$/, '') + (req.originalUrl.includes('?') ? '?' + req.originalUrl.split('?')[1] : '')));
 router.get(legacy.map(name => `/${name}`), (req, res) => res.sendFile(path.join(__dirname, '../../public', `${req.path.slice(1)}.html`)));
 module.exports = router;

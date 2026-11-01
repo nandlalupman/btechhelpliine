@@ -521,15 +521,12 @@
     <!-- Toast -->
     <div class="toast" id="toast"></div>
 
-    <script src="config.js"></script>
+    <script src="/session.js"></script><script src="/config.js"></script>
     <script>
       const token = localStorage.getItem('token');
       const role = localStorage.getItem('role');
 
-      if (!token || !['counsellor', 'admin'].includes(role)) {
-        localStorage.clear();
-        window.location.href = 'login.html';
-      }
+      window.BtechSession.protect(['counsellor', 'admin'], API_URL);
 
       document.getElementById('counsellor-name').textContent = localStorage.getItem('userName') || 'Counsellor Portal';
 
@@ -761,7 +758,7 @@
       }
 
       function handleLogout() {
-        localStorage.clear();
+        window.BtechSession.clear();
         window.location.href = 'login.html';
       }
       document.getElementById('btn-logout').addEventListener('click', handleLogout);

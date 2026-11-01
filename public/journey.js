@@ -13,7 +13,7 @@
   async function api(url, { method = 'GET', body, auth = false } = {}) {
     const response = await fetch(url, { method, headers: { ...(body ? { 'Content-Type': 'application/json' } : {}), ...(auth ? { Authorization: `Bearer ${token()}` } : {}) }, ...(body ? { body: JSON.stringify(body) } : {}) });
     const result = await response.json().catch(() => ({}));
-    if (!response.ok || !result.success) throw new Error(result.error || 'Service unavailable. Please try again.');
+    if (!response.ok || !result.success) { if (auth && response.status === 401) { window.BtechSession?.clear(); throw new Error('Your session expired. Sign in again using the login link; your saved tasks have been kept.'); } throw new Error(result.error || 'Service unavailable. Please try again.'); }
     return result;
   }
   function submit(form, task, errorSelector) {
@@ -23,7 +23,8 @@
       finally { if (button) button.disabled = false; }
     });
   }
-  let language = read('btech:tool-language', 'en');
+  let language = read('btech:tool-language', 'en') === 'hi' ? 'hi' : 'en';
+  const browserApplications = () => { const rows = read('btech:applications', []); return (Array.isArray(rows) ? rows : []).filter(item => item && typeof item._id === 'string' && typeof item.title === 'string' && Number.isFinite(+new Date(item.deadline))); };
   const translate = () => { document.querySelectorAll('[data-en][data-hi]').forEach(node => { node.textContent = node.dataset[language]; node.lang = language; }); };
   translate();
   $('[data-journey-language]')?.addEventListener('click', () => { language = language === 'en' ? 'hi' : 'en'; translate(); try { save('btech:tool-language', language); } catch {} });
@@ -49,13 +50,13 @@
     };
     const load = async () => {
       if (token()) { const result = await api('/api/journey/applications', { auth: true }); account = true; applications = result.data; feedback('#application-storage', 'Saved in your account'); }
-      else { applications = read(key, []); feedback('#application-storage', 'Saved on this browser'); }
+      else { applications = browserApplications(); feedback('#application-storage', 'Saved on this browser'); }
       const hint = new URLSearchParams(location.search);
       if (hint.get('task') && !applicationForm.elements.title.value) { applicationForm.elements.title.value = hint.get('task').slice(0,160); const source = hint.get('source'); if (source && /^https?:\/\//i.test(source)) applicationForm.elements.sourceUrl.value = safeLink(source); }
       storageReady = true;
       applicationForm.elements.emailReminder.disabled = !account;
       render();
-      const local = read(key, []);
+      const local = browserApplications();
       if (account && local.length) {
         feedback('#application-message', `${local.length} browser-only tasks are still on this device. They have not been copied into your account.`);
         const button = document.createElement('button'); button.type = 'button'; button.className = 'text-button'; button.textContent = 'Copy browser tasks to my account';
