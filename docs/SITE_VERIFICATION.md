@@ -1,5 +1,15 @@
 # Site verification — 1 November 2026
 
+## Production routing repair
+
+The live domain reproduced Vercel `NOT_FOUND` for `/compare/`, `/colleges/`, `/messages/` and other trailing-slash URLs even though the latest source and database were deployed. Requests without the slash reached Express, then redirected to the failing URL. The named rewrite also leaked `path` into query strings.
+
+Vercel now forwards all paths to `/api/index.js` using one regular-expression route. Express owns canonical redirects, static assets and application 404s. This uses Vercel's documented [custom routes configuration](https://vercel.com/docs/project-configuration/vercel-json#routes). Deployment of commit `3325495` succeeded; a crawl of **https://www.btechhelpline.com** checked 333 pages and 609 internal links/assets/anchors with zero failures. The screenshot's `/compare/` returned HTTP 200, `/compare` redirected cleanly, and an unknown page returned the application's 404.
+
+A transient public-data 503 was observed; three subsequent checks succeeded with MongoDB connected. The connection helper now shares an in-flight connection attempt and checks connection state before reuse, so failed attempts and disconnected instances can retry. This is covered by a concurrency/reconnect regression test. Production mail delivery and successful account submissions are not established by these read-only checks.
+
+Run `npm run check:production` after deployment to audit the live domain, with results saved to `.local/production-audit.json`. Local tests alone cannot establish that Vercel routing works.
+
 The local server was repeatedly restarting under Node watch mode with the embedded MongoDB dependency tree on Windows. The launcher now runs a stable background process. Use `npm run local -- --restart` after server edits. Existing development database records are preserved.
 
 ## Repairs

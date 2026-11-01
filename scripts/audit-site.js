@@ -64,4 +64,4 @@ async function audit(base, { output } = {}) {
   return report;
 }
 module.exports={audit,references};
-if(require.main===module) audit(process.env.AUDIT_URL||'http://127.0.0.1:4173',{output:path.join(__dirname,'../.local/site-audit.json')}).then(report=>{console.log(JSON.stringify({pages:report.pages,internalLinks:report.internalLinks,issues:report.issues},null,2));if(report.issues.length)process.exitCode=1;}).catch(error=>{console.error(error.message);process.exitCode=1;});
+if(require.main===module) audit(process.argv.includes('--production')?'https://www.btechhelpline.com':process.env.AUDIT_URL||'http://127.0.0.1:4173',{output:path.join(__dirname,process.argv.includes('--production')?'../.local/production-audit.json':'../.local/site-audit.json')}).then(report=>{console.log(JSON.stringify({pages:report.pages,internalLinks:report.internalLinks,issues:report.issues},null,2));if(report.issues.length)process.exitCode=1;}).catch(error=>{console.error(error.message);process.exitCode=1;});

@@ -15,7 +15,8 @@
     "seed-admin": "node server/scripts/createAdmin.js",
     "seed-colleges": "node server/scripts/seedColleges.js",
     "check:links": "node scripts/audit-site.js",
-    "check:links:external": "node scripts/check-resource-links.js --site"
+    "check:links:external": "node scripts/check-resource-links.js --site",
+    "check:production": "node scripts/audit-site.js --production"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
