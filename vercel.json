@@ -5,17 +5,10 @@
       "includeFiles": "public/**"
     }
   },
-  "redirects": [
-    { "source": "/:page.html", "destination": "/:page", "permanent": true }
-  ],
-  "rewrites": [
+  "routes": [
     {
-      "source": "/api/:path*",
-      "destination": "/api"
-    },
-    {
-      "source": "/:path*",
-      "destination": "/api"
+      "src": "/(.*)",
+      "dest": "/api/index.js"
     }
   ]
 }
