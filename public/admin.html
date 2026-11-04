@@ -598,7 +598,7 @@
         }
       }
     </style>
-  </head>
+  <link rel="stylesheet" href="/student-stories.css"><script src="/student-stories.js" defer></script></head>
   <body class="admin-body"><div style="padding:10px 24px;background:#20375c;color:white;font-size:14px"><a href="/inbox/" style="color:white;margin-right:24px">Student message inbox →</a><a href="/staff/" style="color:white">Sessions, appointments & review moderation →</a></div>
     <!-- Header -->
     <header class="dash-header">
@@ -617,6 +617,7 @@
 
     <div class="admin-container" style="padding-top: 24px;">
 
+      <details class="story-admin-panel"><summary>Homepage student messages · Review &amp; select</summary><p>Review the student's submitted words and chosen public name. Select only consented, appropriate messages; do not publish private counselling details.</p><button type="button" id="refresh-stories">Refresh submissions</button><p id="story-admin-status" role="status"></p><div id="story-moderation"></div></details>
       <!-- Tabs Nav -->
       <nav class="tabs-nav">
         <button class="tab-btn active" onclick="switchTab('leads-tab', this)">Leads Management</button>

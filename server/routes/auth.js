@@ -18,7 +18,7 @@ router.post(
   '/register',
   [
     body('name').trim().notEmpty().withMessage('Name is required'),
-    body('email').isEmail().withMessage('Enter a valid email address'),
+    body('email').trim().toLowerCase().isEmail().withMessage('Enter a valid email address'),
     body('phone')
       .isLength({ min: 10, max: 10 })
       .withMessage('Phone number must be exactly 10 digits')
@@ -104,7 +104,7 @@ router.post(
 router.post(
   '/login',
   [
-    body('email').isEmail().withMessage('Enter a valid email address'),
+    body('email').trim().toLowerCase().isEmail().withMessage('Enter a valid email address'),
     body('password').notEmpty().withMessage('Password is required'),
   ],
   async (req, res) => {
@@ -213,7 +213,7 @@ router.get('/verify-email/:token', async (req, res) => {
 // POST /forgot-password
 router.post(
   '/forgot-password',
-  [body('email').isEmail().withMessage('Enter a valid email address')],
+  [body('email').trim().toLowerCase().isEmail().withMessage('Enter a valid email address')],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -325,6 +325,8 @@ router.post(
       }
 
       // Generate a 6-digit OTP code
+      if (!user.isVerified) return res.status(403).json({ success: false, error: 'Verify your email first using the Verify email link.', unverified: true });
+
       const otp = crypto.randomInt(100000, 1000000).toString();
       user.otpCode = otp;
       user.otpExpires = Date.now() + 5 * 60 * 1000; // valid for 5 mins
@@ -418,6 +420,7 @@ router.post(
       }
 
       // Clear OTP details
+      if (!user.isVerified) return res.status(403).json({ success: false, error: 'Verify your email before signing in.' });
       user.otpCode = undefined;
       user.otpExpires = undefined;
       user.lastLogin = new Date();
@@ -452,7 +455,7 @@ router.post(
 router.post(
   '/verify-email-otp',
   [
-    body('email').isEmail().withMessage('Enter a valid email address'),
+    body('email').trim().toLowerCase().isEmail().withMessage('Enter a valid email address'),
     body('otp')
       .isLength({ min: 6, max: 6 })
       .withMessage('OTP must be exactly 6 digits'),
@@ -516,7 +519,7 @@ router.post(
 router.post(
   '/resend-email-otp',
   [
-    body('email').isEmail().withMessage('Enter a valid email address')
+    body('email').trim().toLowerCase().isEmail().withMessage('Enter a valid email address')
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -535,6 +538,8 @@ router.post(
       if (!user.isActive) {
         return res.status(403).json({ success: false, error: 'Account deactivated. Please contact support.' });
       }
+
+      if (user.isVerified) return res.status(400).json({ success: false, error: 'Email is already verified. Please log in or reset your password.' });
 
       // Generate a new 6-digit OTP code
       const emailOtp = crypto.randomInt(100000, 1000000).toString();

@@ -14,7 +14,7 @@ router.use(verifyToken);
 // GET /me — Get own profile
 router.get('/me', async (req, res) => {
   try {
-    const user = await User.findById(req.user.userId).select('-password');
+    const user = await User.findById(req.user.userId).select('-password -verificationToken -resetPasswordToken -resetPasswordExpires -otpCode -otpExpires -emailOtpCode -emailOtpExpires');
     res.json({ success: true, data: user });
   } catch (err) {
     console.error('Fetch profile error:', err.message);
@@ -179,6 +179,7 @@ router.delete('/me', async (req, res) => {
     const ownedLeads = await Lead.find({ userId: req.user.userId }).select('_id');
     await require('../models/ConversationMessage').deleteMany({ leadId: { $in: ownedLeads.map(lead => lead._id) } });
     await Lead.deleteMany({ userId: req.user.userId });
+    await require('../models/StudentStory').deleteOne({ userId: req.user.userId });
     await require('../models/Journey').Application.deleteMany({ userId: req.user.userId });
 
     res.json({ success: true, message: 'Account deleted successfully' });

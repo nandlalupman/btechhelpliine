@@ -593,7 +593,7 @@
       }
     </style>
 
-  </head>
+  <link rel="stylesheet" href="/student.css"><script src="/student-account.js" defer></script><link rel="stylesheet" href="/student-stories.css"><script src="/student-stories.js" defer></script></head>
   <body class="student-body"><div style="padding:10px 24px;background:#20375c;color:white;font-size:14px;display:flex;gap:24px;flex-wrap:wrap"><a href="/messages/" style="color:white">My messages →</a><a href="/applications/" style="color:white">My application tracker →</a><a href="/appointments/" style="color:white">Book counselling →</a><a href="/rank-explorer/" style="color:white">Historical rank explorer →</a></div>
     <!-- Header -->
     <header class="dash-header">
@@ -611,6 +611,7 @@
     </header>
 
     <div class="dashboard-container" style="padding-top: 24px;">
+      <section class="card student-overview"><span class="student-eyebrow">YOUR STUDENT SPACE</span><h1>Your next step, in one place.</h1><p>Keep your preferences updated, ask your counsellor a question and follow the replies here.</p><div class="student-account-state"><span id="student-verification">Checking account…</span><span id="student-request-count">Loading requests…</span></div><nav class="student-actions" aria-label="Student shortcuts"><a href="/messages/"><strong>Messages &amp; replies</strong><span id="student-reply-count">Check your conversations</span></a><a href="/applications/"><strong>Application tracker</strong><span>Save deadlines and next steps</span></a><a href="/appointments/"><strong>Book counselling</strong><span>Choose an available session</span></a><a href="/scholarships/"><strong>Scholarships &amp; support</strong><span>Explore official resources</span></a></nav><p class="student-tip">New here? Complete your profile below, shortlist colleges, then <a href="/messages/">send your first question</a>. Only you and the authorised team can open your account conversations.</p></section>
 
       <div class="grid-layout">
         
@@ -695,7 +696,7 @@
             <button type="submit" class="btn-save" id="btn-save-profile">Save Changes</button>
           </form>
 
-          <div class="danger-zone" style="margin-top: 35px; border-top: 1px dashed rgba(220, 38, 38, 0.2); padding-top: 25px;">
+          <details class="student-security"><summary>Account security · Change password</summary><form id="student-password-form" class="profile-form"><label>Current password<input type="password" name="oldPassword" autocomplete="current-password" required></label><label>New password<input type="password" name="newPassword" autocomplete="new-password" minlength="8" required></label><label>Confirm new password<input type="password" name="confirmPassword" autocomplete="new-password" minlength="8" required></label><p>Use at least 8 characters with an uppercase letter, a lowercase letter and a number.</p><button type="submit" class="btn-save">Update password</button><p id="student-password-status" role="status"></p></form></details><div class="danger-zone" style="margin-top: 35px; border-top: 1px dashed rgba(220, 38, 38, 0.2); padding-top: 25px;">
             <h3 style="color: #ef4444; margin-top: 0; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;">
               <svg style="width: 18px; height: 18px; fill: currentColor;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
               Danger Zone
@@ -712,7 +713,7 @@
         <!-- Requests Column -->
         <section class="card">
           <div class="leads-header">
-            <h2 style="margin: 0;">My Counselling Requests</h2>
+            <h2 style="margin: 0;">My Counselling Requests</h2><button type="button" class="btn-request" onclick="fetchLeads()">Refresh replies</button>
             <button class="btn-request" id="btn-open-modal">Request Consultation</button>
           </div>
 
@@ -722,6 +723,7 @@
         </section>
       </div>
 
+      <section class="card" id="my-experience" style="margin-top:28px"><span class="student-eyebrow">YOUR WORDS, YOUR CHOICE</span><h2>Share your experience</h2><p>Want to say thanks or tell other students how counselling helped? Submit a short, honest message for our homepage.</p><form id="student-story-form" class="profile-form"><label>Public display name<input name="displayName" maxlength="60" required placeholder="First name or a name you choose"></label><label>Your experience<textarea name="message" rows="5" minlength="20" maxlength="700" required placeholder="What helped you, and what would you tell another student?"></textarea></label><label class="story-consent"><input type="checkbox" name="consent" required><span>I agree to display this name and message publicly on the BtechHelpline homepage after review. I can edit or withdraw it here.</span></label><p>Avoid phone numbers, email addresses, OTPs and private details. Your counselling conversations are never published through this form.</p><div class="button-row"><button type="submit" class="btn-save">Submit for review</button><button type="button" id="withdraw-story" class="btn-delete" hidden>Withdraw my message</button></div><p id="student-story-status" role="status"></p></form></section>
       <!-- My Shortlisted Colleges (Choice List) Section -->
       <section class="card" style="margin-top: 30px;">
         <h2 style="margin: 0 0 4px 0; border-left: 4px solid #ef4444; padding-left: 10px; display: flex; align-items: center; gap: 8px;">
@@ -1018,6 +1020,7 @@
           if (res.ok && data.success) {
             const user = data.data;
             document.getElementById('student-name-welcome').textContent = user.name;
+            document.getElementById('student-verification').textContent = user.isVerified ? 'Email verified' : 'Email verification required';
             document.getElementById('profile-name').value = user.name;
             document.getElementById('profile-email').value = user.email;
             document.getElementById('profile-phone').value = user.phone;
@@ -1041,11 +1044,15 @@
             headers: { 'Authorization': `Bearer ${token}` }
           });
           const data = await res.json();
+          if (!res.ok || !data.success) throw new Error(data.error || 'Requests unavailable. Please retry.');
           const listDiv = document.getElementById('leads-list');
           listDiv.innerHTML = '';
 
           if (res.ok && data.success) {
             const leads = data.data;
+            const unread = leads.filter(lead => lead.lastMessageFrom === 'team' && (!lead.studentReadAt || new Date(lead.lastMessageAt) > new Date(lead.studentReadAt))).length;
+            document.getElementById('student-reply-count').textContent = unread ? unread + ' unread team ' + (unread === 1 ? 'reply' : 'replies') : 'No unread team replies';
+            document.getElementById('student-request-count').textContent = leads.length + ' counselling requests';
             if (leads.length === 0) {
               listDiv.innerHTML = `
                 <div class="no-leads">
@@ -1064,18 +1071,18 @@
               
               div.innerHTML = `
                 <div class="lead-item-header">
-                  <h3>Counselling Consultation Request</h3>
+                  <h3>${escapeHTML(lead.subject || "Counselling request")}</h3>
                   <span class="status-badge status-${lead.status}">${lead.status.replace('_', ' ')}</span>
                 </div>
-                <div class="lead-details">
-                  <span>Branch: <strong>${escapeHTML(lead.preferredBranch)}</strong></span><a href="/messages/" style="color:var(--blue);font-weight:600">Open conversation →</a>
+                ${lead.lastMessageFrom === 'team' && (!lead.studentReadAt || new Date(lead.lastMessageAt) > new Date(lead.studentReadAt)) ? '<p class="student-unread">New team reply — open your conversation to read it.</p>' : ''}<div class="lead-details">
+                  <span>Branch: <strong>${escapeHTML(lead.preferredBranch)}</strong></span><a href="/messages/?request=${encodeURIComponent(lead._id)}" style="color:var(--blue);font-weight:600">Read replies &amp; respond →</a>
                   <span>State: <strong>${escapeHTML(lead.preferredState)}</strong></span>
                   <span>Budget: <strong>${escapeHTML(lead.budget)}</strong></span>
                   <span>Date: <strong>${createdDate}</strong></span>
                 </div>
                 ${['new', 'in_progress'].includes(lead.status) ? `
                   <div style="margin-top: 12px; font-size: 0.8rem; color: #b45309; background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.15); padding: 8px 12px; border-radius: 8px; display: flex; align-items: center; gap: 6px; font-weight: 600;">
-                    <span style="font-size: 1rem;">⏱️</span> You will be contacted under 24 hours (SLA)
+                    <span style="font-size: 1rem;">⏱️</span> Your request is in the team queue. Replies appear in My messages.
                   </div>
                   <div style="margin-top: 14px; border-top: 1px solid var(--line); padding-top: 12px; display: flex; align-items: center; justify-content: flex-end;">
                     <button onclick="cancelRequest('${lead._id}')" style="background: var(--white); color: #dc2626; border: 1px solid #fca5a5; padding: 6px 14px; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 4px rgba(220, 38, 38, 0.05);">
@@ -1088,7 +1095,9 @@
             });
           }
         } catch (err) {
-          console.error(err);
+          document.getElementById('leads-list').textContent = err.message;
+          document.getElementById('student-reply-count').textContent = 'Replies unavailable — refresh requests';
+          document.getElementById('student-request-count').textContent = 'Requests unavailable';
         }
       }
 

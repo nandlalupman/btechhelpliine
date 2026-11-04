@@ -5,7 +5,7 @@
   const clear = () => { for (const key of keys) try { localStorage.removeItem(key); } catch {} navigation(); };
   const destination = role => role === 'admin' ? '/admin' : role === 'counsellor' ? '/counsellor' : '/dashboard';
   const safeNext = value => {
-    try { const target=new URL(value,location.origin); return value?.startsWith('/')&&!value.startsWith('//')&&target.origin===location.origin&&!/^\/(?:login|register|forgot-password|reset-password)(?:\/|\.|$)/.test(target.pathname) ? target.pathname+target.search+target.hash : ''; } catch { return ''; }
+    try { const target=new URL(value,location.origin); return value?.startsWith('/')&&!value.startsWith('//')&&target.origin===location.origin&&!/^\/(?:login|register|forgot-password|reset-password|verify-email)(?:\/|\.|$)/.test(target.pathname) ? target.pathname+target.search+target.hash : ''; } catch { return ''; }
   };
   const loginUrl = path => '/login' + (safeNext(path) ? '?next='+encodeURIComponent(safeNext(path)) : '');
   async function validate(base = location.origin) {
@@ -24,13 +24,13 @@
     const retry=document.createElement('button');retry.type='button';retry.textContent='Retry';retry.addEventListener('click',()=>location.reload());notice.append(retry);
   }
   async function protect(role,base) {
-    try { const user=await validate(base); if(!user){location.replace(loginUrl(location.pathname+location.search));return null;} if(!(Array.isArray(role)?role:[role]).includes(user.role)){location.replace(destination(user.role));return null;} return user; }
+    try { const user=await validate(base); if(!user){location.replace(loginUrl(location.pathname+location.search+location.hash));return null;} if(!(Array.isArray(role)?role:[role]).includes(user.role)){location.replace(destination(user.role));return null;} return user; }
     catch(error){showIssue(error.message);return null;}
   }
   window.BtechSession={read,clear,validate,protect,destination,safeNext,loginUrl};
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',navigation);else navigation();
   function navigation(){
-    document.querySelectorAll('a.login-link').forEach(link=>{link.href=read('token')?destination(read('role')):loginUrl(location.pathname+location.search);link.textContent=read('token')?'Dashboard':'Log in';});
-    if(!read('token')&&!/^\/(login|register|forgot-password|reset-password)(\.|\/|$)/.test(location.pathname))document.querySelectorAll('a[href="/login"]').forEach(link=>{link.href=loginUrl(location.pathname+location.search);});
+    document.querySelectorAll('a.login-link').forEach(link=>{link.href=read('token')?destination(read('role')):loginUrl(location.pathname+location.search+location.hash);link.textContent=read('token')?'Dashboard':'Log in';});
+    if(!read('token')&&!/^\/(login|register|forgot-password|reset-password|verify-email)(\.|\/|$)/.test(location.pathname))document.querySelectorAll('a[href="/login"]').forEach(link=>{link.href=loginUrl(location.pathname+location.search+location.hash);});
   }
 })();

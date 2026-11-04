@@ -113,6 +113,7 @@ const requireDatabase = (req, res, next) => {
 // API Routes
 app.use('/api/tools', require('./routes/tools'));
 app.use('/api/journey', requireDatabase, require('./routes/journey'));
+app.use('/api/student-stories', requireDatabase, require('./routes/studentStories'));
 app.use('/api/messages', requireDatabase, require('./routes/messages'));
 app.use('/api/dev', require('./routes/local'));
 app.use('/api/auth', authLimiter, requireDatabase, require('./routes/auth'));

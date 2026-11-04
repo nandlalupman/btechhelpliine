@@ -30,7 +30,7 @@ async function studentAccess(req, res, next) {
   let user;
   const bearer = req.get('authorization');
   if (bearer?.startsWith('Bearer ')) {
-    try { const decoded = jwt.verify(bearer.slice(7), await getJwtSecret()); const account = await User.findById(decoded.userId); if (account?.isActive) user = { userId: account._id, role: account.role }; } catch {}
+    try { const decoded = jwt.verify(bearer.slice(7), await getJwtSecret()); const account = await User.findById(decoded.userId); if (account?.isActive && account.isVerified) user = { userId: account._id, role: account.role }; } catch {}
   }
   if (!owns(lead, user) && !validKey(lead, req.body.accessKey)) return res.status(403).json({ success: false, error: 'Use the account that sent this request or its private tracking code.' });
   req.lead = lead; req.sender = user; next();

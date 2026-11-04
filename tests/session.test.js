@@ -3,11 +3,11 @@ const assert = require('node:assert/strict');
 const fs = require('fs');
 const vm = require('vm');
 
-function session(response, initial = {}) {
+function session(response, initial = {}, hash = '') {
   const store = new Map(Object.entries({ token: 'old-token', role: 'student', 'btech:saved': '["mnit-jaipur"]', 'btech:message-references': '["private-reference"]', ...initial }));
   const redirects = [], requests = [];
   const links = [{ href: '/login', textContent: 'Log in' }];
-  const context = { window: {}, URL, AbortSignal, Array, location: { origin: 'http://localhost:4173', pathname: '/applications/', search: '?task=Documents', replace: url => redirects.push(url) }, localStorage: { getItem: key => store.get(key), setItem: (key, value) => store.set(key, value), removeItem: key => store.delete(key) }, document: { readyState: 'loading', addEventListener() {}, querySelectorAll: selector => selector === 'a.login-link' ? links : [] }, fetch: async (url, options) => { requests.push({ url, options }); if (response instanceof Error) throw response; return { status: response.status, ok: response.status === 200, json: async () => response.body }; } };
+  const context = { window: {}, URL, AbortSignal, Array, location: { origin: 'http://localhost:4173', pathname: '/applications/', search: '?task=Documents', hash, replace: url => redirects.push(url) }, localStorage: { getItem: key => store.get(key), setItem: (key, value) => store.set(key, value), removeItem: key => store.delete(key) }, document: { readyState: 'loading', addEventListener() {}, querySelectorAll: selector => selector === 'a.login-link' ? links : [] }, fetch: async (url, options) => { requests.push({ url, options }); if (response instanceof Error) throw response; return { status: response.status, ok: response.status === 200, json: async () => response.body }; } };
   vm.runInNewContext(fs.readFileSync('public/session.js', 'utf8'), context);
   return { api: context.window.BtechSession, store, redirects, requests, links };
 }
@@ -47,4 +47,11 @@ test('login return destinations reject external URLs and authentication loops', 
   const { api } = session({ status: 401 });
   for (const value of ['https://example.com/', '//example.com/', '/\\example.com/', '/login', '/login/?next=/login', '/register.html', '/forgot-password?email=x', 'javascript:alert(1)', null]) assert.equal(api.safeNext(value), '', String(value));
   assert.equal(api.safeNext('/messages/?subject=Fees#new-message'), '/messages/?subject=Fees#new-message');
+});
+
+test('login preserves the student experience section in the return link', async () => {
+  const { api, redirects } = session({ status: 401 }, {}, '#my-experience');
+  await api.protect('student');
+  assert.equal(redirects[0], '/login?next=%2Fapplications%2F%3Ftask%3DDocuments%23my-experience');
+  assert.equal(api.safeNext('/verify-email/'), '');
 });

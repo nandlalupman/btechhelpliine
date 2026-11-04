@@ -1,0 +1,16 @@
+.student-overview{margin-bottom:28px;background:linear-gradient(120deg,#f2f6ff,#fff)!important;border-top:3px solid #235de8!important}
+.student-eyebrow{color:#2355a4;font-size:11px;font-weight:700;letter-spacing:.13em}
+.student-overview h1{font-size:clamp(26px,4vw,38px);letter-spacing:-1px;margin:14px 0;color:#172d4c}
+.student-overview>p{font-size:14px;line-height:1.8;color:#526680}
+.student-account-state{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}
+.student-account-state span{border-radius:20px;padding:7px 12px;background:#e8effc;font-size:12px;color:#254b84}
+.student-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:22px 0}
+.student-actions a{display:grid;gap:9px;text-decoration:none;padding:20px;border:1px solid #dce5f3;border-radius:12px;background:#fff;color:#17345e}
+.student-actions a:hover,.student-actions a:focus-visible{border-color:#235de8;outline:2px solid #b6caff;outline-offset:2px}
+.student-actions span{font-size:12px;line-height:1.6;color:#5a6e89}
+.student-tip{border-top:1px solid #dae4f1;padding-top:15px}
+.student-unread{background:#eaf2ff;color:#174990;border-left:3px solid #235de8;padding:10px 12px;font-size:13px}
+@media(max-width:1000px){.student-actions{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.student-actions{grid-template-columns:1fr}.student-actions a{padding:16px}.student-overview{padding:20px!important}}
+
+.student-security{margin-top:25px;border-top:1px solid #dce5f3;padding-top:20px}.student-security summary{cursor:pointer;font-weight:600;color:#244d98}.student-security form{margin-top:18px}.student-security p{font-size:12px;line-height:1.7;color:#526680}

@@ -26,7 +26,7 @@ const optionalVerifyToken = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, await getJwtSecret());
     const user = await User.findById(decoded.userId);
-    if (user && user.isActive) {
+    if (user && user.isActive && user.isVerified) {
       req.user = user;
     }
   } catch (err) {

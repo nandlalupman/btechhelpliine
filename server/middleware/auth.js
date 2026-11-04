@@ -28,6 +28,8 @@ const verifyToken = async (req, res, next) => {
       return res.status(403).json({ success: false, error: 'Account deactivated. Please contact support.' });
     }
 
+    if (!user.isVerified) return res.status(403).json({ success: false, error: 'Verify your email before accessing your account.' });
+
     req.user = {
       userId: user._id,
       email: user.email,

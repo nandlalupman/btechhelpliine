@@ -726,16 +726,16 @@
             <div id="section-password" class="login-section active">
               <label>
                 Email Address
-                <input type="email" id="email" placeholder="student@example.com" required autofocus />
+                <input type="email" id="email" autocomplete="username" placeholder="student@example.com" required autofocus />
               </label>
 
               <label style="margin-bottom: 8px;">
                 Password
-                <input type="password" id="password" placeholder="••••••••" required />
+                <input type="password" id="password" autocomplete="current-password" placeholder="••••••••" required />
               </label>
 
               <div class="form-forgot">
-                <a href="forgot-password.html">Forgot Password?</a>
+                <a href="/forgot-password">Forgot password?</a> · <a href="/verify-email/">Verify email / resend code</a>
               </div>
             </div>
 
@@ -757,7 +757,7 @@
               </label>
             </div>
 
-            <button type="submit" id="btn-submit" style="margin-top: 15px;">Login</button>
+            <p style="font-size:13px;line-height:1.7;color:#536780">Your student account keeps counselling requests, team replies and application tasks together. Read and reply from My messages after login.</p><button type="submit" id="btn-submit" style="margin-top: 15px;">Login</button>
             <p class="privacy-disclaimer" style="margin-top: 14px; font-size: 0.76rem; color: #94a3b8; text-align: center; line-height: 1.4;">
               Your information may be shared with our trusted partners and service providers where necessary to provide services and improve your experience. Please refer to our <a href="privacy.html" target="_blank" style="color: var(--blue); text-decoration: underline;">Privacy Policy</a> for complete details.
             </p>
@@ -1025,7 +1025,7 @@
             const container = document.querySelector('.auth-card-full');
             container.innerHTML = `
               <div style="text-align: center; padding: 20px 0;">
-                <h2 style="color: white; font-size: 1.8rem; font-weight: 800; margin: 0 0 12px 0;">Verify Your Email</h2>
+                <h2 style="color: #172d4c; font-size: 1.8rem; font-weight: 800; margin: 0 0 12px 0;">Verify Your Email</h2>
                 <p style="color: #94a3b8; font-size: 0.95rem; line-height: 1.5; margin: 0 0 24px 0;">
                   Please verify your email address. A 6-digit verification code has been sent to <strong>${escapeHTML(email)}</strong>.<br>
                   ${data.otp ? `<span style="color: #3b82f6; font-weight: bold; display: block; margin-top: 10px;">[Local preview] Verification code: ${data.otp}</span>` : ''}
@@ -1034,7 +1034,7 @@
                 <div class="form-msg" id="otp-form-msg" style="margin-bottom: 15px; display: none; text-align: center; padding: 10px; border-radius: 6px; font-size: 0.88rem;"></div>
 
                 <form id="otp-verify-form" style="display: flex; flex-direction: column; gap: 16px; align-items: center; width: 100%; max-width: 320px; margin: 0 auto;">
-                  <input type="text" maxlength="6" id="email-otp-input" placeholder="Enter 6-digit code" style="width: 100%; text-align: center; font-size: 1.25rem; font-weight: 700; padding: 12px; border-radius: 10px; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); color: white; outline: none; transition: all 0.3s; letter-spacing: 0.2em;" required>
+                  <input type="text" maxlength="6" id="email-otp-input" placeholder="Enter 6-digit code" style="width: 100%; text-align: center; font-size: 1.25rem; font-weight: 700; padding: 12px; border-radius: 10px; background: #f7f9fc; border: 1.5px solid #cad5e5; color: #172d4c; outline: none; transition: all 0.3s; letter-spacing: 0.2em;" required>
                   <button type="submit" id="btn-otp-submit" style="width: 100%; padding: 12px; font-weight: 700; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; color: white; border-radius: 8px; font-size: 0.9rem; cursor: pointer;">Verify & Login</button>
                   <button type="button" id="btn-otp-resend" style="background: none; border: none; color: #3b82f6; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.color='#60a5fa'" onmouseout="this.style.color='#3b82f6'">Resend OTP Code</button>
                 </form>
@@ -1100,7 +1100,7 @@
                           <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
                       </div>
-                      <h2 style="color: white; font-size: 2rem; font-weight: 800; margin: 0 0 12px 0;">Verified!</h2>
+                      <h2 style="color: #172d4c; font-size: 2rem; font-weight: 800; margin: 0 0 12px 0;">Verified!</h2>
                       <p style="color: #94a3b8; font-size: 1rem; margin: 0 0 32px 0;">Redirecting to your dashboard...</p>
                       <div style="display: inline-block; width: 28px; height: 28px; border: 3px solid rgba(59, 130, 246, 0.15); border-radius: 50%; border-top-color: #3b82f6; animation: spin 0.8s linear infinite;"></div>
                     </div>

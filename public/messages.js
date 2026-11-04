@@ -73,7 +73,7 @@
       newForm.elements.message.value = ''; newForm.elements.subject.value = '';
       try { await open({ _id: result.leadId, accessKey: result.accessKey }); } catch (error) { studentPanel.textContent = 'Message saved. Keep the code above. Conversation could not load: ' + error.message; }
     }, '#new-message-result');
-    refresh().catch(error => notice('#find-message-result', error.message, true));
+    refresh().then(async () => { const id = new URLSearchParams(location.search).get('request'); if (!id) return; const item = requests.find(row => row._id === id) || (token() && /^[a-f0-9]{24}$/.test(id) ? { _id: id } : null); if (!item) return notice('#find-message-result', 'Sign in with the account that sent this request, or enter its private tracking code.', true); await open(item); studentPanel.scrollIntoView({ behavior: 'smooth', block: 'start' }); }).catch(error => notice('#find-message-result', error.message, true));
   }
   const teamPanel = $('#team-conversation');
   if (teamPanel) {
