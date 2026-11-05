@@ -52,7 +52,7 @@
   const money = n => n == null ? 'Not verified' : `₹${Math.round(n).toLocaleString('en-IN')}`;
   const smallArrow = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg>';
   function card(c) { return window.BtechCollegeCards.render(c); }
-  let featuredSlugs = $("#featured-grid [data-college]").map(node => node.dataset.college);
+  let featuredSlugs = $$("#featured-grid [data-college]").map(node => node.dataset.college);
   function renderFeatured(value = "All") {
     const selected = value === "All" ? featuredSlugs.map(find).filter(Boolean) : colleges.filter(c => c.state === value || c.type === value).slice(0,6);
     const grid = $("#featured-grid"); if (!grid) return;
@@ -60,9 +60,9 @@
     const status = $("#featured-status"); if (status) status.textContent = `${selected.length} listings to explore${value === "All" ? "" : " · " + value}. Check programme and source details before deciding.`;
     updateControls();
   }
-  let limit = 12;
   const filters = $('#directory-filters');
   const params = new URLSearchParams(location.search);
+  let limit = Math.min(1000, Math.max(12, Number.parseInt(params.get('limit'), 10) || 12));
   const sharedSaved = path === '/shortlist/' ? cleanList((params.get('colleges') || '').split(',')).filter(find) : [];
   if (sharedSaved.length) { $('.page-intro h1').textContent = 'A shortlist to explore together.'; $('.page-intro>p').textContent = 'This shared list is separate from your saved colleges. Save the ones you like to your own shortlist.'; }
   if (filters) ['q', 'state', 'type'].forEach(key => { filters.elements[key].value = params.get(key) || ''; });
@@ -75,18 +75,22 @@
     $('#results-count').textContent = `${list.length} ${list.length === 1 ? 'college' : 'colleges'}${q || state || type ? ' found' : path === '/shortlist/' ? ' in this shortlist' : ' to explore'}`;
     grid.innerHTML = list.length ? list.slice(0, limit).map(card).join('') : `<div class="empty-state"><h3>${path === '/shortlist/' ? 'Your next chapter starts with a possibility.' : 'Let’s try a different search.'}</h3><p>${path === '/shortlist/' ? 'Tap the heart on a college to keep it here.' : 'Try a college name, a nearby city, or clear the filters.'}</p><a class="button button-small" href="/colleges/">Explore colleges ${smallArrow}</a></div>`;
     $('#load-more').hidden = list.length <= limit;
+    $('#load-more').href = filterUrl(limit + 12);
     updateControls();
   }
-  function updateFilterUrl() {
+  function filterUrl(nextLimit = 12) {
     const url = new URL(location.href);
     ['q', 'state', 'type'].forEach(key => { const value = filters.elements[key].value.trim(); if (value) url.searchParams.set(key, value); else url.searchParams.delete(key); });
-    history.replaceState(null, '', url.pathname + url.search);
+    if (nextLimit > 12) url.searchParams.set('limit', String(Math.min(nextLimit, 1000)));
+    else url.searchParams.delete('limit');
+    return url.pathname + url.search;
   }
+  function updateFilterUrl() { history.replaceState(null, '', filterUrl(limit)); }
   filters?.addEventListener('submit', event => { event.preventDefault(); limit = 12; updateFilterUrl(); renderDirectory(); track('filter_colleges'); });
   filters?.addEventListener('change', () => { limit = 12; updateFilterUrl(); renderDirectory(); });
   let searchTimer;
   filters?.elements.q.addEventListener('input', () => { clearTimeout(searchTimer); searchTimer = setTimeout(() => { limit = 12; updateFilterUrl(); renderDirectory(); }, 180); });
-  $('#load-more')?.addEventListener('click', () => { limit += 12; renderDirectory(); });
+  $('#load-more')?.addEventListener('click', event => { event.preventDefault(); limit += 12; updateFilterUrl(); renderDirectory(); });
   $('[data-reset-filters]')?.addEventListener('click', () => { filters.reset(); filters.elements.q.value = ''; filters.elements.state.value = ''; filters.elements.type.value = ''; limit = 12; updateFilterUrl(); renderDirectory(); });
   $$('[data-feature-filter]').forEach(button => button.addEventListener('click', () => {
     const value = button.dataset.featureFilter;

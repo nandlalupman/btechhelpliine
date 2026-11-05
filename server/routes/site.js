@@ -14,7 +14,7 @@ router.get(canonicalPaths, (req, res) => res.redirect(301, req.path + '/' + (req
 router.get(['/index', '/index.html'], (req, res) => res.redirect(301, '/'));
 router.get('/', handle(async (req, res) => res.set('Cache-Control', 'no-store').send(views.renderHome((await getCatalogue()).colleges, await require('../services/studentStories').publishedStories().catch(() => [])))));
 router.get('/api/discovery', handle(async (req, res) => res.json({ success: true, ...(await getCatalogue()) })));
-router.get('/colleges/', handle(async (req, res) => res.send(views.directoryPage((await getCatalogue()).colleges, { query: typeof req.query.q === 'string' ? req.query.q.slice(0, 100) : '' }))));
+router.get('/colleges/', handle(async (req, res) => res.send(views.directoryPage((await getCatalogue()).colleges, { query: req.query.q, state: req.query.state, type: req.query.type, limit: req.query.limit }))));
 router.get('/shortlist/', handle(async (req, res) => res.send(views.directoryPage((await getCatalogue()).colleges, { saved: true }))));
 router.get('/compare/', handle(async (req, res) => res.send(views.comparePage((await getCatalogue()).colleges))));
 router.get('/verify-email/', (req, res) => res.send(require('../views/student').verificationPage()));

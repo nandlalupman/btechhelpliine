@@ -30,6 +30,23 @@ test('canonical redirects terminate and preserve reset-password tokens', async (
   }
 });
 
+test('directory GET filters and Show more links work before client JavaScript runs', async () => {
+  const { colleges } = await getCatalogue();
+  const selected = colleges.filter(c => c.state === 'Rajasthan' && c.type === 'Private');
+  const html = await (await fetch(base + '/colleges/?state=Rajasthan&type=Private')).text();
+  const slugs = [...html.matchAll(/<article\b[^>]*data-college="([^"]+)"/g)].map(match => match[1]);
+  assert.deepEqual(slugs, selected.slice(0, 12).map(c => c.slug));
+  assert.match(html, /<option selected>Rajasthan<\/option>/);
+  assert.match(html, /<option selected>Private<\/option>/);
+  const expanded = await (await fetch(base + '/colleges/?type=Private&limit=24')).text();
+  assert.equal([...expanded.matchAll(/<article\b[^>]*data-college=/g)].length, 24);
+  assert.match(expanded, /id="load-more" href="\/colleges\/\?type=Private&amp;limit=36"/);
+  const empty = await (await fetch(base + '/colleges/?q=does-not-match-any-college')).text();
+  assert.match(empty, /No colleges match these filters/);
+  assert.equal([...empty.matchAll(/<article\b[^>]*data-college=/g)].length, 0);
+  assert.match(empty, /id="load-more"[^>]* hidden/);
+});
+
 test('legacy pages accept trailing slashes without breaking relative links or reset tokens', async () => {
   for (const name of ['login', 'register', 'forgot-password', 'reset-password', 'dashboard', 'admin', 'counsellor', 'onboard', 'privacy', 'terms']) {
     const response = await fetch(base + '/' + name + '/?token=sample&next=%2Fmessages%2F', { redirect: 'manual' });
