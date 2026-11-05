@@ -13,6 +13,18 @@ const router = express.Router();
 router.use(verifyToken);
 router.use(requireRole('admin'));
 
+router.get('/college-updates', async (req, res, next) => {
+  try {
+    const updates = require('../services/collegeUpdates').updateSummary();
+    const imported = await College.countDocuments({ 'directorySource.sourceId': { $in: require('../data/approved-colleges.json').records.map(row => row.sourceId) } });
+    res.json({ success: true, data: { ...updates, imported } });
+  } catch (error) { next(error); }
+});
+router.post('/college-updates/sync', async (req, res, next) => {
+  try { res.json({ success: true, data: await require('../services/collegeUpdates').syncApprovedColleges() }); }
+  catch (error) { next(error); }
+});
+
 // Helper to validate base64 image strings
 function isValidBase64Image(str) {
   if (!str) return true;

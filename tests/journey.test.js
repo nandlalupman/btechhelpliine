@@ -272,3 +272,55 @@ test('homepage experiences require student consent and admin selection, and edit
   assert.equal(verification.status, 200);
   assert.match(await verification.text(), /student-verification-form/);
 });
+
+test('reviewed college imports persist once, refresh owned facts and preserve admin edits and deletions', async () => {
+  const snapshot = require('../server/data/approved-colleges.json');
+  const { syncApprovedColleges } = require('../server/services/collegeUpdates');
+  const Import = require('../server/models/CollegeImport');
+  const originalRevision = snapshot.revision;
+  const first = snapshot.records[0], originalWebsite = first.website, originalCity = first.city;
+  const before = await College.countDocuments();
+  try {
+    const imports = await Promise.all([syncApprovedColleges(), syncApprovedColleges()]);
+    assert.equal(imports.reduce((sum, result) => sum + result.added, 0), 48);
+    assert.equal(await College.countDocuments(), before + 48);
+    assert.equal((await request('/api/admin/college-updates')).status, 401);
+    assert.equal((await request('/api/admin/college-updates', 'GET', null, student)).status, 403);
+    assert.equal((await request('/api/admin/college-updates', 'GET', null, admin)).body.data.imported, 48);
+    assert.equal((await request('/api/admin/college-updates/sync', 'POST', {}, student)).status, 403);
+    assert.equal((await request('/api/admin/college-updates/sync', 'POST', {}, admin)).body.data.added, 0);
+    const imported = await College.findOne({ name: first.name });
+    assert.equal(imported.directorySource.sourceId, first.sourceId);
+    assert.equal(imported.directorySource.sourceYear, 2026);
+    assert.equal(imported.dataStatus, 'needs_review');
+    assert.equal(imported.feesPerYear, null);
+    assert.equal(imported.avgPlacement, null);
+    assert.deepEqual(imported.branches, []);
+    assert.equal((await syncApprovedColleges()).added, 0);
+    await College.updateOne({ _id: imported._id }, { $set: { website: 'https://admin-chosen.example.edu/', feesPerYear: 12345, isOnboarded: true } });
+    first.website = 'https://new-source.example.edu/'; first.city = 'Source revision test city'; snapshot.revision = originalRevision + '.test2';
+    const refreshed = await syncApprovedColleges();
+    assert.equal(refreshed.added, 0);
+    const updated = await College.findById(imported._id);
+    assert.equal(updated.website, 'https://admin-chosen.example.edu/');
+    assert.equal(updated.city, first.city);
+    assert.equal(updated.feesPerYear, 12345);
+    assert.equal(updated.isOnboarded, true);
+    await College.findByIdAndDelete(imported._id);
+    snapshot.revision = originalRevision + '.test3';
+    const removed = await syncApprovedColleges();
+    assert.equal(removed.removedByAdmin, 1);
+    assert.equal(await College.countDocuments({ name: first.name }), 0);
+    assert.equal(await College.countDocuments(), before + 47);
+    const detail = await fetch(base + '/colleges/' + require('../server/services/catalogue').slugify(snapshot.records[1].name) + '/');
+    assert.equal(detail.status, 200);
+    const html = await detail.text();
+    assert.match(html, /OFFICIAL DIRECTORY SOURCE/);
+    assert.match(html, /source reviewed 2026-11-05/);
+    assert.ok(!html.includes('₹12,345'));
+  } finally {
+    snapshot.revision = originalRevision; first.website = originalWebsite; first.city = originalCity;
+    await College.deleteMany({ 'directorySource.sourceId': { $in: snapshot.records.map(row => row.sourceId) } });
+    await Import.deleteMany({ sourceId: { $in: snapshot.records.map(row => row.sourceId) } });
+  }
+});

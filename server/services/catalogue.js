@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const College = require('../models/College');
 const directory = require('../data/directory.json');
 const { evidenceFor, feeSummary } = require('./collegeEvidence');
+const { additions, updateSummary } = require('./collegeUpdates');
 
 const slugify = value => String(value).normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const safeUrl = value => {
@@ -23,6 +24,11 @@ function publicCollege(raw) {
     website: safeUrl(row.website), admissionMode: row.admissionMode || 'Confirm with institution',
     branches: row.branches || [], branchPreview: (row.branches || []).slice(0, 2), image: image ? `/assets/colleges/${image}.webp` : '',
     evidence, feeSummary: feeSummary(evidence),
+    directorySource: row.directorySource && safeUrl(row.directorySource.sourceUrl) ? {
+      sourceId: row.directorySource.sourceId, sourceUrl: safeUrl(row.directorySource.sourceUrl),
+      sourceYear: row.directorySource.sourceYear, reviewedAt: row.directorySource.reviewedAt,
+      scope: row.directorySource.scope
+    } : null,
     partner: row.isOnboarded === true, verified: !!verified,
     dataYear: verified ? row.dataYear : null, sourceUrl: verified ? safeUrl(row.sourceUrl) : '',
     verifiedAt: verified ? new Date(row.verifiedAt).toISOString().slice(0, 10) : '',
@@ -33,7 +39,7 @@ function publicCollege(raw) {
   };
 }
 async function getCatalogue() {
-  let rows = new Map(directory.map(c => [slugify(c.name), publicCollege(c)]));
+  let rows = new Map([...directory, ...additions()].map(c => [slugify(c.name), publicCollege(c)]));
   let live = false;
   if (mongoose.connection.readyState === 1) {
     try {
@@ -43,7 +49,7 @@ async function getCatalogue() {
     } catch (error) { console.error('Catalogue database unavailable:', error.message); }
   }
   const colleges = [...rows.values()];
-  return { colleges, live, featuredSlugs: featured(colleges).map(c => c.slug) };
+  return { colleges, live, featuredSlugs: featured(colleges).map(c => c.slug), updates: updateSummary() };
 }
 function featured(colleges) {
   const names = ['MNIT Jaipur', 'JECRC University', 'BITS Pilani', 'SKIT Jaipur', 'Poornima College of Engineering', 'Arya Institute of Engineering'];

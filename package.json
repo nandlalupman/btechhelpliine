@@ -16,7 +16,8 @@
     "seed-colleges": "node server/scripts/seedColleges.js",
     "check:links": "node scripts/audit-site.js",
     "check:links:external": "node scripts/check-resource-links.js --site",
-    "check:production": "node scripts/audit-site.js --production"
+    "check:production": "node scripts/audit-site.js --production",
+    "sync:colleges": "node scripts/sync-colleges.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

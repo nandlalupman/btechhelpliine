@@ -6,6 +6,7 @@ module.exports = async (req, res) => {
   if (process.env.MONGODB_URI || databaseRoute) {
     try {
       await connectDB();
+      await require('../server/services/collegeUpdates').ensureApprovedColleges().catch(error => console.error('College snapshot sync failed:', error.message));
     } catch (error) {
       console.error('Database connection error:', error.message);
       if (databaseRoute) return res.status(503).json({ success: false, error: 'Online service temporarily unavailable. Please try again or contact our team.' });

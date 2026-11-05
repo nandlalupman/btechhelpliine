@@ -35,6 +35,7 @@ const local = path.join(root, '.local');
     }
     console.log('Local database ready. Administrator login details: .local/access.json');
     await require('../server/services/collegeEvidence').syncEvidence();
+    await require('../server/services/collegeUpdates').syncApprovedColleges();
     const { CounsellingSlot } = require('../server/models/Journey');
     if (!await CounsellingSlot.exists({ startAt: { $gt: new Date() }, cancelled: false })) {
       const admin = await User.findOne({ email });

@@ -62,6 +62,7 @@ const CollegeSchema = new mongoose.Schema(
     // A retained copy of the curated field-level official-source snapshot.
     // Public rendering uses the reviewed source catalogue, not arbitrary edits.
     officialEvidence: { type: mongoose.Schema.Types.Mixed, default: null },
+    directorySource: { type: mongoose.Schema.Types.Mixed, default: null },
     branches: {
       type: [String],
       default: ['Computer Science Engineering', 'Electronics & Communication Engineering', 'Electrical Engineering', 'Mechanical Engineering', 'Civil Engineering'],
