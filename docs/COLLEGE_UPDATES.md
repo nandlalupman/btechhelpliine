@@ -21,6 +21,12 @@ A weekly Codex heartbeat attached to this chat is intended to review official so
 
 Keep the last reviewed values and date if a source fails. Notify only for a published verified update, a refresh failure or a decision requiring human review. Do not change unchanged fact dates merely to make a page appear fresh.
 
+## Deployment access for a private repository
+
+Vercel supports private repositories, but the commit author must have access to the Vercel project. On a Hobby team, that author must be the team owner with the matching GitHub account connected under **Account Settings → Login Connections**. Pro/Enterprise projects require the appropriate team membership. See [Vercel's project collaboration guidance](https://vercel.com/docs/deployments/troubleshoot-project-collaboration).
+
+GitHub recognizes this repository's configured commit author as `nandlalupman`. If private-repository deployment is blocked, check that same account's connection and project access in Vercel. Making a repository private again can affect later automatic deployments until this connection is resolved. This workflow does not change repository visibility or substitute another person's commit identity.
+
 ## Commands
 
 `npm run sync:colleges` applies the reviewed snapshot to the configured database (or the launcher's local database). The admin portal's **College directory · Source updates** panel shows the source year, review date and database count; **Apply reviewed updates** retries the deployed snapshot without scraping or resetting administrator data. Only admins can use that control. `npm run local -- --restart` applies it and restarts localhost. `npm test` verifies uniqueness, evidence scope, concurrent/repeated imports, protected administrator edits, source revisions and deleted-college preservation. `npm run build:home` rebuilds the static fallback. Use the live discovery API and affected college pages to verify publication after deployment.
